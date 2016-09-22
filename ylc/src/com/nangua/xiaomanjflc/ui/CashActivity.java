@@ -80,7 +80,7 @@ public class CashActivity extends KJActivity {
 						mPrice.setSelection(s.length());
 					}
 				}
-				if (s.toString().trim().substring(0).equals(".")) {
+				if (s.toString().trim().equals(".")) {
 					s = "0" + s;
 					mPrice.setText(s);
 					mPrice.setSelection(2);
@@ -159,7 +159,7 @@ public class CashActivity extends KJActivity {
 	
 	/**
 	 * 开启环迅插件支付
-	 * @param server返回的支付信息json
+	 * @param ret server返回的支付信息json
 	 */
 	private void cashAction(JSONObject ret) {
 		try {

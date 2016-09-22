@@ -99,6 +99,17 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical" >
 
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                typefaceName="msyh"
+                android:drawablePadding="@dimen/text_drawable"
+                android:drawableRight="@drawable/yibao"
+                android:text="平台第三方合作提现渠道："
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_small" />
+
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

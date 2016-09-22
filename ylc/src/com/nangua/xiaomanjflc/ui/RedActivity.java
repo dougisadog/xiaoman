@@ -108,7 +108,7 @@ public class RedActivity extends KJActivity {
 					FontTextView t = holder.getView(R.id.status);
 					t.setTextColor(getResources().getColor(R.color.font_gray));
 					t.setText("已过期");
-					holder.setText(R.id.cash_title, "过期时间：", false);
+					holder.setText(R.id.cash_title, "有效时间：", false);
 					holder.setText(R.id.get_time, item.getExpire_time(), false);
 					FontTextView a = holder.getView(R.id.active_time);
 					a.setVisibility(View.GONE);

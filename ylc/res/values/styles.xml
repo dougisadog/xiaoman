@@ -16,6 +16,18 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    <style name="Theme.NoTitleBar" parent="android:Theme.NoTitleBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:actionMenuTextAppearance">@style/MenuTextStyle</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
+    </style>
+
+
+
+    <style name="MenuTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
     <style name="loading_small">
         <item name="android:indeterminateDrawable">@anim/loading</item>

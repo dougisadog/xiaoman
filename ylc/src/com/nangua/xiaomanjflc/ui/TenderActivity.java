@@ -379,7 +379,7 @@ public class TenderActivity extends KJActivity {
 					} else if (price < min) {
 						ld.showConfirmHint("请大于最小投资金额");
 						return;
-					} else if ((price % mul) > 0 && (price % min) > 0) {
+					} else if ((price % mul) > 0) {
 						ld.showConfirmHint("请输入" + mul + "的整数倍");
 						return;
 					}
@@ -423,7 +423,7 @@ public class TenderActivity extends KJActivity {
 	/**
 	 * 开启环迅插件支付
 	 * 
-	 * @param server返回的支付信息json
+	 * @param ret server返回的支付信息json
 	 */
 	private void biddingAction(JSONObject ret) {
 		try {

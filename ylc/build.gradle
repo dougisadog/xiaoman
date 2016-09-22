@@ -25,6 +25,7 @@ dependencies {
     compile project(':BDIntegrationSDK_LibProject')
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
 }
 
 android {
@@ -57,7 +58,7 @@ android {
         applicationId "com.nangua.xiaomanjflc"
         minSdkVersion 19
         targetSdkVersion 22
-        multiDexEnabled true
+        multiDexEnabled false
         versionCode 10000
         versionName "1.0.0"
     }
@@ -78,7 +79,7 @@ android {
             }
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

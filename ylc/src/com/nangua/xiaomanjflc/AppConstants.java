@@ -309,6 +309,12 @@ public class AppConstants {
 	 */
 	public static final String MESSAGE_CENTER_ALREAD = HOST
 			+ "/my/center/alread";
+	
+	/**
+	 * 消息中心 全部已读
+	 */
+	public static final String MESSAGE_CENTER_READ_ALL = HOST
+			+ "/my/center/readall";
 
 	/**
 	 * 用户是否有借款
