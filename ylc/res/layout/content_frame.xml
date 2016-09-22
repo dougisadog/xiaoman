@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/app_blue" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/title_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            typefaceName="msyh"
+            android:drawableLeft="@drawable/header_back"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="我的账户"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:src="@drawable/ic_list_white_48dp" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/title_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:text="交易记录"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- 定义一个虚拟的视图，方便Fragment能够替换该视图，以达到Fragment的视图内容能够显示在屏幕上的效果。 -->
+
+</LinearLayout>

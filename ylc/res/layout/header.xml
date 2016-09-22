@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/app_blue" >
+
+    <com.nangua.xiaomanjflc.widget.FontTextView
+        android:id="@+id/title_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        typefaceName="msyh"
+        android:drawableLeft="@drawable/header_back"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_title"
+        android:visibility="gone" />
+
+    <com.nangua.xiaomanjflc.widget.FontTextView
+        android:id="@+id/title_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        typefaceName="msyh"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_title" />
+
+    <com.nangua.xiaomanjflc.widget.FontTextView
+        android:id="@+id/title_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        typefaceName="msyh"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_title" />
+
+    <ImageView
+        android:id="@+id/title_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo" />
+
+</RelativeLayout>

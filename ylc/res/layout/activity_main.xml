@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <!-- 显示头部标题 -->
+
+    <LinearLayout
+        android:id="@+id/headLinear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/app_blue" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/title_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/header_back"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="@string/back"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_title"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:id="@+id/tel_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_title" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/title_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/pagerRelative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- 显示TAB内容 -->
+
+        <TabWidget
+            android:id="@+id/tabwidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/tab_bg"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:tabStripEnabled="false" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@id/tabwidget"
+            android:background="@color/app_bg" />
+    </RelativeLayout>
+
+</LinearLayout>

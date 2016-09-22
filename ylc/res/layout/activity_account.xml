@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <!-- 显示头部标题 -->
+
+    <LinearLayout
+        android:id="@+id/headLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/header" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headLinear"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/page_left"
+        android:paddingRight="@dimen/page_right"
+        android:paddingTop="@dimen/page_top" >
+
+        <RelativeLayout
+            android:id="@+id/rl_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" 
+            android:visibility="gone" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/username_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_username"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="用户名"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/username_title"
+                typefaceName="msyh"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/usernameimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line"
+            android:visibility="gone" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:background="@null"
+                android:drawableLeft="@drawable/account_email"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="@string/account_email"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/emailimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:gravity="center_vertical"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" 
+            android:visibility="gone">
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/tel_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_tel"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="手机"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/tel_title"
+                typefaceName="msyh"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/iv_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_idcard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/idcard_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_idcard"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="身份认证"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/idcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/idcard_title"
+                typefaceName="msyh"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/idcardimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada" />
+
+        <RelativeLayout
+            android:id="@+id/rl_bankcard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" >
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/bankcard_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_bankcard"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="绑定银行卡"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/bankcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/bankcard_title"
+                typefaceName="msyh"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/bankcardimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/hand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_hand"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="启用手势密码"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:id="@+id/handimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/gesture_close" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada" />
+
+        <RelativeLayout
+            android:id="@+id/rl_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_line" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                typefaceName="msyh"
+                android:drawableLeft="@drawable/account_pwd"
+                android:drawablePadding="@dimen/page_drawable"
+                android:gravity="center_vertical"
+                android:text="@string/account_pwd"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_app" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/account_goto" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dadada" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,212 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical" >
+
+    <!-- 显示头部标题 -->
+
+    <LinearLayout
+        android:id="@+id/headLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/header" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_orange"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <com.nangua.xiaomanjflc.widget.FontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_line"
+                        typefaceName="msyh"
+                        android:gravity="center"
+                        android:text="邀请人数（人）"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_app" />
+
+                    <com.nangua.xiaomanjflc.widget.FontTextView
+                        android:id="@+id/count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/text_line"
+                        android:layout_marginTop="@dimen/text_line"
+                        typefaceName="msyh"
+                        android:gravity="center"
+                        android:text="00"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_app" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <com.nangua.xiaomanjflc.widget.FontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/text_line"
+                        typefaceName="msyh"
+                        android:gravity="center"
+                        android:text="已返现金券（元）"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_app" />
+
+                    <com.nangua.xiaomanjflc.widget.FontTextView
+                        android:id="@+id/cashReturned"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/text_line"
+                        android:layout_marginTop="@dimen/text_line"
+                        typefaceName="msyh"
+                        android:gravity="center"
+                        android:text="00.0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_app" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/text_line"
+                android:paddingLeft="@dimen/page_left"
+                android:paddingRight="@dimen/page_right"
+                android:paddingTop="@dimen/text_line" >
+
+                <com.nangua.xiaomanjflc.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    typefaceName="msyh"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:text="我的邀请码"
+                    android:textColor="@color/font_black"
+                    android:textSize="@dimen/font_app" />
+
+                <com.nangua.xiaomanjflc.view.FontTextView
+                    android:id="@+id/refCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    typefaceName="msyh"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:text="XXXXX"
+                    android:textColor="@color/app_orange"
+                    android:textSize="@dimen/font_app" />
+            </RelativeLayout>
+             -->
+            
+             <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/transparent" />
+
+            <RelativeLayout
+                android:id="@+id/scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/text_line"
+                android:paddingLeft="@dimen/page_left"
+                android:paddingRight="@dimen/page_right"
+                android:paddingTop="@dimen/text_line" >
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    typefaceName="msyh"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:text="我的邀请记录"
+                    android:textColor="@color/font_black"
+                    android:textSize="@dimen/font_app" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    typefaceName="msyh"
+                    android:background="@null"
+                    android:drawablePadding="@dimen/text_drawable"
+                    android:drawableRight="@drawable/account_goto"
+                    android:gravity="center_vertical"
+                    android:text="查看"
+                    android:textColor="@color/font_black"
+                    android:textSize="@dimen/font_app" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/transparent" />
+
+
+
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/invite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/page_left"
+                android:layout_marginRight="@dimen/page_right"
+                android:layout_marginTop="@dimen/page_top"
+                typefaceName="msyh"
+                android:background="@drawable/btn_blue"
+                android:gravity="center"
+                android:text="邀请好友"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_title" />
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_line"
+                typefaceName="msyh"
+                android:gravity="center"
+                android:text="小满金服信息技术（大连）有限公司保留对本活动最终解释权"
+                android:textColor="@color/font_gray"
+                android:textSize="@dimen/font_small" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg" >
+
+    <!-- 显示头部标题 -->
+
+    <LinearLayout
+        android:id="@+id/headLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/header" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headLinear"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/page_small" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/one"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:background="@drawable/tab_left"
+            android:gravity="center"
+            android:text="产品详情"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_title" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/two"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:background="@drawable/red_two"
+            android:gravity="center"
+            android:text="还款计划"
+            android:textColor="@color/app_blue"
+            android:textSize="@dimen/font_title" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/three"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:background="@drawable/red_three"
+            android:gravity="center"
+            android:text="投标记录"
+            android:textColor="@color/app_blue"
+            android:textSize="@dimen/font_title" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tab"
+        android:background="@color/app_line" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"
+        android:layout_marginBottom="55dp"
+        android:background="@color/app_bg" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <include layout="@layout/piece_dai_product" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/plan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/page_small"
+            android:paddingRight="@dimen/page_small"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/text_line"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/text_line" >
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="还款时间"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="应还本金"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="应还利息"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="还款总额"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_bg"
+                android:paddingTop="1dp" >
+
+                <ListView
+                    android:id="@+id/listview1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="1dp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/page_small"
+            android:paddingRight="@dimen/page_small"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/text_line"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/text_line" >
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="投资人"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="投资金额"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+
+                <com.nangua.xiaomanjflc.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    typefaceName="msyh"
+                    android:gravity="center"
+                    android:text="投标时间"
+                    android:textColor="@color/font_gray"
+                    android:textSize="@dimen/font_title" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_bg"
+                android:paddingTop="1dp" >
+
+                <com.louding.frame.widget.KJListView
+                    android:id="@+id/listview2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="1dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:padding="@dimen/page_small" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/tender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                typefaceName="msyh"
+                android:background="@drawable/btn_tender"
+                android:gravity="center"
+                android:text="投标"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_title" />
+
+            <EditText
+                android:id="@+id/pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/page_small"
+                android:layout_toLeftOf="@id/tender"
+                android:background="@drawable/edit_gray"
+                android:hint="请输入投资金额"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColorHint="@color/font_hint"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

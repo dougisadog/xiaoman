@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/headLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/header" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/page_left"
+        android:paddingRight="@dimen/page_right" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            typefaceName="msyh"
+            android:background="@null"
+            android:drawablePadding="@dimen/text_drawable"
+            android:gravity="center_vertical"
+            android:text="一、如何获得积分？"
+            android:textColor="#314369"
+            android:textSize="@dimen/font_app" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center_vertical"
+            android:src="@drawable/account_goto" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/text_line"
+            android:background="@color/app_bg" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="1、首次投资送500积分;" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="2、邀请好友注册送500积分;" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="3、邀请好友首次投资送500积分;" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="4、投资产品按照投资金额年化50%送相应积分;\n投资奖励积分=投资金额*项目期限/365天*0.5;\n(例：投资6个月产品10000元，可获得2500积分)" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="5、会员奖励积分及活动返还积分，具体见会员奖励规则;" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="6、其他。" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/text_line"
+        android:background="@color/app_bg" />
+
+    <RelativeLayout
+        android:id="@+id/rl_text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_line"
+        android:paddingLeft="@dimen/page_left"
+        android:paddingRight="@dimen/page_right" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            typefaceName="msyh"
+            android:background="@null"
+            android:drawablePadding="@dimen/text_drawable"
+            android:gravity="center_vertical"
+            android:text="二、积分如何使用？"
+            android:textColor="#314369"
+            android:textSize="@dimen/font_app" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center_vertical"
+            android:src="@drawable/account_goto" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/text_line"
+            android:background="@color/app_bg" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="1、积分可兑换小满金服现金劵及实物商品等;" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="2、积分可兑换小满金服现金券规则：\n1000积分=10元现金券\n1900积分=20元现金券\n2700积分=30元现金券\n4000积分=50元现金券\n7000积分=100元现金券\n注：现金券使用见各现金券具体使用规则;" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/text_line"
+        android:background="@color/app_bg" />
+
+    <RelativeLayout
+        android:id="@+id/rl_text3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_line"
+        android:paddingLeft="@dimen/page_left"
+        android:paddingRight="@dimen/page_right" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            typefaceName="msyh"
+            android:background="@null"
+            android:drawablePadding="@dimen/text_drawable"
+            android:gravity="center_vertical"
+            android:text="三、积分是否有有效期？"
+            android:textColor="#314369"
+            android:textSize="@dimen/font_app" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center_vertical"
+            android:src="@drawable/account_goto" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_text3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/text_line"
+            android:background="@color/app_bg" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:text="1、积分具有有效期，在每年6月30日和12月31日将消除当日积分余额的25%。\n(例：2015年6月30日，当日积分余额10000分，积分将消除2500积分)" />
+    </LinearLayout>
+
+    <com.nangua.xiaomanjflc.widget.FontTextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        typefaceName="msyh"
+        android:gravity="bottom|center_horizontal"
+        android:text="以上活动解释权归小满金服所有" />
+
+</LinearLayout>

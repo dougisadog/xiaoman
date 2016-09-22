@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="5dp" >
+
+    <LinearLayout
+        android:id="@+id/invest_protocol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            typefaceName="msyh"
+            android:paddingRight="20dp"
+            android:textColor="@color/font_black"
+            android:textSize="@dimen/font_title" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="转让"
+            android:textColor="@color/app_orange"
+            android:textSize="@dimen/font_app" />
+
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:gravity="center_vertical"
+            android:src="@drawable/account_goto" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="@dimen/text_line"
+        android:background="@color/app_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_top"
+        android:orientation="horizontal" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/title01"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:text="项目本金"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/font_app" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/title02"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:text="预期收益率"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/font_app" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/txthint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:text="剩余期限"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/font_app" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_top"
+        android:orientation="horizontal" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:textColor="@color/app_orange"
+            android:textSize="@dimen/font_num" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:textColor="@color/app_orange"
+            android:textSize="@dimen/font_num" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/lastReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:gravity="center"
+            android:textColor="@color/app_orange"
+            android:textSize="@dimen/font_num" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_top"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp" >
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/repayTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:drawableLeft="@drawable/invest_start"
+            android:drawablePadding="@dimen/text_drawable"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/font_small" />
+
+        <com.nangua.xiaomanjflc.widget.FontTextView
+            android:id="@+id/endTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            typefaceName="msyh"
+            android:drawableLeft="@drawable/invest_pay"
+            android:drawablePadding="@dimen/text_drawable"
+            android:textColor="@color/font_gray"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+</LinearLayout>
