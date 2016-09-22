@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+//    compile fileTree(include: '*.jar', dir: 'libs')
+    compile project(':Slidingmenu_lib')
+    compile project(':Alert_Dialog_lib')
+    //    compile project(':PushSDK')
+        compile files('libs/glide-3.7.0.jar')
+        compile files('libs/ips-commons-codec-1.10.jar')
+        compile files('libs/ips-p2p-tools.jar')
+        compile files('libs/ips-security-1.0.6.jar')
+        compile files('libs/jackson-all-1.9.10.jar')
+        compile files('libs/kjframe.jar')
+        compile files('libs/mframework.jar')
+//        compile files('libs/MobCommons-2016.0816.1507.jar')
+//        compile files('libs/MobTools-2016.0816.1507.jar')
+//        compile files('libs/ShareSDK-Core-2.7.6.jar')
+//        compile files('libs/ShareSDK-SinaWeibo-2.7.6.jar')
+//        compile files('libs/ShareSDK-Wechat-2.7.6.jar')
+//        compile files('libs/ShareSDK-Wechat-Core-2.7.6.jar')
+//        compile files('libs/ShareSDK-Wechat-Moments-2.7.6.jar')
+        compile files('libs/xiaomi_sdk.jar')
+        compile files('libs/yyb_selfupdate_v1.0.jar')
+    //    compile 'com.android.support:support-v4:24.2.1'
+    compile project(':BDIntegrationSDK_LibProject')
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:multidex:1.0.0'
+}
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion '23.0.2'
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+    defaultConfig {
+        applicationId "com.nangua.xiaomanjflc"
+        minSdkVersion 19
+        targetSdkVersion 22
+        multiDexEnabled true
+        versionCode 10000
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 自定义输出配置
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "xiaomanjf_p2p_release_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        xiaomi {
+            applicationId = "com.nangua.xiaomanjflc"
+        }
+        baidu {
+            applicationId = "com.nangua.xiaomanjflc"
+        }
+        yyb {
+            applicationId = "com.nangua.xiaomanjflc"
+        }
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name];
+    }
+
+    packagingOptions {
+//        exclude('META-INF/DEPENDENCIES')
+//        exclude('META-INF/NOTICE')
+        exclude('META-INF/LICENSE')
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    dexOptions {
+        incremental true
+    }
+}
