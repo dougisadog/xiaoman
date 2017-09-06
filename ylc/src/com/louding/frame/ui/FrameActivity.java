@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -31,7 +32,7 @@ import android.view.View.OnClickListener;
  * @author kymjs(kymjs123@gmail.com)
  * @version 1.8
  */
-public abstract class FrameActivity extends Activity implements
+public abstract class FrameActivity extends FragmentActivity implements
         OnClickListener, I_BroadcastReg, I_KJActivity, I_SkipActivity {
 
     public static final int WHICH_MSG = 0X37210;

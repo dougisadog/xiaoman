@@ -21,21 +21,18 @@
         <item>服务费</item>
         <item>还款</item>
     </string-array>
-    
     <string-array name="repayment_method">
         <item>0</item>
         <item>到期还本付息</item>
         <item>每月等额本息</item>
         <item>按月付息到期还本</item>
     </string-array>
-    
     <string-array name="guarantee_mode">
         <item>0</item>
         <item>本金保障</item>
         <item>每月等额本息</item>
         <item>本息保障</item>
     </string-array>
-    
     <string-array name="product_status">
         <item>0</item>
         <item>还款中</item>
@@ -45,6 +42,32 @@
         <item>购买</item>
         <item>已还款</item>
         <item>审核中</item>
+    </string-array>
+    <string-array name="message_func">
+        <item>全部标记为已读</item>
+    </string-array>
+    <string-array name="search_limit_time">
+        <item>1个月以下</item>
+        <item>1~3个月</item>
+        <item>3~6个月</item>
+        <item>6个月以上</item>
+    </string-array>
+    <string-array name="search_gain">
+        <item>3%~7%</item>
+        <item>7%~10%</item>
+        <item>10%~12%</item>
+        <item>12%~15%</item>
+        <item>15%以上</item>
+    </string-array>
+    <string-array name="search_repay_method">
+        <item>到期还\n本付息</item>
+        <item>按月付息\n到期还本</item>
+        <item>等额本息</item>
+    </string-array>
+    <string-array name="search_single_purchase">
+        <item>100元</item>
+        <item>100~500元</item>
+        <item>500元以上</item>
     </string-array>
 
 </resources>

@@ -6,62 +6,155 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/llButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="@dimen/page_small"
-        android:visibility="gone" >
+        android:orientation="horizontal" >
 
-        <com.nangua.xiaomanjflc.widget.FontTextView
-            android:id="@+id/one"
+        <RelativeLayout
+            android:id="@+id/all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            typefaceName="msyh"
-            android:background="@drawable/tab_left"
-            android:gravity="center"
-            android:text="直投宝"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_title" />
+            android:layout_weight="1" >
 
-        <com.nangua.xiaomanjflc.widget.FontTextView
-            android:id="@+id/two"
+            <com.nangua.xiaomanjflc.widget.FontTextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="全部"
+                android:textColor="@color/blue_v2"
+                android:textSize="@dimen/font_app_v2" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/gain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            typefaceName="msyh"
-            android:background="@drawable/invest_four"
-            android:gravity="center"
-            android:text="定投宝"
-            android:textColor="@color/app_blue"
-            android:textSize="@dimen/font_title" />
+            android:layout_weight="1" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView 
+                android:id="@+id/gainTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="收益"
+                android:textColor="@color/grey_btn"
+                android:textSize="@dimen/font_app_v2" />
+            
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/gainTitle"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_sort_none" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/limitTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView 
+                android:id="@+id/limitTimeTitle"
+               android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="期限"
+                android:textColor="@color/grey_btn"
+                android:textSize="@dimen/font_app_v2" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/limitTimeTitle"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_sort_none" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/singlePurchase"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <com.nangua.xiaomanjflc.widget.FontTextView 
+                android:id="@+id/singlePurchaseTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="金额"
+                android:textColor="@color/grey_btn"
+                android:textSize="@dimen/font_app_v2" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="15dp"
+                android:layout_toRightOf="@+id/singlePurchaseTitle"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_sort_none" />
+        </RelativeLayout>
+
+        <RelativeLayout
+             android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_search_off" />
+        </RelativeLayout>
     </LinearLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+        <com.nangua.xiaomanjflc.widget.FontTextView 
+            android:id="@+id/tips"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="————  按默认排序     ————"
+            android:textColor="#cfcfcf"
+            android:textSize="@dimen/font_hint" />
+        
         <com.louding.frame.widget.KJListView
             android:id="@+id/listview"
+            android:layout_below="@+id/tips"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/transparent"
-            android:dividerHeight="0dp" />
+            android:headerDividersEnabled="false"
+            android:footerDividersEnabled="false"
+            android:divider="@color/app_bg"
+            android:dividerHeight="@dimen/component_line_v2" />
 
         <com.nangua.xiaomanjflc.widget.FontTextView
             android:id="@+id/empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="60dp"
-            typefaceName="msyh"
-            android:drawablePadding="30dp"
+            android:paddingTop="100dp"
             android:drawableTop="@drawable/empty"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="暂无数据！"
             android:textSize="20sp"
-            android:visibility="gone" />
-    </FrameLayout>
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </LinearLayout>

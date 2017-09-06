@@ -22,18 +22,22 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.louding.frame.ui.FrameActivity;
+import com.louding.frame.ui.I_KJActivity;
 import com.louding.frame.ui.KJActivityStack;
 import com.louding.frame.utils.KJLoger;
 import com.nangua.xiaomanjflc.AppVariables;
 import com.nangua.xiaomanjflc.StartApplication;
+import com.nangua.xiaomanjflc.UmengManager;
 import com.nangua.xiaomanjflc.YilicaiApplication;
+import com.nangua.xiaomanjflc.support.ScreenObserver.ScreenStateListener;
 import com.nangua.xiaomanjflc.ui.AccountActivity;
 import com.nangua.xiaomanjflc.ui.GestureActivity;
 import com.nangua.xiaomanjflc.ui.VerifyPwd;
 import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-//import com.umeng.message.PushAgent;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
-public abstract class KJActivity extends FrameActivity {
+public abstract class KJActivity extends FrameActivity implements ScreenStateListener, I_KJActivity{
 
     /**
      * 当前Activity状态
@@ -58,7 +62,7 @@ public abstract class KJActivity extends FrameActivity {
         YilicaiApplication.getInstance().addStackActivity(this);
         KJActivityStack.create().addActivity(this);
         KJLoger.state(this.getClass().getName(), "---------onCreat ");
-//        PushAgent.getInstance(this).onAppStart();
+        PushAgent.getInstance(this).onAppStart();
         super.onCreate(savedInstanceState);
     }
 
@@ -71,6 +75,12 @@ public abstract class KJActivity extends FrameActivity {
     @Override
     protected void onResume() {
         super.onResume();
+      //Umeng活动监听resume
+        if (UmengManager.analyticsStatus == UmengManager.AnalyticsOn) {
+	    	String name = this.getClass().getSimpleName();
+	    	MobclickAgent.onPageStart(name); //统计页面，"MainScreen"为页面名称，可自定义
+	    	MobclickAgent.onResume(this);
+	    }
         YilicaiApplication.getInstance().setCurrentRunningActivity(this);
         activityState = ActivityState.RESUME;
         KJLoger.state(this.getClass().getName(), "---------onResume ");
@@ -86,6 +96,12 @@ public abstract class KJActivity extends FrameActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //Umeng活动监听pause
+        if (UmengManager.analyticsStatus == UmengManager.AnalyticsOn) {
+	    	String name = this.getClass().getSimpleName();
+	    	MobclickAgent.onPageEnd(name); 
+	    	MobclickAgent.onPause(this);
+	    }
         if (YilicaiApplication.getInstance().getCurrentRunningActivity().equals(this)) {
             YilicaiApplication.getInstance().setCurrentRunningActivity(null);
         }
@@ -96,7 +112,8 @@ public abstract class KJActivity extends FrameActivity {
 
     @Override
     protected void onStop() {
-        super.onResume();
+//        super.onResume();
+        super.onStop();
         activityState = ActivityState.STOP;
         KJLoger.state(this.getClass().getName(), "---------onStop ");
     }
@@ -170,4 +187,23 @@ public abstract class KJActivity extends FrameActivity {
         intent.setClass(aty, cls);
         aty.startActivity(intent);
     }
+
+	@Override
+	public void onScreenOn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScreenOff() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUserPresent() {
+		// TODO Auto-generated method stub
+		
+	}
+    
 }

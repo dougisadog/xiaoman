@@ -8,10 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.nangua.xiaomanjflc.utils.ApplicationUtil;
 import com.nangua.xiaomanjflc.utils.Point;
-import com.nangua.xiaomanjflc.utils.ScreenUtils;
 import com.nangua.xiaomanjflc.widget.Drawl.GestureCallBack;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.support.ApkInfo;
 
 /**
  * @author yinqiaoyin
@@ -42,7 +43,8 @@ public class ContentView extends ViewGroup {
 	public ContentView(Context context, String passWord,
 			GestureCallBack callBack) {
 		super(context);
-		screenDispaly = ScreenUtils.getScreenDispaly(context);
+		ApkInfo apkInfo = ApplicationUtil.getApkInfo(context);
+		screenDispaly = new int[] {apkInfo.width, apkInfo.height};
 		d = screenDispaly[0] / 3;
 		this.list = new ArrayList<Point>();
 		this.context = context;

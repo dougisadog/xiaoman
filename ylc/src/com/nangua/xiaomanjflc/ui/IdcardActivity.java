@@ -1,5 +1,7 @@
 package com.nangua.xiaomanjflc.ui;
 
+import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,8 +22,12 @@ import com.louding.frame.ui.BindView;
 import com.louding.frame.utils.StringUtils;
 import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+import com.umeng.analytics.MobclickAgent;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.cache.CacheBean;
+import com.nangua.xiaomanjflc.support.InfoManager;
+import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
 import com.nangua.xiaomanjflc.support.UIHelper;
 
 public class IdcardActivity extends KJActivity {
@@ -35,7 +42,7 @@ public class IdcardActivity extends KJActivity {
 	private EditText mId;
 
 	private KJHttp kjh;
-	private LoudingDialog ld;
+	private LoudingDialogIOS ld;
 
 	private String idcard;
 	private String realName;
@@ -46,6 +53,17 @@ public class IdcardActivity extends KJActivity {
 		UIHelper.setTitleView(this, "账户中心", "实名认证");
 		kjh = new KJHttp();
 	}
+	
+    @Override
+    public void initWidget() {
+    	String groupValided = CacheBean.getInstance().getAccount().getGroupValided();
+    	if ("1".equals(groupValided)) {
+    		mName.setText(CacheBean.getInstance().getAccount().getGroupUserName());
+    		mId.setText(CacheBean.getInstance().getAccount().getGroupIdCard());
+    		mName.setEnabled(false);
+    		mId.setEnabled(false);
+    	}
+    }
 
 	@Override
 	public void widgetClick(View v) {
@@ -55,9 +73,26 @@ public class IdcardActivity extends KJActivity {
 			realName = mName.getText().toString();
 			idcard = mId.getText().toString();
 			if (StringUtils.isEmpty(realName) || StringUtils.isEmpty(idcard)) {
-				ld = new LoudingDialog(IdcardActivity.this);
+				ld = new LoudingDialogIOS(IdcardActivity.this);
 				ld.showConfirmHint("请填写完整信息");
-			} else {
+			} else if (!StringUtils.isIdCard(idcard)) {
+				ld = new LoudingDialogIOS(IdcardActivity.this);
+				ld.showConfirmHint("请填写正确的身份证");
+			}
+			else if (!"1".equals(CacheBean.getInstance().getAccount().getGroupValided())) {
+				final LoudingDialogIOS ld = new LoudingDialogIOS(this);
+				ld.showOperateMessage("请确认您的姓名和身份证信息，\n确认后将不可更改\n"
+						+ "姓名：" + realName + 
+						"\n身份证：" + idcard);
+				ld.setPositiveButton("继续", R.drawable.dialog_positive_btn, new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						post();
+						ld.dismiss();
+					}
+				});
+			}
+			else {
 				post();
 			}
 			break;
@@ -67,7 +102,7 @@ public class IdcardActivity extends KJActivity {
 	
 	/**
 	 * 开启环迅插件 开户
-	 * @param server返回的支付信息json
+	 * @param ret server返回的支付信息json
 	 */
 	private void createAccountAction(JSONObject ret) {
 		try {
@@ -76,7 +111,13 @@ public class IdcardActivity extends KJActivity {
 			bundle.putString("merchantID", ret.getString("merchantID"));
 			bundle.putString("sign", ret.getString("sign"));
 			bundle.putString("request", ret.getString("request"));
-			StartPluginTools.start_p2p_plugin(StartPluginTools.CREATE_ACCT, IdcardActivity.this, bundle, 1);
+			StartPluginTools.start_p2p_plugin(StartPluginTools.CREATE_ACCT, IdcardActivity.this, bundle, AppConstants.IPS_VERSION);
+			
+			//Umeng事件统计
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("idCard", idcard);
+			map.put("realName", realName);
+			MobclickAgent.onEvent(this, StartPluginTools.CREATE_ACCT, map);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -99,6 +140,46 @@ public class IdcardActivity extends KJActivity {
 					e.printStackTrace();
 				}
 			}
+
+			@Override
+			public void failure(JSONObject ret) {
+				try {
+					if ("8000".equals(ret.getString("status"))) {
+						final String groupValided = ret.getString("groupValided");
+						if (!StringUtils.isEmpty(groupValided)) {
+							String groupUserName = ret.getString("groupUserName");
+							String groupIdCard = ret.getString("groupIdCard");
+							CacheBean.getInstance().getAccount().setGroupValided(groupValided);
+							CacheBean.getInstance().getAccount().setGroupUserName(groupUserName);
+							CacheBean.getInstance().getAccount().setGroupIdCard(groupIdCard);
+						}
+						final LoudingDialogIOS ldc = new LoudingDialogIOS(IdcardActivity.this);
+						ldc.setTitle(R.string.dialog_title, R.color.black);
+						ldc.setMessage(ret.getString("msg"), R.color.black);
+						ldc.setPositiveButton(
+								getResources().getString(R.string.dialog_confirm),
+								null, new OnClickListener() {
+									@Override
+									public void onClick(View arg0) {
+										ldc.dismiss();
+										if ("1".equals(groupValided)) {
+											initWidget();
+										}
+										else {
+											AppVariables.forceUpdate = true;
+											finish();
+										}
+									}
+								});
+					}
+					else {
+						super.failure(ret);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		});
 	}
 	

@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
-            typefaceName="msyh"
+            
             android:drawablePadding="30dp"
             android:drawableTop="@drawable/empty"
             android:gravity="center"

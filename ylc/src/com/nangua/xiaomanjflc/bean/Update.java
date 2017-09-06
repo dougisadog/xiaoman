@@ -20,6 +20,9 @@ public class Update {
     protected String versionDesc;//版本描述
     
     protected boolean forceUpdate = false;//版本描述
+    
+    public Update() {
+	}
 
 	public Update(JSONObject o) throws JSONException {
         super();

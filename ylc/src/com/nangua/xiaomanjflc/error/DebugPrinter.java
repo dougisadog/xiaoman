@@ -7,7 +7,7 @@ package com.nangua.xiaomanjflc.error;
  */
 public class DebugPrinter {
     
-    protected static final String TAG = "sg";
+    protected static final String TAG = "xiaoman";
     
     private static boolean debug = true;
 

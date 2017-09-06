@@ -6,7 +6,7 @@
         <shape>
             <corners android:radius="10dp" />
 
-            <solid android:color="#ffcccccc" />
+            <solid android:color="#ffa7a7a7" />
         </shape>
     </item>
     <!-- 第二条进度条颜色 -->

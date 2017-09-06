@@ -3,34 +3,22 @@ package com.nangua.xiaomanjflc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.louding.frame.ui.AnnotateUtil;
 import com.nangua.xiaomanjflc.error.ErrLogManager;
-//import com.nangua.xiaomanjflc.service.MyPushIntentService;
 import com.nangua.xiaomanjflc.support.AppActivityLifecycleCallbacks;
-import com.nangua.xiaomanjflc.support.AppInfo;
 import com.nangua.xiaomanjflc.support.CrashHandler;
 import com.nangua.xiaomanjflc.support.ScreenObserver;
-//import com.umeng.message.IUmengRegisterCallback;
-//import com.umeng.message.PushAgent;
-//import com.umeng.message.UmengNotificationClickHandler;
-//import com.umeng.message.entity.UMessage;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.multidex.MultiDex;
+import android.webkit.WebView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class YilicaiApplication extends Application {
-
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(this);
-	}
 
 
 	@Override
@@ -40,14 +28,21 @@ public class YilicaiApplication extends Application {
 		crashHandler.init(getApplicationContext());
 
 		instance = this;
-		initAppInfo();
 		ErrLogManager.registerHandler();
 		if (Build.VERSION.SDK_INT >= 14) {
 			registerActivityLifecycleCallbacks(new AppActivityLifecycleCallbacks());
 		}
+		//开启webview chrome调试
+		if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.KITKAT) {  
+			   WebView.setWebContentsDebuggingEnabled(true);  
+		} 
 
 		// 推送消息SDK 初始化
-//		UmengManager.getInstance().initPushInfo(this);
+		UmengManager.getInstance().initPushInfo(this);
+		//false 正式 true 集成测试
+		UmengManager.getInstance().initAnalytics(this, false);
+//		String info = UmengManager.getDeviceInfo(this);
+//		AnnotateUtil.writeErr(info);
 
 		// 监听屏幕
 		observer = new ScreenObserver();
@@ -73,7 +68,6 @@ public class YilicaiApplication extends Application {
 	    /**
 	     * app性格信息
 	     */
-	    private AppInfo appInfo = null;
 	    private Activity activity = null;
 	    private Activity currentRunningActivity = null;
 	    private List<String> stackActivities = new ArrayList<String>();
@@ -103,44 +97,6 @@ public class YilicaiApplication extends Application {
 	    	};
 	    	
 	    };
-
-	    
-	    private void initAppInfo() {
-	    	appInfo = new AppInfo();
-	        appInfo.getAppInfo(this);
-	    }
-	    
-	    /**
-	     * umeng集成注册
-	     */
-//	    private void initPushInfo() {
-//	    	PushAgent mPushAgent = PushAgent.getInstance(this);
-//	    	//注册推送服务，每次调用register方法都会回调该接口
-//	    	mPushAgent.register(new IUmengRegisterCallback() {
-//
-//	    	    @Override
-//	    	    public void onSuccess(String deviceToken) {
-//	    	        //注册成功会返回device token
-//	    	    	System.out.println(deviceToken);
-//	    	    }
-//
-//	    	    @Override
-//	    	    public void onFailure(String s, String s1) {
-//	    	    	System.out.println(s + "####" + s1);
-//
-//	    	    }
-//	    	});
-//	    	//完全自定义处理推送
-////	    	mPushAgent.setPushIntentServiceClass(MyPushIntentService.class);
-//	    	
-//	    	UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
-//	    	    @Override
-//	    	    public void dealWithCustomAction(Context context, UMessage msg) {
-//	    	        Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
-//	    	    }
-//	    	};
-//	    	mPushAgent.setNotificationClickHandler(notificationClickHandler);
-//	    }
 	    
 	    /**********************************************************************************************************************************************************/
 	    
@@ -216,6 +172,10 @@ public class YilicaiApplication extends Application {
 			String name = activity.getClass().getSimpleName();
 			if (stackActivities.contains(name))
 				stackActivities.remove(name);
+		}
+
+		public ScreenObserver getObserver() {
+			return observer;
 		}
 		
 	}

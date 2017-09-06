@@ -34,7 +34,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="账户余额："
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_app" />
@@ -43,7 +43,7 @@
                 android:id="@+id/balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:textColor="@color/app_orange"
                 android:textSize="@dimen/font_app" />
         </LinearLayout>
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                typefaceName="msyh"
+                
                 android:text="提现金额："
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_app" />
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@null"
-                android:hint="提现金额>=1元"
+                android:hint="提现金额>=100元"
                 android:inputType="numberDecimal"
                 android:singleLine="true"
                 android:textColor="@color/black"
@@ -83,10 +83,12 @@
         <com.nangua.xiaomanjflc.widget.FontTextView
             android:id="@+id/cash"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft = "20dp"
+            android:layout_marginRight = "20dp"
             android:layout_below="@id/two"
-            android:layout_marginTop="@dimen/page_top"
-            typefaceName="msyh"
+            android:layout_marginTop="@dimen/component_btn_v2"
+            
             android:background="@drawable/btn_blue"
             android:gravity="center"
             android:text="@string/cash_confirm"
@@ -98,15 +100,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="vertical" >
-
-
+            
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:drawablePadding="@dimen/text_drawable"
                 android:drawableRight="@drawable/yibao"
-                android:text="平台第三方合作提现渠道："
+                android:text="第三方合作平台提现渠道："
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
 
@@ -114,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/text_line"
-                typefaceName="msyh"
+                
                 android:text="温馨提示："
                 android:textColor="@color/app_orange"
                 android:textSize="@dimen/font_hint" />
@@ -122,7 +123,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="1.客户设置的提现账户名，须与其在小满金服平台进行实名认证时身份证的名字相同；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
@@ -130,7 +131,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="2.个人提现收取2元手续费。企业提现收提现金额的0.1%的手续费，最低手续费2元；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
@@ -138,7 +139,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="3.为遵守国家反洗钱和套现行为的相关法律规定，不支持信用卡提现；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
@@ -146,7 +147,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="4.平台禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账户使用；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
@@ -154,7 +155,7 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="5.由于所有充值行为都是在第三方平台账户之间进行划拨，烦请注意第三方平台的服务时间可能造成的延误；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
@@ -162,15 +163,16 @@
             <com.nangua.xiaomanjflc.widget.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="6.为确保款项能及时转入您的银行帐号，请正确填写您的联系方式；"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />
             
             <com.nangua.xiaomanjflc.widget.FontTextView
+                android:id="@+id/supportTel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                typefaceName="msyh"
+                
                 android:text="7.在提现过程如遇任何问题，请联系平台客服400-178-5558。"
                 android:textColor="@color/font_gray"
                 android:textSize="@dimen/font_small" />

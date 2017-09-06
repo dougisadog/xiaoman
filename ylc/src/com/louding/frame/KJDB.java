@@ -844,5 +844,114 @@ public class KJDB {
          */
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion);
     }
+    
+    /** 
+     * Upgrade tables. In this method, the sequence is: 
+     * <b> 
+     * <p>[1] Rename the specified table as a temporary table. 
+     * <p>[2] Create a new table which name is the specified name. 
+     * <p>[3] Insert data into the new created table, data from the temporary table. 
+     * <p>[4] Drop the temporary table. 
+     * </b> 
+     * 
+     * @param db The database. 
+     * @param clazz The table name.
+     * @param columns The columns range, format is "ColA, ColB, ColC, ... ColN"; 
+     */  
+    public static void upgradeTables(SQLiteDatabase db, Class<?> clazz, List<String> columns)  
+    {  
+    	String tableName = TableInfo.get(clazz).getTableName();
+    	String[] c = getColumnNames(db, tableName);
+        try  
+        {  
+            db.beginTransaction();  
+      
+            // 1, Rename table.  
+            String tempTableName = tableName + "_temp";  
+            String sql = "ALTER TABLE " + tableName +" RENAME TO " + tempTableName;
+            db.execSQL(sql);
+      
+            // 2, Create table.
+            String sqlTable = SqlBuilder.getCreatTableSQL(clazz);
+            db.execSQL(sqlTable);
+      
+            // 3, Load data 
+            String sql_column = "";
+            for (int i = 0; i < c.length; i++) {
+            	if (i == c.length - 1) {
+            		sql_column = sql_column + c[i];
+            	}
+            	else {
+            		sql_column = sql_column + c[i] + ",";
+            	}
+			}
+            sql =   "INSERT INTO " + tableName +  
+                    " (" + sql_column + ") " +  
+                    " SELECT " + sql_column + " FROM " + tempTableName;  
+            db.execSQL(sql);
+      
+            // 4, Drop the temporary table. 
+            db.execSQL("DROP TABLE IF EXISTS " + tempTableName);
+            
+            db.setTransactionSuccessful();  
+//            String[] c2 = getColumnNames(db, tableName);
+//            System.out.println("done");
+        }  
+        catch (SQLException e)  
+        {  
+            e.printStackTrace();  
+        }  
+        catch (Exception e)  
+        {  
+            e.printStackTrace();  
+        }  
+        finally  
+        {  
+            db.endTransaction();  
+        }  
+    }  
+    
+    /**
+     * 获取所有 指定table的字段
+     * @param db
+     * @param tableName
+     * @return
+     */
+    protected static String[] getColumnNames(SQLiteDatabase db, String tableName)  
+    {  
+        String[] columnNames = null;  
+        Cursor c = null;  
+      
+        try  
+        {  
+            c = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);  
+            if (null != c)  
+            {  
+                int columnIndex = c.getColumnIndex("name");  
+                if (-1 == columnIndex)  
+                {  
+                    return null;  
+                }  
+      
+                int index = 0;  
+                columnNames = new String[c.getCount()];  
+                for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext())  
+                {  
+                    columnNames[index] = c.getString(columnIndex);  
+                    index++;  
+                }  
+            }  
+        }  
+        catch (Exception e)  
+        {  
+            e.printStackTrace();  
+        }  
+        finally  
+        {  
+            c.close();
+        }  
+      
+        return columnNames;  
+    } 
 
 }

@@ -20,8 +20,8 @@ import android.util.Log;
 /**
  * 应用程序的Log管理<br>
  * <b>创建时间</b> 2014-2-28
- * 
- * @author kymjs(kymjs123@gmail.com)
+ *
+ * @author kymjs (https://github.com/kymjs)
  * @version 1.1
  */
 public final class KJLoger {
@@ -42,6 +42,10 @@ public final class KJLoger {
         if (IS_DEBUG) {
             Log.i("debug", msg);
         }
+    }
+
+    public static final void log(String packName, String state) {
+        debugLog(packName, state);
     }
 
     public static final void debug(String msg, Throwable tr) {
@@ -66,5 +70,9 @@ public final class KJLoger {
         if (DEBUG_LOG) {
             e.printStackTrace();
         }
+    }
+
+    public static final void debug(String msg, Object... format) {
+        debug(String.format(msg, format));
     }
 }

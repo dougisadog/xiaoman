@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sky"
-    tools:context=".MainActivity" >
+    android:background="@drawable/sky" >
 
     <!-- 显示头部标题 -->
 
@@ -23,7 +22,7 @@
         android:layout_marginLeft="@dimen/page_left"
         android:layout_marginRight="@dimen/page_right"
         android:layout_marginTop="30dp"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:text="欢迎您"
         android:textColor="@color/white"
@@ -37,7 +36,7 @@
         android:layout_marginLeft="@dimen/page_left"
         android:layout_marginRight="@dimen/page_right"
         android:layout_marginTop="70dp"
-        typefaceName="msyh"
+        
         android:drawableLeft="@drawable/gesture_icon"
         android:drawablePadding="@dimen/text_drawable"
         android:gravity="center"
@@ -51,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/page_bottom"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:text="设置手势密码，防止他人未经授权查看。"
         android:textColor="@color/white"
@@ -64,7 +63,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="40dp"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:text="忘记手势密码"
         android:textColor="@color/white"
@@ -78,9 +77,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="40dp"
-        typefaceName="msyh"
+        
         android:gravity="center"
-        android:text="用其他账号登陆"
+        android:text="用其他账号登录"
         android:textColor="@color/white"
         android:textSize="@dimen/font_app" />
 

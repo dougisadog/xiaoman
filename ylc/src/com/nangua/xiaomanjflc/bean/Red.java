@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-public class Red {
+public class Red implements Comparable<Red>{
 
 	private int id;
 	private String cash_price; // 现金券金额
@@ -14,6 +14,7 @@ public class Red {
 	private String cash_desc; // 现金券描述
 	private String valid_days; // 有效天数
 	private boolean checked; // 是否被选中
+	private float lock_flg = 0; //1 锁 0未锁
 
 	public String getValid_days() {
 		return valid_days;
@@ -94,5 +95,45 @@ public class Red {
 				+ active_time + '\'' + ", used_time="
 				+ Arrays.toString(used_time) + ", cash_desc='" + cash_desc
 				+ '\'' + '}';
+	}
+
+	public float getLock_flg() {
+		return lock_flg;
+	}
+
+	public void setLock_flg(float lock_flg) {
+		this.lock_flg = lock_flg;
+	}
+
+	@Override
+	public int compareTo(Red another) {
+		if (this.lock_flg > another.lock_flg) {
+			return 1;
+		}
+		else if (this.lock_flg < another.lock_flg) {
+			return -1;
+		}
+		else {
+			return compareExpireTime(another) ? 1 : -1;
+		}
+	}
+	
+	private boolean compareExpireTime(Red another) {
+		if ("无期限".equals(this.expire_time)) {
+			return true;
+		}
+		else if ("无期限".equals(another.expire_time)) {
+			return false;
+		}
+		else {
+			String e1 = this.expire_time.replace(".", "");
+			String e2 = another.expire_time.replace(".", "");
+			try {
+				return Integer.parseInt(e1) > Integer.parseInt(e2);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+				return true;
+			}
+		}
 	}
 }

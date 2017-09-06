@@ -1,36 +1,23 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-//    compile fileTree(include: '*.jar', dir: 'libs')
-    compile project(':Slidingmenu_lib')
-    compile project(':Alert_Dialog_lib')
-    //    compile project(':PushSDK')
-        compile files('libs/glide-3.7.0.jar')
-        compile files('libs/ips-commons-codec-1.10.jar')
-        compile files('libs/ips-p2p-tools.jar')
-        compile files('libs/ips-security-1.0.6.jar')
-        compile files('libs/jackson-all-1.9.10.jar')
-        compile files('libs/kjframe.jar')
-        compile files('libs/mframework.jar')
-//        compile files('libs/MobCommons-2016.0816.1507.jar')
-//        compile files('libs/MobTools-2016.0816.1507.jar')
-//        compile files('libs/ShareSDK-Core-2.7.6.jar')
-//        compile files('libs/ShareSDK-SinaWeibo-2.7.6.jar')
-//        compile files('libs/ShareSDK-Wechat-2.7.6.jar')
-//        compile files('libs/ShareSDK-Wechat-Core-2.7.6.jar')
-//        compile files('libs/ShareSDK-Wechat-Moments-2.7.6.jar')
-        compile files('libs/xiaomi_sdk.jar')
-        compile files('libs/yyb_selfupdate_v1.0.jar')
-    //    compile 'com.android.support:support-v4:24.2.1'
+    compile fileTree(include: '*.jar', dir: 'libs')
+    //compile project(':PushSDK')
     compile project(':BDIntegrationSDK_LibProject')
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.android.support:multidex:1.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
+    compile 'com.google.code.gson:gson:2.7'
+    //compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.umeng.analytics:analytics:6.1.2'
+    compile project(':PushSDK')
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'org.kymjs.kjframe:kjframe:2.6'
+    compile group: 'com.github.bumptech.glide', name: 'glide', version: '3.7.0'
 }
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 23
+    buildToolsVersion '25.0.0'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -57,8 +44,7 @@ android {
     defaultConfig {
         applicationId "com.nangua.xiaomanjflc"
         minSdkVersion 19
-        targetSdkVersion 22
-        multiDexEnabled false
+        targetSdkVersion 23
         versionCode 10000
         versionName "1.0.0"
     }
@@ -109,6 +95,9 @@ android {
         abortOnError false
     }
     dexOptions {
-        incremental true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }

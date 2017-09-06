@@ -19,7 +19,7 @@
         android:orientation="horizontal" >
 
         <com.nangua.xiaomanjflc.widget.FontTextView
-typefaceName="msyh"
+
             android:id="@+id/tv_message_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@ typefaceName="msyh"
             android:textColor="#7aa7e0" />
 
         <com.nangua.xiaomanjflc.widget.FontTextView
-typefaceName="msyh"
+
             android:id="@+id/tv_message_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@ typefaceName="msyh"
         android:orientation="horizontal" >
 
         <com.nangua.xiaomanjflc.widget.FontTextView
-typefaceName="msyh"
+
             android:id="@+id/tv_message_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

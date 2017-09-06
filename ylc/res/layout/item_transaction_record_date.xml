@@ -17,7 +17,7 @@
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            typefaceName="msyh"
+            
             android:text="11111111111"
             android:textColor="#808082"
             android:textSize="@dimen/font_title" />

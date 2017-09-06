@@ -1,30 +1,37 @@
 package com.nangua.xiaomanjflc;
 
+import java.math.BigDecimal;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+//import com.baidu.autoupdatesdk.AppUpdateInfo;
+//import com.baidu.autoupdatesdk.AppUpdateInfoForInstall;
+//import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
+//import com.baidu.autoupdatesdk.CPCheckUpdateCallback;
+//import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.louding.frame.KJHttp;
 import com.louding.frame.http.HttpCallBack;
 import com.louding.frame.http.HttpParams;
 import com.nangua.xiaomanjflc.bean.Update;
 import com.nangua.xiaomanjflc.cache.CacheBean;
-import com.nangua.xiaomanjflc.support.ApkInfo;
+import com.nangua.xiaomanjflc.dialog.DialogConfirmFragment;
+import com.nangua.xiaomanjflc.error.DebugPrinter;
 import com.nangua.xiaomanjflc.support.UpdateManager;
 import com.nangua.xiaomanjflc.support.UpdateManager.CheckVersionInterface;
 import com.nangua.xiaomanjflc.support.UpdateManager.OnCheckDoneListener;
-import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.tencent.tmselfupdatesdk.ITMSelfUpdateListener;
-import com.tencent.tmselfupdatesdk.TMSelfUpdateManager;
-import com.tencent.tmselfupdatesdk.YYBDownloadListener;
-import com.tencent.tmselfupdatesdk.model.TMSelfUpdateUpdateInfo;
+import com.nangua.xiaomanjflc.support.UpdateManager.OnPatchUpdateListener;
+import com.nangua.xiaomanjflc.support.YYBManager;
+import com.nangua.xiaomanjflc.support.YYBManager.UpdateCallBack;
+import com.tencent.tmapkupdatesdk.model.ApkUpdateDetail;
 import com.xiaomi.market.sdk.UpdateResponse;
 import com.xiaomi.market.sdk.UpdateStatus;
 import com.xiaomi.market.sdk.XiaomiUpdateAgent;
 import com.xiaomi.market.sdk.XiaomiUpdateListener;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 
 public class AutoUpdateManager {
 
@@ -67,7 +74,7 @@ public class AutoUpdateManager {
 	
 	/**
 	 * 通用更新回调
-	 * @author Administrator
+	 * @author Doug
 	 *
 	 */
 	public static interface UpdateCallback {
@@ -78,8 +85,19 @@ public class AutoUpdateManager {
 		//更新完成
 		public void onUpdated();	
 		
-		//更新前 暂未使用
 		public void onBeforeUpdate();	
+	}
+	
+	/**
+	 * 弹出框点击回调
+	 * @author Doug
+	 *
+	 */
+	public static interface UpdateConfirm {
+		
+		public void submit();
+		
+		public void cancel();
 	}
 	
 	/**
@@ -99,7 +117,7 @@ public class AutoUpdateManager {
 
 					@Override
 					public void failure(JSONObject ret) {
-						System.out.println("f");
+						System.out.println("fail");
 					}
 
 					@Override
@@ -120,15 +138,29 @@ public class AutoUpdateManager {
 				});
 				
 			}
-		}, 2900);
+		}, 500); //修改本地更新请求延迟 2.9s-> 0.5s
 	}
 	
+	//本地更新是否提示信息  特指 当前为最新版本时 是否提示
+	private boolean showMsg = false;
+	
+
+	public boolean isShowMsg() {
+		return showMsg;
+	}
+
+	public void setShowMsg(boolean showMsg) {
+		this.showMsg = showMsg;
+	}
+	/**
+	 * 检测更新
+	 * @param context
+	 */
 	private void checkUpdate(Context context) {
 		updateManager.setOnCheckDoneListener(new OnCheckDoneListener() {
 			@Override
 			public void onCheckDone() {
 				updateCallback.onUpdated();
-//				updateDone();
 			}
 		});
 		CheckVersionInterface update = new CheckVersionInterface() {
@@ -137,82 +169,87 @@ public class AutoUpdateManager {
 			public Update checkVersion() throws Exception {
 				try {
 					u = new Update(versionInfo);
+					int currentVersion = CacheBean.getInstance().getApkInfo().versionCode;
+					if (currentVersion < u.getVersionCode())
+					CacheBean.getInstance().getRedConditions().put("lastVersion", u.getVersionCode() + "");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				return u;
 			}
 		};
-		updateManager.checkAppUpdate(context, false, update);
+		updateManager.checkAppUpdate(context, showMsg, update);
 	}
 
+	/**
+	 * 新版应用宝自动更新
+	 * @param context
+	 * @param apkUpdateDetail 应用宝 查询更新内容{@link ApkUpdateDetail}
+	 */
+	private void yybUpdate(final Context context ,final ApkUpdateDetail apkUpdateDetail) {
+		updateManager = UpdateManager.getUpdateManager();
+		updateManager.setOnCheckDoneListener(new OnCheckDoneListener() {
+			@Override
+			public void onCheckDone() {
+				updateCallback.onUpdated();
+			}
+		});
+		
+		CheckVersionInterface update = new CheckVersionInterface() {
+			
+			@Override
+			public Update checkVersion() throws Exception {
+				Update up = new Update();
+				try {
+					up.setDownloadURL(apkUpdateDetail.url);
+					up.setForceUpdate(false);
+					up.setVersionCode(apkUpdateDetail.versioncode);
+					up.setVersionName(apkUpdateDetail.versionname);
+					
+					int currentVersion = CacheBean.getInstance().getApkInfo().versionCode;
+					if (currentVersion < apkUpdateDetail.versioncode)
+					CacheBean.getInstance().getRedConditions().put("lastVersion", apkUpdateDetail.versioncode + "");
+					
+					String patchTitle = "";
+					if (apkUpdateDetail.patchsize > 0)
+						patchTitle = "增量更新";
+					up.setVersionDesc(patchTitle + " " + apkUpdateDetail.newFeature);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return up;
+			}
+		};
+		//当为应用宝增量更新时 使用patch组包apk安装
+		if (apkUpdateDetail.patchsize > 0) {
+			updateManager.setOnPatchUpdateListener(new OnPatchUpdateListener() {
+				
+				@Override
+				public void onPatchUpdate() {
+					YYBManager.getInstance().startPatch(context, apkUpdateDetail.url);
+				}
+			});
+		}
+		updateManager.checkAppUpdate(context, showMsg, update);
+	}
 	
 	/**
-	 * 应用宝注册自动更新  selfUpdateManager.startSelfUpdate(false);启动更新 若为true需强制下载应用宝
-		若为 true则需要在activity处增加 onResume处
-		try {
-	  	 selfUpdateManager.onActivityResume();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+	 * 初始化应用宝自动更新
 	 * @param c
 	 */
-	public void initYYB(Context c) {
-		// 自更新sdk初始化
-		TMSelfUpdateManager selfUpdateManager = TMSelfUpdateManager.getInstance();
-		try {
-			final Context context = c.getApplicationContext();// application的context
-			String channelid = "990483"; // 应用宝渠道包的渠道号，申请方法请参见《腾讯应用宝自更新SDK产品介绍》中的产品接入步骤step1
-			ITMSelfUpdateListener selfupdateListener = new ITMSelfUpdateListener() {
-				@Override
-				public void onDownloadAppStateChanged(final int state, final int errorCode, final String errorMsg) {
-					// TODO 更新包下载状态变化的处理逻辑
-				}
+	public void initYYB(final Context c) {
+		YYBManager.getInstance().checkUpdate(c, new UpdateCallBack() {
+			
+			@Override
+			public void onUpdateRecieved(ApkUpdateDetail apkUpdateDetail) {
+				yybUpdate(c, apkUpdateDetail);
+			}
 
-				@Override
-				public void onUpdateInfoReceived(TMSelfUpdateUpdateInfo info) {
-					// TODO 收到更新信息的处理逻辑
-					ApkInfo apkInfo = ApplicationUtil.getApkInfo(context);
-					if (apkInfo.versionCode >= info.versioncode) {
-						updateCallback.onUpdated();
-					}
-					else {
-						updateCallback.onBeforeUpdate();
-					}
-				}
-
-				@Override
-				public void onDownloadAppProgressChanged(final long arg0, final long arg1) {
-					// TODO 更新包下载进度发生变化的处理逻辑
-				}
-			};
-			YYBDownloadListener yybDownloadListener = new YYBDownloadListener() {
-				@Override
-				public void onDownloadYYBStateChanged(String url, final int state, int errorCode, String errorMsg) {
-					// TODO 应用宝下载状态变化的处理逻辑
-				}
-
-				@Override
-				public void onDownloadYYBProgressChanged(final String url, final long receiveDataLen,
-						final long totalDataLen) {
-					// TODO 应用宝下载进度变化的处理逻辑
-				}
-
-				@Override
-				public void onCheckDownloadYYBState(String arg0, int arg1, long arg2, long arg3) {
-					// TODO Auto-generated method stub
-
-				}
-			};
-			Bundle bundle = null;// 附加参数的bundle，一般情况下传空，可以由外部传入场景信息等，具体字段可参考
-									// TMSelfUpdateConst. BUNDLE_KEY_* 的定义
-			selfUpdateManager.init(context, channelid, selfupdateListener, yybDownloadListener, bundle);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		selfUpdateManager.checkSelfUpdate();
-		selfUpdateManager.startSelfUpdate(false);
+			@Override
+			public void noUpdate() {
+				updateCallback.onUpdated();
+			}
+		});
 	}
 	
 	/**
@@ -220,7 +257,8 @@ public class AutoUpdateManager {
 	 * @param context
 	 * @param debug true沙盒  false 正式
 	 */
-	public void initXiaomi(Context context, boolean debug) {
+	public void initXiaomi(final Context context, boolean debug) {
+		
 		XiaomiUpdateAgent.setCheckUpdateOnlyWifi(true);
 		
 		XiaomiUpdateAgent.setUpdateAutoPopup(false);
@@ -232,9 +270,33 @@ public class AutoUpdateManager {
 		            case UpdateStatus.STATUS_UPDATE:
 		                 // 有更新， UpdateResponse为本次更新的详细信息
 		                 // 其中包含更新信息，下载地址，MD5校验信息等，可自行处理下载安装
-		                 // 如果希望 SDK继续接管下载安装事宜，可调用
 		            	 updateCallback.onBeforeUpdate();
-		                 XiaomiUpdateAgent.arrange();
+
+		         		StringBuffer sb = new StringBuffer();
+		         		double size = new   BigDecimal(1d * updateInfo.apkSize /1000 /1000).setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue(); 
+		         		sb.append("apk大小为" + size + "MB\n");
+		         		sb.append("最新版本为" + updateInfo.versionName + "\n");
+		         		sb.append("最新版本号为" + updateInfo.versionCode + "\n");
+		         		sb.append("本次更新内容:" + updateInfo.updateLog + "\n");
+		         		
+						int currentVersion = CacheBean.getInstance().getApkInfo().versionCode;
+						if (currentVersion < updateInfo.versionCode)
+		         		CacheBean.getInstance().getRedConditions().put("lastVersion", updateInfo.versionCode + "");
+		         		showDialog(context, sb.toString(), new UpdateConfirm() {
+							
+							@Override
+							public void submit() {
+								// 如果希望 SDK继续接管下载安装事宜，可调用
+								StartApplication.parse = true;
+								XiaomiUpdateAgent.arrange();
+//		         				updateCallback.onUpdated();
+							}
+							
+							@Override
+							public void cancel() {
+								updateCallback.onUpdated();
+							}
+						});
 		                 break;
 		             case UpdateStatus.STATUS_NO_UPDATE:
 		                // 无更新， UpdateResponse为null
@@ -260,24 +322,97 @@ public class AutoUpdateManager {
 		        }
 		    }
 		});
-		
 		XiaomiUpdateAgent.update(context, debug);
+	}
+	
+	
+	private DialogConfirmFragment updateConfirmDialog;
+	/**
+	 * 弹出对话框
+	 * @param context 上下文 需要为fragmentActivity
+	 * @param content 内容
+	 * @param updateConfirm 按钮回调 {@link UpdateConfirm}
+	 */
+	private void showDialog(Context context, String content, final UpdateConfirm updateConfirm) {
+		if (context instanceof FragmentActivity) {
+			if (null == updateConfirmDialog) {
+				updateConfirmDialog = new DialogConfirmFragment(new DialogConfirmFragment.CallBackDialogConfirm() {
+					@Override
+					public void onSubmit(int position) {
+						if (null == updateConfirmDialog) {
+							return;
+						}
+						updateConfirm.submit();
+						updateConfirmDialog.dismiss();
+						updateConfirmDialog = null;
+					}
+					
+					@Override
+					public void onKeyBack() {
+						updateConfirm.cancel();
+						updateConfirmDialog.dismiss();
+						updateConfirmDialog = null;
+					}
+					
+					@Override
+					public void onCancel() {
+						updateConfirm.cancel();
+						updateConfirmDialog.dismiss();
+						updateConfirmDialog = null;
+					}
+				}, content, " ", 0, "下载更新", "取消");
+			}
+			if (updateConfirmDialog.isVisible()) {
+				return;
+			}
+			updateConfirmDialog.setCancelable(false);
+			updateConfirmDialog.showDialog(((FragmentActivity)context).getSupportFragmentManager());
+			
+		}
+		else {
+			DebugPrinter.e("Dialog needs FragmentActivity");
+		}
+		
 	}
 
 	/**
 	 * 百度自动更新
 	 * @param context
 	 */
-	public void initBaidu(Context context) {
+	public void initBaidu(final Context context) {
 		
 //		BDAutoUpdateSDK.uiUpdateAction(context, new UICheckUpdateCallback() {
 //
 //			@Override
 //			public void onCheckComplete() {
+//				new Handler().post(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						BDAutoUpdateSDK.cpUpdateCheck(context, new CPCheckUpdateCallback() {
+//							
+//							@Override
+//							public void onCheckUpdateCallback(AppUpdateInfo appInfo,
+//									AppUpdateInfoForInstall install) {
+//								if (null == appInfo) return;
+//								String name = appInfo.getAppSname();
+//								int code = appInfo.getAppVersionCode();
+//								String versionName = appInfo.getAppVersionName();
+//								DebugPrinter.d("name = " + name + " code = " + code + " vesion = " + versionName);
+//								int currentVersion = CacheBean.getInstance().getApkInfo().versionCode;
+//								if (currentVersion < code)
+//								CacheBean.getInstance().getRedConditions().put("lastVersion", code + "");
+//								
+//							}
+//						});
+//						
+//					}
+//				});
 //				updateCallback.onUpdated();
 //			}
 //			
 //		});
 	}
+
 
 }

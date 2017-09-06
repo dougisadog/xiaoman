@@ -47,13 +47,8 @@ public class TenderProtocolActivity extends KJActivity {
 
 		mContent.setWebViewClient(new WebViewClient());
 		
-		if ("01".equals(products_type)) {
-			url = AppConstants.SERVICE_PROTOCOL + "?pid=" + pid + "&uid=" + uid
-					+ "&amt=" + amt;
-		} else {
-			url = AppConstants.SERVICE_PROTOCOL2 + "?pid=" + pid + "&uid="
-					+ uid + "&amt=" + amt;
-		}
+		url = AppConstants.SERVICE_PROTOCOL + "?pid=" + pid + "&uid=" + uid
+				+ "&amt=" + amt;
 		mContent.loadUrl(url);
 	}
 

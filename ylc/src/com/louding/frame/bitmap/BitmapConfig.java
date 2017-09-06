@@ -15,18 +15,24 @@
  */
 package com.louding.frame.bitmap;
 
-public class BitmapConfig {
+import com.louding.frame.bitmap.ImageDisplayer.ImageCache;
+import com.louding.frame.utils.KJLoger;
 
-    public boolean isDEBUG = true;
-    public int memoryCacheSize;
+/**
+ * Bitmap配置器
+ *
+ * @author kymjs (https://github.com/kymjs)
+ */
+public final class BitmapConfig {
 
-    public String cachePath = "KJLibrary/image";
-    public int diskCacheSize = 41943040; // 40M
+    public static boolean isDEBUG = KJLoger.DEBUG_LOG;
 
-    public I_ImageLoader downloader;
+    /**
+     * 缓存器
+     **/
+    public static ImageCache mMemoryCache;
 
-    public BitmapConfig() {
-        memoryCacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        downloader = new BitmapDownloader(this, 0, 0);
-    }
+    public int cacheTime = 1440000;
+    // 为了防止网速很快的时候速度过快而造成先显示加载中图片，然后瞬间显示网络图片的闪烁问题
+    public long delayTime = 0;
 }

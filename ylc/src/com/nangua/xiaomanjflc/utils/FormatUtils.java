@@ -2,8 +2,22 @@ package com.nangua.xiaomanjflc.utils;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.type.JavaType;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.louding.frame.utils.StringUtils;
 
 public class FormatUtils {
 
@@ -82,6 +96,18 @@ public class FormatUtils {
 		ss.add(b);
 		return ss;
 	}
+	
+	public static String numSecretHide(String num) {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < num.length(); i++) {
+			String current = num.charAt(i) + "";
+			if (StringUtils.isNumber(current)) {
+				current = "*";
+			}
+			builder.append(current);
+		}
+		return builder.toString();
+	}
 
 	public static String urlFormat(String url) {
 		if (url.indexOf("http") == -1) {
@@ -109,7 +135,7 @@ public class FormatUtils {
 	/**
 	 * 将每三个数字加上逗号处理（通常使用金额方面的编辑）
 	 *
-	 * @param str
+	 * @param text
 	 *            无逗号的数字
 	 * @return 加上逗号的数字
 	 */
@@ -133,6 +159,82 @@ public class FormatUtils {
 			number = 0.0;
 		}
 		return df.format(number);
+	}
+	
+	public static ObjectMapper mapper;
+	
+	public static ObjectMapper getMapper() {
+		if (null == mapper) {
+			mapper = new ObjectMapper();
+			//忽略未知参数的转换
+			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);			
+		}
+		return mapper;
+	}
+	
+	
+	public static <T> List<T> getListJson(String json, Class<T> clazz) {
+		List<T> result = new ArrayList<T>();
+		try {
+			result = getMapper().readValue(json, getCollectionType(List.class, clazz));
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+		return getMapper().getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+	}  
+	
+	public static String getJson(Object o) {
+		String Json = null;
+		try {
+			Json = getMapper().writeValueAsString(o);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Json;
+		}
+		return Json;
+	}
+	
+	/**
+	 * jsons数据解析成为对应类
+	 * @param json
+	 * @param clazz 所属class
+	 * @return
+	 */
+	public static <T> T jsonParse(String json, Class<T> clazz) {
+		T result = null;
+		try {
+			result = getMapper().readValue(json, clazz);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 将以.00结尾的数字变为整数
+	 */
+	public static String getSimpleNum(String num) {
+		if (num.endsWith(".00"))
+			num = num.substring(0, num.length() - 3);
+		return num;
 	}
 
 }

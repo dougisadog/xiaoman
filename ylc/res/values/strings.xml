@@ -7,6 +7,9 @@
     <string name="back">返回</string>
     <string name="product">产品中心</string>
     <string name="account">我的账户</string>
+    <string name="product_v2">理财</string>
+    <string name="account_v2">我的</string>
+    <string name="home_v2">首页</string>
     <string name="more">更多</string>
     <string name="signin">登录</string>
     <string name="signout">退出登录</string>
@@ -15,21 +18,25 @@
     <string name="cash">提现</string>
     <string name="confirm">确定</string>
     <string name="copyright">版权所有：小满金服信息技术（大连）有限公司</string>
+    <string name="bottom_pull_detail">————  上拉查看项目详情     ————</string>
     <string name="item_product_gain">预计年化收益率</string>
     <string name="item_product_deadline">投资时限</string>
-    <string name="sign_tel_hint">填写手机号码</string>
-    <string name="sign_tel_verify_hint">短信验证码</string>
-    <string name="sign_pwd_hint">填写登录密码</string>
+    <string name="sign_tel_hint">请填写手机号码</string>
+     <string name="sign_captcha_hint">请填写图片验证码</string>
+    <string name="sign_tel_hint_new">请输入绑定手机号码</string>
+    <string name="sign_tel_verify_hint">请输入短信验证码</string>
+    <string name="sign_pwd_hint">请填写登录密码</string>
     <string name="new_pwd_hint">新密码为8个以上字母、数字和符号的组合</string>
     <string name="new_confirm_pwd_hint">再次输入新密码</string>
     <string name="sign_up_pwd_hint">密码为8个以上字母、数字和符号的组合</string>
-    <string name="sign_up_confirm_pwd_hint">再次输入密码</string>
-    <string name="sign_verify_hint">输入验证码</string>
+    <string name="sign_up_confirm_pwd_hint">请再次输入密码</string>
+    <string name="sign_up_invite_code_hint">请填写邀请码(可不填)</string>
+    <string name="sign_verify_hint">请输入验证码</string>
     <string name="sign_hint_err">输入的手机号和密码有误！</string>
     <string name="sign_hint">请先填写完整信息！</string>
-    <string name="sign_lose"><u>忘记密码？</u></string>
+    <string name="sign_lose">忘记密码</string>
     <string name="sign_protocol"><u>注册协议</u></string>
-    <string name="sign_code">点击获取</string>
+    <string name="sign_code">获取验证码</string>
     <string name="signup_code">请先输入11位电话号码。</string>
     <string name="signup_hascode">请先获取短信验证码！</string>
     <string name="signup_code_success">验证码发送成功，请注意查收。</string>
@@ -62,7 +69,7 @@
     <string name="more_update">检测更新</string>
     <string name="more_comment">拨打客服电话</string>
     <string name="invest_protocol"><u>借款协议</u></string>
-    <string name="invest_rate">预计年化收益率</string>
+    <string name="invest_rate">年化收益率</string>
     <string name="invest_price">投资金额</string>
     <string name="invest_amount">还款本息</string>
     <string name="trans_pre">操作前金额</string>
@@ -86,8 +93,47 @@
     <string name="title_activity_yan_invite">YanInviteActivity</string>
     <string name="title_activity_invite_list">InviteListActivity</string>
     <string name="title_activity_verify_pwd">VerifyPwd</string>
+    <string name="message_all_read">全部设置为已读</string>
+    
+    <string name="title_red">现金券</string>
+    <string name="title_plus_bonus">加息券</string>
+    
+    
+    <string name="different_pwd">两次输入密码不一致。</string>
+    <string name="invite_code_limit">邀请码应为8位</string>
+    
 
-    <string name="message_all_read">全部标记为已读</string>
+    
+    <!-- product -->
+    <string name="limit_title">项目期限</string>
+    
+    <!-- KJListView -->
+    <string name="refresh_list_normal">下拉立即刷新</string>
+    <string name="refresh_list_head_ready">松开立即刷新</string>
+    <string name="refresh_list_head_refreshing">数据正在刷新…</string>
+    <string name="refresh_list_foot_refreshing">上拉立即加载更多数据</string>
+    <string name="refresh_list_foot_ready">松开立即加载更多数据</string>
+    
+    <!-- hint -->
+    <string name="lesat_charge_amount">充值最低100元起</string>
+    <string name="report_hint">再次留下您的宝贵意见和建议</string>
+    <string name="btn_submit">提交</string>
+    
+        <!-- dialog -->
+    <string name="txtDialogCancelEn">Cancel</string>
+    <string name="txtDialogCancelCn">(取消)</string>
+    <string name="txtDialogSubmitEn">OK</string>
+    <string name="txtDialogSubmitCn">(确认)</string>
+    <string name="txtDialogYesEn">Yes</string>
+    <string name="txtDialogYesCn">(好)</string>
+    <string name="txtDialogNoEn">No</string>
+    <string name="txtDialogNoCn">(不)</string>
+    <string name="txtDialogRestartEn">Restart</string>
+    <string name="txtDialogRestartCn">(重新开始)</string>
+	<string name="txtDialogClose">关闭</string>
+	
+	<string name="txtInvitedDialogCancelCn">返回修改</string>
+	<string name="txtInvitedDialogSubmitCn">确认提交</string>
     
         <!-- system -->
     <string name="timeout">网络存在问题，请稍后重试</string>
@@ -97,5 +143,10 @@
     <string name="something_error">发生故障</string>
     <string name="please_deleted_cache_dir">权限出错，无法读取存储空间</string>
 	<string name="ok">确定</string>
+	
+	<string name="support_tel_text2">400-178-5558</string>
+	<string name="support_tel2">4001785558</string>
+	
+	
 	
 </resources>

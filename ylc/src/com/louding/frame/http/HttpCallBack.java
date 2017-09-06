@@ -16,32 +16,42 @@
 package com.louding.frame.http;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.louding.frame.utils.KJLoger;
-import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.utils.ApplicationUtil;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.widget.Toast;
 
 /**
  * Http请求回调类<br>
- * <p/>
+ * 
  * <b>创建时间</b> 2014-8-7
  *
- * @author kymjs(kymjs123@gmail.com)
- * @version 1.3
+ * @author kymjs (http://www.kymjs.com/) .
+ * @version 1.4
  */
 public abstract class HttpCallBack {
+	
+	private boolean isStream = false;
 
 	private Context context;
-	private LoudingDialog ld;
-	private LoudingDialog ldc;
+	private LoudingDialogIOS ld;
+	private LoudingDialogIOS ldc;
 	private boolean loading = true;
+	
+	public HttpCallBack() {
+		super();
+	}
 
 	public HttpCallBack(Context context) {
 		super();
@@ -53,6 +63,13 @@ public abstract class HttpCallBack {
 		this.context = context;
 		this.loading = loading;
 	}
+	
+	public HttpCallBack(Context context, boolean loading, boolean isStream) {
+		super();
+		this.context = context;
+		this.loading = loading;
+		this.setStream(isStream);
+	}
 
 	/**
 	 * Http请求开始前回调
@@ -60,8 +77,14 @@ public abstract class HttpCallBack {
 	public void onPreStart() {
 		KJLoger.debug("Http请求开始。。。");
 		if (context != null && loading) {
-			ld = new LoudingDialog(context);
+			ld = new LoudingDialogIOS(context);
 			ld.showLouding(R.string.load_ing);
+		}
+	}
+	
+	private void dissmiss() {
+		if (ld != null && loading) {
+			ld.dismiss();
 		}
 	}
 
@@ -77,6 +100,10 @@ public abstract class HttpCallBack {
 	 */
 	public void onLoading(long count, long current) {
 	}
+	
+	public void onSuccess(InputStream input) {
+		KJLoger.debug("Http请求流成功。。。");
+	}
 
 	/**
 	 * Http请求成功时回调
@@ -84,8 +111,11 @@ public abstract class HttpCallBack {
 	 * @param t
 	 */
 	public void onSuccess(String t) {
+		if (isStream) {
+			dissmiss();
+			return;
+		}
 		KJLoger.debug("Http请求成功。。。");
-		System.out.println(t);
 		try {
 			JSONObject ret = new JSONObject(t);
 			int state = ret.getInt("status");
@@ -96,32 +126,42 @@ public abstract class HttpCallBack {
 			}
 		} catch (JSONException e) {
 			System.out.println("json数据解析错误。");
-			Toast.makeText(context, R.string.app_data_error, Toast.LENGTH_SHORT)
-					.show();
+			if (null != context) {
+				Toast.makeText(context, R.string.app_data_error, Toast.LENGTH_SHORT)
+				.show();
+			}
+			dissmiss();
 		}
 	}
 
 	public void failure(JSONObject ret) {
+		if (isStream) {
+			dissmiss();
+			return;
+		}
 		if (!ret.isNull("msg")) {
 			try {
 				String msg = ret.getString("msg");
 				if (context != null) {
 					if (msg.equals("not login")) {
 						ApplicationUtil.restartApplication(context);
-						// context.startActivity(new Intent(context,
-						// SigninActivity.class));
 					} else {
-						ldc = new LoudingDialog(context);
+						ldc = new LoudingDialogIOS(context);
 						ldc.showConfirmHint(msg);
 					}
 				}
 			} catch (JSONException e) {
-				Toast.makeText(context, R.string.app_data_error,
-						Toast.LENGTH_SHORT).show();
+				if (context != null) {
+					Toast.makeText(context, R.string.app_data_error,
+							Toast.LENGTH_SHORT).show();
+				}
+				dissmiss();
 			}
 		} else {
+			if (context != null) {
 			Toast.makeText(context, R.string.app_exception, Toast.LENGTH_SHORT)
 					.show();
+			}
 		}
 		failNext(ret);
 	}
@@ -131,15 +171,16 @@ public abstract class HttpCallBack {
 	}
 
 	public void success(JSONObject ret) {
-
+		KJLoger.debug("Http请求成功。。。");
 	}
 
 	/**
 	 * Http下载成功时回调
 	 */
 	public void onSuccess(File f) {
+		KJLoger.debug("文件下载成功。。。");
 	}
-
+	
 	/**
 	 * Http请求失败时回调
 	 *
@@ -161,8 +202,69 @@ public abstract class HttpCallBack {
 	 */
 	public void onFinish() {
 		KJLoger.debug("Http请求结束。。。");
-		if (ld != null && loading) {
-			ld.dismiss();
-		}
+		dissmiss();
 	}
+
+	public boolean isStream() {
+		return isStream;
+	}
+
+	public void setStream(boolean isStream) {
+		this.isStream = isStream;
+	}
+
+    /**
+     * 注意：本方法将在异步调用。
+     * Http异步请求成功时在异步回调,并且仅当本方法执行完成才会继续调用onSuccess()
+     *
+     * @param t 返回的信息
+     */
+    public void onSuccessInAsync(byte[] t) {
+    }
+
+    /**
+     * Http请求成功时回调
+     * 
+     * @param t
+     *            HttpRequest返回信息
+     */
+    public void onSuccess(byte[] t) {
+        if (t != null) {
+            onSuccess(new String(t));
+        }
+    }
+
+    /**
+     * Http请求成功时回调
+     * 
+     * @param headers
+     *            HttpRespond头
+     * @param t
+     *            HttpRequest返回信息
+     */
+    public void onSuccess(Map<String, String> headers, byte[] t) {
+    	if (isStream()) {
+    		onSuccess(headers, t);
+    	}
+    	onSuccess(t);
+    }
+
+    /**
+     * 仅在KJBitmap中可用，图片加载完成时回调
+     * 
+     * @param t
+     */
+    public void onSuccess(Bitmap t) {}
+
+    /**
+     * Http请求失败时回调
+     * 
+     * @param errorNo
+     *            错误码
+     * @param strMsg
+     *            错误原因
+     */
+    public void onFailure(int errorNo, String strMsg) {}
+
+
 }

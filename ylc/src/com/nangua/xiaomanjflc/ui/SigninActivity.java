@@ -1,43 +1,23 @@
 package com.nangua.xiaomanjflc.ui;
 
-import java.util.Date;
-import java.util.List;
+import com.louding.frame.KJActivity;
+import com.louding.frame.KJDB;
+import com.louding.frame.ui.BindView;
+import com.louding.frame.utils.StringUtils;
+import com.nangua.xiaomanjflc.AppConstants;
+import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.support.InfoManager;
+import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
+import com.nangua.xiaomanjflc.support.UIHelper;
+import com.nangua.xiaomanjflc.utils.KeyboardUitls;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.kymjs.kjframe.KJDB;
-
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Resources.NotFoundException;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.louding.frame.KJActivity;
-import com.louding.frame.KJHttp;
-import com.louding.frame.http.HttpCallBack;
-import com.louding.frame.http.HttpParams;
-import com.louding.frame.ui.BindView;
-import com.louding.frame.utils.StringUtils;
-import com.nangua.xiaomanjflc.AppConfig;
-import com.nangua.xiaomanjflc.AppConstants;
-import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.nangua.xiaomanjflc.utils.HttpHelper;
-import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
-import com.nangua.xiaomanjflc.R;
-import com.nangua.xiaomanjflc.bean.jsonbean.UserConfig;
-import com.nangua.xiaomanjflc.cache.CacheBean;
-import com.nangua.xiaomanjflc.support.InfoManager;
-import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
-import com.nangua.xiaomanjflc.support.UIHelper;
+import android.widget.TextView;
 
 public class SigninActivity extends KJActivity {
 
@@ -50,44 +30,47 @@ public class SigninActivity extends KJActivity {
 	@BindView(id = R.id.verifyimage, click = true)
 	private ImageView mVrifyImage;
 	@BindView(id = R.id.signin, click = true)
-	private FontTextView mSignin;
-	@BindView(id = R.id.signup, click = true)
-	private FontTextView mSignup;
+	private TextView mSignin;
+	@BindView(id = R.id.title_right, click = true)
+	private TextView mSignup;
 	@BindView(id = R.id.verify1)
 	private LinearLayout mVrify1;
 	@BindView(id = R.id.verify2)
 	private LinearLayout mVrify2;
 	@BindView(id = R.id.hint)
-	private FontTextView mHint;
+	private TextView mHint;
 	@BindView(id = R.id.losepwd, click = true)
-	private FontTextView mLose;
-
-	private FontTextView titleRight;
+	private TextView mLose;
 
 	private String tel;
 	private String pwd;
 	private String code;
-	private String sid;
-	private int uid;
-
-	private KJHttp kjh;
 	private KJDB kjdb;
 
 	@Override
 	public void setRootView() {
-		setContentView(R.layout.activity_signin);
+		setContentView(R.layout.activity_signin_v2);
 	}
 
 	@Override
 	public void initWidget() {
 		super.initWidget();
-		UIHelper.setTitleView(this, "关闭", "登录");
+		UIHelper.setTitleView(this, "取消", "注册", "登录", 0);
+		TextView btnLeft = (TextView) findViewById(R.id.title_left);
+		btnLeft.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setResult(AppConstants.FAILED);
+				finish();
+			}
+		});
+		ImageView imgLeft = (ImageView) findViewById(R.id.img_left);
+		imgLeft.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
 	public void initData() {
 		super.initData();
-		sid = "";
 		kjdb = KJDB.create(this);
 	}
 
@@ -113,6 +96,7 @@ public class SigninActivity extends KJActivity {
 					
 					@Override
 					public void taskFail(String err, int type) {
+						mHint.setVisibility(View.GONE);
 					}
 					
 					@Override
@@ -122,33 +106,40 @@ public class SigninActivity extends KJActivity {
 					}
 				});
 			}
+			KeyboardUitls.hideKeyboard(SigninActivity.this);
 			break;
-//		case R.id.verifyimage:
-//			getCapture();
-//			break;
 		case R.id.losepwd:
 			showActivity(SigninActivity.this, FindPwdOneActivity.class);
 			break;
-		case R.id.signup:
-			showActivity(SigninActivity.this, SignupActivity.class);
-			finish();
+		case R.id.title_right:
+			Intent intent = new Intent(SigninActivity.this,
+					SignupActivity.class);
+			startActivityForResult(intent, 10002);
 			break;
 		}
 	}
-
-
-	private void getCapture() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final Bitmap b = new HttpHelper().getCapture(sid);
-				runOnUiThread(new Runnable() {
-					public void run() {
-						mVrifyImage.setImageBitmap(b);
-					}
-				});
-			}
-		}).start();
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (resultCode) {
+		case AppConstants.SUCCESS:
+			setResult(AppConstants.SUCCESS);
+			finish();
+			break;
+		case AppConstants.FAILED:
+			break;
+		default:
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	
+	
+	@Override
+	public void onBackPressed() {
+		setResult(AppConstants.FAILED);
+		finish();
 	}
 
 }

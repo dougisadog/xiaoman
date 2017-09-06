@@ -3,8 +3,10 @@ package com.nangua.xiaomanjflc.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -32,7 +34,7 @@ public class AnnoActivity extends KJActivity {
 	private HttpParams params;
 
 	private CommonAdapter<Announce> adapter;
-	private List<Announce> data;
+	private static List<Announce> data = new ArrayList<Announce>();
 
 	private int page = 1;
 	private boolean noMoreData;
@@ -46,10 +48,9 @@ public class AnnoActivity extends KJActivity {
 	@Override
 	public void initData() {
 		super.initData();
-		data = new ArrayList<Announce>();
 		http = new KJHttp();
 		params = new HttpParams();
-		getData(page);
+//		getData(page);
 	}
 
 	private void getData(int page) {
@@ -111,8 +112,9 @@ public class AnnoActivity extends KJActivity {
 			try {
 				JSONObject articles = ret.getJSONObject("articles");
 				page = articles.getInt("currentPage");
-				int maxPage = articles.getJSONObject("pager").getInt("maxPage");
-				if (page >= maxPage) {
+//				int maxPage = articles.getJSONObject("pager").getInt("maxPage");
+				JSONArray arr = articles.getJSONArray("items");
+				if (null == arr || arr.length() == 0) {
 					listview.hideFooter();
 					noMoreData = true;
 				} else {
@@ -121,11 +123,10 @@ public class AnnoActivity extends KJActivity {
 				}
 				System.out.println("当前页面=====>" + page);
 				if (page == 1) {
-					data = new AnnounceList(articles.getJSONArray("items"))
+					data = new AnnounceList(arr)
 							.getAnnounces();
 				} else {
-					data = new AnnounceList(data,
-							articles.getJSONArray("items")).getAnnounces();
+					data = new AnnounceList(data, arr).getAnnounces();
 				}
 				System.out.println("data=========>" + data);
 				adapter.setList(data);
@@ -142,5 +143,11 @@ public class AnnoActivity extends KJActivity {
 			listview.stopRefreshData();
 		}
 	};
+	
+	public static void startActivity(Activity activity, List<Announce> announces) {
+		data = announces;
+		Intent i = new Intent(activity,AnnoActivity.class);
+		activity.startActivity(i);
+	}
 
 }

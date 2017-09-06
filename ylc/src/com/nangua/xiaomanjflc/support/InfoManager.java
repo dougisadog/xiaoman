@@ -5,20 +5,21 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.KJDB;
 
+import com.louding.frame.KJDB;
 import com.louding.frame.KJHttp;
 import com.louding.frame.http.HttpCallBack;
 import com.louding.frame.http.HttpParams;
 import com.nangua.xiaomanjflc.AppConfig;
 import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
+import com.nangua.xiaomanjflc.bean.database.UserConfig;
 import com.nangua.xiaomanjflc.bean.jsonbean.Account;
 import com.nangua.xiaomanjflc.bean.jsonbean.User;
-import com.nangua.xiaomanjflc.bean.jsonbean.UserConfig;
 import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.nangua.xiaomanjflc.utils.HttpHelper;
+import com.nangua.xiaomanjflc.utils.FormatUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Context;
 
@@ -38,8 +39,14 @@ public class InfoManager {
 		return instance;
 	}
 	
+	/**
+	 * http请求回调
+	 * @author Doug
+	 *
+	 */
 	public static interface TaskCallBack {
 		
+		//返回信息类型
 		public static int JSON = 0;
 		public static int TXT = 1;
 		
@@ -79,13 +86,13 @@ public class InfoManager {
 						//基础参数更新
 						String sid = o.getString("sid");
 						int uid = o.getInt("uid");
-						AppConfig.getAppConfig(context).set("sid", sid);
-						AppConfig.getAppConfig(context).set("tel", account);
-						AppConfig.getAppConfig(context).set("uid", Integer.toString(uid));
 						AppVariables.uid = uid;
 						AppVariables.sid = sid;
 						AppVariables.tel = account;
 						AppVariables.isSignin = true;
+						if (o.has("new_hand"))
+						AppVariables.newHand = o.getInt("new_hand");
+						AppConfig.getAppConfig(context).set(AppConfig.SID, sid);
 						
 						//账号数据本地数据库存储
 						KJDB kjdb = KJDB.create(context);
@@ -93,6 +100,7 @@ public class InfoManager {
 						UserConfig userConfig = null;
 						if (userConfigs.size() > 0) {
 							userConfig = userConfigs.get(0);
+							userConfig.setTel(account);
 							userConfig.setLastGestureCheckTime(new Date().getTime());
 							kjdb.update(userConfig);
 							AppVariables.needGesture = userConfig.isNeedGesture();
@@ -100,6 +108,7 @@ public class InfoManager {
 						if (userConfig == null) {
 							userConfig = new UserConfig();
 							userConfig.setUid(uid);
+							userConfig.setTel(account);
 							userConfig.setNeedGesture(false);
 							userConfig.setLastGestureCheckTime(new Date().getTime());
 							kjdb.save(userConfig);
@@ -108,6 +117,8 @@ public class InfoManager {
 						//清空webview的cookie
 						CacheBean.syncCookie(context);
 						AppVariables.forceUpdate = true;
+						//Umeng账号统计
+						MobclickAgent.onProfileSignIn(account);
 						taskCallBack.taskSuccess();
 //						getInfo(context, taskCallBack);
 					} catch (JSONException e) {
@@ -163,9 +174,9 @@ public class InfoManager {
 					JSONObject account = ret.getJSONObject("account");
 					
 					//储存在缓存中
-					User u = HttpHelper.jsonParse(user.toString(), User.class);
+					User u = FormatUtils.jsonParse(user.toString(), User.class);
 					CacheBean.getInstance().setUser(u);
-					Account a = HttpHelper.jsonParse(account.toString(), Account.class);
+					Account a = FormatUtils.jsonParse(account.toString(), Account.class);
 					CacheBean.getInstance().setAccount(a);
 					taskCallBack.taskSuccess();
 				} catch (JSONException e) {
@@ -195,11 +206,6 @@ public class InfoManager {
 	 * @param context
 	 */
 	public void clearinfo(Context context) {
-		AppConfig.getAppConfig(context).set("sid", "");
-		AppConfig.getAppConfig(context).set("tel", "");
-		AppConfig.getAppConfig(context).set("uid", "");
-		AppConfig.getAppConfig(context).set("gesturetel", "");
-		AppConfig.getAppConfig(context).set("gesture", "");
 		AppVariables.clear();
 	}
 }

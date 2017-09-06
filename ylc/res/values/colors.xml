@@ -74,7 +74,8 @@
     <color name="mediumpurple">#9370db</color> <!-- 中紫色 -->
     <color name="skyblue">#87ceeb</color> <!-- 天蓝色 -->
     <color name="gray">#808080</color> <!-- 灰色 -->
-    <color name="grey">#808080</color> <!-- 灰色 -->
+    <color name="grey">#88a7a7a7</color> <!-- v2 灰色 -->
+    <color name="grey_btn">#8b8b8b</color> <!-- v2 灰色 -->
     <color name="olive">#808000</color> <!-- 橄榄色 -->
     <color name="purple">#800080</color> <!-- 紫色 -->
     <color name="maroon">#800000</color> <!-- 粟色 -->
@@ -119,6 +120,7 @@
     <color name="deepskyblue">#00bfff</color> <!-- 深天蓝色 -->
     <color name="navy">#000080</color> <!-- 海军色 -->
     <color name="black">#000000</color> <!-- 黑色 -->
+    
     <color name="darkslategray">#2f4f4f</color> <!-- 暗瓦灰色 -->
     <color name="darkslategrey">#2f4f4f</color> <!-- 暗瓦灰色 -->
     <color name="seagreen">#2e8b57</color> <!-- 海绿色 -->
@@ -145,19 +147,34 @@
     <color name="crimson">#dc143c</color> <!-- 暗深红色 -->
     <color name="plum">#dda0dd</color> <!-- 洋李色 -->
     <color name="gainsboro">#dcdcdc</color> <!-- 淡灰色 -->
-    <color name="orange">#ff9900</color> <!-- 橙色 -->
+    
+    <!-- v2 -->
+    <color name="orange">#ff6633</color> <!-- v2橙色 -->
+    <color name="back_grey">#ff6633</color> <!-- v2橙色 -->
+    <color name="grey_v2">#f6f6f6</color> <!-- v2 灰色 -->
+    <color name="black_v2">#1d1d1d</color> <!-- 黑色 -->
+    <color name="app_bg">#f6f6f6</color> <!-- app背景 -->
+     <color name="anno_text_v2">#C7C7C7</color>
+     <color name="app_line_v2">#d7d7d7</color> <!-- app线条灰 -->
+    
+    
     <!-- 透明 -->
     <color name="transparent">#00000000</color>
     <!-- 半透明 -->
     <color name="half_transparent">#e0000000</color>
+    <color name="sub_white">#88FFFFFF</color>
+    
+    <color name="main_home_line">#338b8b8b</color> <!-- v2 灰色 -->
 
     <!-- app特殊颜色 -->
     <color name="dialog_orange">#ff7719</color> <!-- 对话框橙色 -->
     <color name="dialog_green">#ff6db85c</color> <!-- 对话框绿色 -->
     <color name="dialog_blue">#ff3883d7</color> <!-- 对话框蓝色 -->
     <color name="app_blue">#ff3882d7</color> <!-- APP蓝色 -->
+    <color name="blue_v2">#0076ff</color> <!-- APP蓝色 -->
     <color name="font_black">#ff2a344d</color> <!-- 文字黑色 -->
     <color name="font_gray">#ff808080</color> <!-- 文字灰色 -->
+    <color name="font_gray_new">#ffc6c6ca</color> <!-- 文字灰色 -->
     <color name="font_gray_man">#313852</color> <!-- 文字灰色 -->
     <color name="font_message_title">#31436b</color> <!-- 消息中心标题 -->
     <color name="font_hint">#ffbdbdbd</color> <!-- 文字灰色 -->
@@ -165,9 +182,77 @@
     <color name="app_orange">#ffff7719</color> <!-- app橙色 -->
     <color name="app_line">#ffcccccc</color> <!-- app线条灰 -->
     <color name="app_line_man">#313852</color> <!-- app线条灰 -->
-    <color name="app_bg">#ffe6e6e6</color> <!-- app背景 -->
+    
+    <!--  
+    <color name="app_bg">#ffe6e6e6</color> 
+    -->
     <color name="tab_gray">#ff929292</color> <!-- Tab灰色 -->
     <color name="app_green">#ff54c7c4</color> <!-- app绿色 -->
     <color name="app_coupon">#ffe65e79</color> <!-- app红包颜色 -->
+    
+      <color name="titlebar_bg1">#26c6da</color> <!-- 蓝色 -->
+    <color name="titlebar_bg2">#ffffff</color>  <!-- 白色 -->
+    <color name="titlebar_bg3">#F8F8F8</color>  <!-- 灰色 -->
+    <color name="titlebar_title1">#ffffff</color> 
+    <color name="titlebar_title2">#cacaca</color>
+
+    
+    <color name="default_tip_en">#26c6da</color>
+    <color name="default_tip_cn">#8826c6da</color>
+    <color name="dialog_btn_txt">#26a69a</color>
+    <color name="dialog_sub_btn_txt">#8826a69a</color>
+    <color name="dialog_sub_title">#883a3a3a</color>
+    <color name="default_title">#3a3a3a</color>
+    <color name="default_sub_info">#848484</color>
+    <color name="default_sub_info2">#88a1a1a1</color>
+    
+    <color name="listview_item">#ffffff</color>
+    <color name="listview_item_p">#88e0e0e0</color>
+    
+    <!-- red green gray -->
+    <color name="default_red_btn">#cf5350</color>
+    <color name="default_green_btn">#81c784</color>
+    <color name="default_gray_btn">#aaaaaa</color>
+    
+    <!-- 内容 -->
+    <!-- Emphasize -->
+    <color name="emphasize_class">#20a8ba</color>
+    <color name="info">#858585</color>
+    <color name="sub_info">#aaaaaa</color>
+    
+    <!-- input -->
+    <color name="input_title">#9f9f9f</color>
+    <color name="input_info">#c9c9c9</color>
+    <color name="input_content">#5c5c5c</color>
+    
+    
+    <color name="default_bg">#f9f9f1</color>
+    <color name="default_content">#666</color>
+    <color name="default_txt_tips">#ddd</color>
+
+    <!-- 点击背景色 -->
+    <color name="default_click_bg">#ccc</color>
+
+    <!-- 边框颜色 -->
+    <color name="default_border">#e0e0e0</color>
+    <color name="default_border2">#efefef</color>
+
+    <!-- 帖子标题栏颜色 -->
+    <color name="postTitle">#f4bc64</color>
+    <color name="province_line_border">#C7C7C7</color>
+    <!-- 登山字体颜色 -->
+    <color name="unit_text_color">#c8c8c8</color>
+    <color name="course_btn_color">#0090ff</color>
+    <color name="dialog_alert_color">#4a4a4a</color>
+    <color name="dialog_percent_color">#12b3eb</color>
+    
+    <!-- 阅读 设置的一些选择器  -->
+    <color name="read_home_text_click_color">#5F5F5F</color>
+	<color name="read_home_next_arrow_click">#EFF2F0</color>
+	
+	<color name="show_score">#A6E8F0</color>
+	<color name="read_list_description">#9b9b9b</color>
+	<color name="separator_line">#ececec</color>
+	<color name="dark_gray_txt">#D0D0D0</color>
 
 </resources>

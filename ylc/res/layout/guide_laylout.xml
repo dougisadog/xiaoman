@@ -9,7 +9,7 @@
         android:id="@+id/txt_Activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        typefaceName="msyh"
+        
         android:background="#000000" />
 
 </LinearLayout>

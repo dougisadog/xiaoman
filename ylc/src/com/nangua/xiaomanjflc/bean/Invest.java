@@ -21,6 +21,8 @@ public class Invest {
     private String couponName;
     private String couponPrice;
     private String couponLastReturn;
+    
+    private String activityRate;
 
 
     public String getEndDate() {
@@ -151,5 +153,13 @@ public class Invest {
                 + ", lastReturn=" + lastReturn + ", repayTime=" + repayTime
                 + ", statusText=" + statusText + "]";
     }
+
+	public String getActivityRate() {
+		return activityRate;
+	}
+
+	public void setActivityRate(String activityRate) {
+		this.activityRate = activityRate;
+	}
 
 }

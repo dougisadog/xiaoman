@@ -3,6 +3,7 @@ package com.nangua.xiaomanjflc.ui;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.widget.TextView;
 
 import com.louding.frame.KJActivity;
 import com.louding.frame.KJHttp;
@@ -21,9 +22,9 @@ public class MessageCenterDetailActivity extends KJActivity {
 	private HttpParams params;
 	private KJHttp http;
 
-	private FontTextView tv_message_title;
-	private FontTextView tv_message_time;
-	private FontTextView tv_message_content;
+	private TextView tv_message_title;
+	private TextView tv_message_time;
+	private TextView tv_message_content;
 
 	private String message_title;
 	private String message_time;
@@ -33,7 +34,7 @@ public class MessageCenterDetailActivity extends KJActivity {
 	@Override
 	public void setRootView() {
 		setContentView(R.layout.activity_message_center_detail);
-		UIHelper.setTitleView(this, "全部消息", "");
+		UIHelper.setTitleView(this, "", "消息详情");
 
 		Intent intent = getIntent();
 		message_title = intent.getStringExtra("message_title");

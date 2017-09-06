@@ -3,8 +3,6 @@ package com.nangua.xiaomanjflc.ui;
 import java.util.Date;
 import java.util.List;
 
-import org.kymjs.kjframe.KJDB;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,21 +14,22 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.louding.frame.KJDB;
 import com.louding.frame.KJHttp;
 import com.louding.frame.utils.StringUtils;
-import com.nangua.xiaomanjflc.AppConfig;
 import com.nangua.xiaomanjflc.AppVariables;
 import com.nangua.xiaomanjflc.widget.ContentView;
-import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
 import com.nangua.xiaomanjflc.widget.Drawl.GestureCallBack;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.bean.database.UserConfig;
 import com.nangua.xiaomanjflc.bean.jsonbean.Account;
 import com.nangua.xiaomanjflc.bean.jsonbean.User;
-import com.nangua.xiaomanjflc.bean.jsonbean.UserConfig;
 import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.support.InfoManager;
+import com.nangua.xiaomanjflc.support.UIHelper;
 import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
 
 public class GestureActivity extends Activity {
@@ -38,11 +37,11 @@ public class GestureActivity extends Activity {
 	private LinearLayout headLinear;
 	private FrameLayout body_layout;
 	private ContentView content;
-	private FontTextView hint;
-	private FontTextView forget;
-	private FontTextView operate;
-	private FontTextView transfer;
-	private FontTextView welcome;
+	private TextView hint;
+	private TextView forget;
+	private TextView operate;
+	private TextView transfer;
+	private TextView welcome;
 
 	private KJHttp kjh;
 	private KJDB kjdb;
@@ -74,7 +73,6 @@ public class GestureActivity extends Activity {
 		else {
 			userConfig = new UserConfig();
 		}
-//		pwd = AppConfig.getAppConfig(this).get("gesture");
 		pwd = userConfig.getHandPwd();
 		if (StringUtils.isEmpty(pwd)) {
 			pwd = "";
@@ -133,14 +131,6 @@ public class GestureActivity extends Activity {
 						if (pwd.equals(code)) {
 							setIconVisible(false);
 							hint.setText("设置成功。");
-//							AppVariables.needGesture = false;
-//							AppConfig.getAppConfig(GestureActivity.this).set(
-//									"gesture", pwd);
-//							AppConfig.getAppConfig(GestureActivity.this).set(
-//									"gesturetel",
-//									AppConfig
-//											.getAppConfig(GestureActivity.this)
-//											.get("tel"));
 							
 							//修改内存和db
 							AppVariables.needGesture = false;
@@ -188,13 +178,13 @@ public class GestureActivity extends Activity {
 
 	private void initview(boolean isSet) {
 		headLinear = (LinearLayout) this.findViewById(R.id.headLinear);
-		hint = (FontTextView) this.findViewById(R.id.hint);
-		forget = (FontTextView) this.findViewById(R.id.forget);
+		hint = (TextView) this.findViewById(R.id.hint);
+		forget = (TextView) this.findViewById(R.id.forget);
 		forget.setOnClickListener(listerner);
-		operate = (FontTextView) this.findViewById(R.id.operate);
-		transfer = (FontTextView) this.findViewById(R.id.transfer);
+		operate = (TextView) this.findViewById(R.id.operate);
+		transfer = (TextView) this.findViewById(R.id.transfer);
 		transfer.setOnClickListener(listerner);
-		welcome = (FontTextView) this.findViewById(R.id.welcome);
+		welcome = (TextView) this.findViewById(R.id.welcome);
 		getName();
 		setIconVisible(false);
 		if (isSet) {
@@ -218,7 +208,7 @@ public class GestureActivity extends Activity {
 		public void onClick(View view) {
 			switch (view.getId()) {
 			case R.id.transfer:
-				final LoudingDialog ld = new LoudingDialog(GestureActivity.this);
+				final LoudingDialogIOS ld = new LoudingDialogIOS(GestureActivity.this);
 				ld.showOperateMessage("确定更改账号？");
 				ld.setPositiveButton("确定", R.drawable.dialog_positive_btn,
 						new OnClickListener() {
@@ -233,34 +223,34 @@ public class GestureActivity extends Activity {
 						});
 				break;
 			case R.id.forget:
-//				startActivity(new Intent(GestureActivity.this, VerifyPwd.class));
 				Intent intent = new Intent(GestureActivity.this, VerifyPwd.class);
 				intent.putExtra("reset", true);
 				startActivityForResult(intent, GESTURE_CODE);
-//				finish();
+				break;
+			case R.id.flleft:
+			case R.id.flright:
+				finish();
 				break;
 			}
 		}
 	};
 
 	private void setTitleView() {
-		FontTextView btnRitht = null;
-		FontTextView titleTv = null;
+		TextView btnRitht = null;
+		TextView titleTv = null;
 		ImageView titleImage = null;
-		btnRitht = (FontTextView) this.findViewById(R.id.title_right);
-		titleTv = (FontTextView) this.findViewById(R.id.title_center);
+		btnRitht = (TextView) this.findViewById(R.id.title_right);
+		titleTv = (TextView) this.findViewById(R.id.title_center);
 		titleImage = (ImageView) this.findViewById(R.id.title_image);
 		btnRitht.setText("跳过");
 		titleImage.setVisibility(View.GONE);
 		btnRitht.setVisibility(View.VISIBLE);
 		titleTv.setVisibility(View.VISIBLE);
 		titleTv.setText("设置手势密码");
-		btnRitht.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				GestureActivity.this.finish();
-			}
-		});
+		FrameLayout flright = (FrameLayout) findViewById(R.id.flright);
+		flright.setOnClickListener(listerner);
+		FrameLayout flleft = (FrameLayout) findViewById(R.id.flleft);
+		flleft.setOnClickListener(listerner);
 	}
 
 	private void setIconVisible(boolean visible) {
@@ -281,7 +271,7 @@ public class GestureActivity extends Activity {
 		if (isSet) {
 			finish();
 		} else {
-			final LoudingDialog ld = new LoudingDialog(this);
+			final LoudingDialogIOS ld = new LoudingDialogIOS(this);
 			ld.showOperateMessage("是否退出登录？");
 			ld.setPositiveButton("确定", R.drawable.dialog_positive_btn,
 					new OnClickListener() {
@@ -296,11 +286,6 @@ public class GestureActivity extends Activity {
 	}
 
 	private void clearinfo() {
-		AppConfig.getAppConfig(GestureActivity.this).set("sid", "");
-		AppConfig.getAppConfig(GestureActivity.this).set("tel", "");
-		AppConfig.getAppConfig(GestureActivity.this).set("uid", "");
-		AppConfig.getAppConfig(GestureActivity.this).set("gesturetel", "");
-		AppConfig.getAppConfig(GestureActivity.this).set("gesture", "");
 		AppVariables.clear();
 	}
 

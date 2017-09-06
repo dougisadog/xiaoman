@@ -1,12 +1,16 @@
 package com.nangua.xiaomanjflc.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.louding.frame.KJActivity;
@@ -14,13 +18,16 @@ import com.louding.frame.KJHttp;
 import com.louding.frame.http.HttpCallBack;
 import com.louding.frame.http.HttpParams;
 import com.louding.frame.ui.BindView;
+import com.louding.frame.utils.DensityUtils;
 import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.adapter.CommonAdapter;
+import com.nangua.xiaomanjflc.adapter.RedUserAdapter;
 import com.nangua.xiaomanjflc.adapter.ViewHolder;
 import com.nangua.xiaomanjflc.bean.Red;
 import com.nangua.xiaomanjflc.bean.RedList;
+import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.support.UIHelper;
+import com.nangua.xiaomanjflc.utils.ApplicationUtil;
 import com.nangua.xiaomanjflc.widget.FontTextView;
 import com.nangua.xiaomanjflc.R;
 
@@ -30,15 +37,15 @@ public class UseRedActivity extends KJActivity {
 	private ListView listview;
 
 	@BindView(id = R.id.confirm, click = true)
-	private FontTextView confirm;
+	private TextView confirm;
 
 	@BindView(id = R.id.footer_hint)
-	private FontTextView hint;
+	private TextView hint;
 
 	private KJHttp http;
 	private HttpParams params;
 
-	private CommonAdapter<Red> adapter;
+	private RedUserAdapter adapter;
 	private List<Red> data;
 
 	private int page = 1;
@@ -83,7 +90,7 @@ public class UseRedActivity extends KJActivity {
 			Intent intent = new Intent();
 			intent.putExtra("cash", checkedid);
 			intent.putExtra("price", price);
-			setResult(1, intent);
+			setResult(AppConstants.SUCCESS, intent);
 			finish();
 			break;
 		}
@@ -92,30 +99,19 @@ public class UseRedActivity extends KJActivity {
 	@Override
 	public void initWidget() {
 		super.initWidget();
-		adapter = new CommonAdapter<Red>(UseRedActivity.this,
-				R.layout.item_use_red) {
-			@Override
-			public void canvas(ViewHolder holder, Red item) {
-				holder.addClick(R.id.item);
-				ImageView i = holder.getView(R.id.cash_check);
-				if (item.isChecked()) {
-					i.setImageResource(R.drawable.checkbox);
-				} else {
-					i.setImageResource(R.drawable.checkbox_none);
-				}
-				holder.setText(R.id.cash_price, item.getCash_price(), false);
-				holder.setText(R.id.cash_desc, item.getCash_desc(), false);
-				holder.setText(R.id.cash_span, "有效时间：" + item.getActive_time()
-						+ "至" + item.getExpire_time(), false);
-			}
+		redBg = getRedBg(R.color.orange);
+		redGreyBg = getRedBg(R.color.grey);
+		adapter = new RedUserAdapter(UseRedActivity.this,
+				R.layout.item_red_v2) {
 
 			@Override
 			public void click(int id, List<Red> list, int position,
 					ViewHolder viewHolder) {
-				if (checkedid == list.get(position).getId()) {
-					Red red = list.get(position);
-					red.setChecked(false);
-					list.set(position, red);
+				Red r = list.get(position);
+				if (null == r || r.getLock_flg() != 0) return;
+				if (checkedid == r.getId()) {
+					r.setChecked(false);
+					list.set(position, r);
 					checkedid = 0;
 					price = 0;
 					hint.setText("已选0张，可抵扣0元");
@@ -140,28 +136,52 @@ public class UseRedActivity extends KJActivity {
 		listview.setAdapter(adapter);
 		listview.setEmptyView(findViewById(R.id.empty));
 	}
+	
+	private Bitmap redBg;
+	private Bitmap redGreyBg;
+	
+	private Bitmap getRedBg(int colorId) {
+		Bitmap bitmap = null;
+		SparseArrayCompat<Bitmap> redBgs = CacheBean.getInstance().getRedBgs();
+		if (null == redBgs.get(colorId)) {
+			int w = (ApplicationUtil.getApkInfo(this).width - DensityUtils.dip2px(this, 10 + 10)) *3/7;
+			int h = DensityUtils.dip2px(this, 80);
+			bitmap = UIHelper.makeRedBg2(this, w, h, getResources().getColor(colorId));
+			redBgs.put(colorId, bitmap);
+			CacheBean.getInstance().setRedBgs(redBgs);
+		}
+		else {
+			bitmap = redBgs.get(colorId);
+		}
+		return bitmap;
+	}
 
-	// private KJRefreshListener refreshListener = new KJRefreshListener() {
-	// @Override
-	// public void onRefresh() {
-	// getData(1);
-	// }
-	//
-	// @Override
-	// public void onLoadMore() {
-	// getData(page + 1);
-	// }
-	// };
 
 	private HttpCallBack httpCallback = new HttpCallBack(UseRedActivity.this) {
 		public void success(org.json.JSONObject ret) {
 			try {
-				// page = ret.getInt("page");
-				// if (page < 2) {
-				data = new RedList(ret.getJSONArray("val")).getList();
-				// } else {
-				// data = new RedList(data, ret.getJSONArray("val")).getList();
-				// }
+				List<Red> reds = new RedList(ret.getJSONArray("val")).getList();
+				data = reds;
+				int cashId = getIntent().getIntExtra("cashid", 0);
+				if (cashId != 0) {
+					for (int i = 0; i < reds.size(); i++) {
+						if (reds.get(i).getId() == cashId) {
+							data.get(i).setChecked(true);
+							checkedid = cashId;
+							String p = data.get(i).getCash_price();
+							price = Integer.parseInt(p);
+							hint.setText("已选1张，可抵扣" + p + "元");
+							break;
+						}
+					}
+				}
+				Red lock = new Red();
+				lock.setLock_flg(0.5f);
+				data.add(lock);
+				Red unlock = new Red();
+				unlock.setLock_flg(-0.5f);
+				data.add(unlock);
+				Collections.sort(data);
 				adapter.setList(data);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -172,7 +192,6 @@ public class UseRedActivity extends KJActivity {
 
 		public void onFinish() {
 			super.onFinish();
-			// listview.stopRefreshData();
 		}
 	};
 

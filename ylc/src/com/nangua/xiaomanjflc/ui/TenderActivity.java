@@ -1,525 +1,303 @@
 package com.nangua.xiaomanjflc.ui;
 
-import m.framework.utils.Utils;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.ips.commons.security.DES;
-import com.ips.p2p.StartPluginTools;
 import com.louding.frame.KJActivity;
 import com.louding.frame.KJHttp;
 import com.louding.frame.http.HttpCallBack;
 import com.louding.frame.http.HttpParams;
-import com.louding.frame.ui.BindView;
-import com.louding.frame.utils.KJLoger;
-import com.louding.frame.utils.StringUtils;
 import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.bean.DetailProduct;
-import com.nangua.xiaomanjflc.bean.jsonbean.Account;
-import com.nangua.xiaomanjflc.bean.jsonbean.User;
-import com.nangua.xiaomanjflc.cache.CacheBean;
+import com.nangua.xiaomanjflc.R;
 import com.nangua.xiaomanjflc.support.InfoManager;
 import com.nangua.xiaomanjflc.support.UIHelper;
 import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
+import com.nangua.xiaomanjflc.ui.fragment.DetailFragmentIntroduction;
+import com.nangua.xiaomanjflc.ui.fragment.DetailFragmentTender;
+import com.nangua.xiaomanjflc.ui.myabstract.HomeFragment;
+import com.nangua.xiaomanjflc.ui.myabstract.VerticalScrollFragment.ScollCallBack;
+import com.nangua.xiaomanjflc.utils.CommonUtils;
 import com.nangua.xiaomanjflc.utils.FormatUtils;
-import com.nangua.xiaomanjflc.widget.CircleProgressBar;
-import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
-import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.utils.ToastUtil;
+import com.nangua.xiaomanjflc.widget.InviteCodeDialog;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+import com.nangua.xiaomanjflc.widget.TenderVerticalViewPager;
+import com.nangua.xiaomanjflc.widget.InviteCodeDialog.OnSubmitCallBack;
+import com.nangua.xiaomanjflc.adapter.fragment.HomeFragmentAdapter;
+import com.nangua.xiaomanjflc.bean.DetailProduct;
+import com.nangua.xiaomanjflc.bean.Product;
+import com.nangua.xiaomanjflc.bean.jsonbean.User;
+import com.nangua.xiaomanjflc.cache.CacheBean;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLayoutChangeListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class TenderActivity extends KJActivity {
 
-	// 产品详情
-	@BindView(id = R.id.name)
-	private FontTextView name;
-	@BindView(id = R.id.totalInvestment)
-	private FontTextView totalInvestment;
-	@BindView(id = R.id.totalInvestmentunit)
-	private FontTextView totalInvestmentunit;
-	@BindView(id = R.id.investmentPeriodDesc)
-	private FontTextView investmentPeriodDesc;
-	@BindView(id = R.id.investmentPeriodDescunit)
-	private FontTextView investmentPeriodDescunit;
-	@BindView(id = R.id.annualizedGain)
-	private FontTextView annualizedGain;
-	@BindView(id = R.id.guaranteeModeName)
-	private FontTextView guaranteeModeName;
-	@BindView(id = R.id.repaymentMethodName)
-	private FontTextView repaymentMethodName;
-	@BindView(id = R.id.expirationDate)
-	private FontTextView expirationDate;
-	@BindView(id = R.id.interestBeginDate)
-	private FontTextView interestBeginDate;
-	@BindView(id = R.id.remainingInvestmentAmount)
-	private FontTextView remainingInvestmentAmount;
-	@BindView(id = R.id.singlePurchaseLowerLimit)
-	private FontTextView singlePurchaseLowerLimit;
-	@BindView(id = R.id.percentagetxt)
-	private FontTextView percentagetxt;
-	@BindView(id = R.id.percentage)
-	private FontTextView percentage;
-	@BindView(id = R.id.percentagepb)
-	private CircleProgressBar percentagepb;
-
-	@BindView(id = R.id.tender_cash, click = true)
-	private FontTextView tender_cash;
-	@BindView(id = R.id.price)
-	private EditText mPrice;
-	@BindView(id = R.id.cash, click = true)
-	private FontTextView cash;
-	@BindView(id = R.id.cash_state, click = true)
-	private FontTextView cash_state;
-	@BindView(id = R.id.buy, click = true)
-	private FontTextView buy;
-	@BindView(id = R.id.protocol, click = true)
-	private FontTextView protocol;
-	@BindView(id = R.id.cash_use, click = true)
-	private FontTextView cash_use;
-	@BindView(id = R.id.available)
-	private FontTextView mAvaliable;
-	@BindView(id = R.id.cash_discount)
-	private FontTextView cash_discount;
-	@BindView(id = R.id.pay)
-	private FontTextView pay;
-	@BindView(id = R.id.checkbox, click = true)
-	private ImageView mCheckbox;
-
-	@BindView(id = R.id.add_v)
-	private LinearLayout add_v;
-	@BindView(id = R.id.add)
-	private FontTextView add;
-
-	private KJHttp http;
-	private HttpParams params;
-	private DetailProduct product;
-	private int id;
-	private int mul;
-	private int max;
-	private int min;
-	private int available = 0;
-	private int price;
-	private int cashid;
-	private int cash_price;
-	private int cash_count;
-	private int cash_sum;
-	private String url;
-	private String agreement;// 我同意内容
-	private String products_type;// 产品类型 01:融资产品,02:债权产品
-	private boolean checkbox = true;
-
-	private int idValidated;
-	private int status;
-	private boolean isCharge;
-
-	private String tenderAward;
 
 	private static final String LOGTAG = "TenderActivity";
-
+	
+	private TenderVerticalViewPager vp;
+	
+	private List<HomeFragment> homeFragments;
+	
+	private TextView mBuy;
+	
+	private HomeFragmentAdapter adapter;
+	
+	private int id;
+	private KJHttp http;
+	private HttpParams params;
+	
+	private DetailProduct dProduct;
+	
+	public static int REQUEST_RED = 1;
+	public static int REQUEST_SIGNIN = 99;
+	
+	private int confine; //专享类型
+	private int status; //标状态 5为正在售卖
+	
+	private Product product;
+	
+	//TODO 滚动回调 在优化后可舍弃 此处在最终执行处注释掉 详见BaseTextFragment和ProductRecordFragment，以后可酌情吧全部相关回调删除
+	private ScollCallBack sc = new ScollCallBack() {
+		
+		@Override
+		public void onScrollTop() {
+			vp.setCurrentItem(0);
+		}
+		
+		@Override
+		public void onScrollBottom() {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	public void changePage(int page) {
+		vp.setCurrentItem(page);
+	}
+	
+	
 	@Override
 	public void setRootView() {
-		setContentView(R.layout.activity_tender);
-		UIHelper.setTitleView(this, "产品详情", "投标");
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		idValidated = 0;
-	}
-
-	@Override
-	public void initData() {
-		super.initData();
-		Intent intent = getIntent();
-		tenderAward = intent.getStringExtra("tenderAward");// 加息
-		id = intent.getIntExtra("id", 0);
-		price = intent.getIntExtra("price", 0);
+		setContentView(R.layout.activity_tender_v2);
+		UIHelper.setTitleView(this, "", "项目详情");
+		vp = (TenderVerticalViewPager) findViewById(R.id.vp);
+		mBuy = (TextView) findViewById(R.id.buy);
+		
+		//TODO DELETE 测试用
+//		AppVariables.newHand = 0;
+		
+		//监听键盘隐藏投资按钮防止遮挡EditText
+		LinearLayout mainContent = (LinearLayout) findViewById(R.id.mainContent);
+		mainContent.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+			
+			@Override
+			public void onLayoutChange(View v, int left, int top, int right, int bottom,
+					int oldLeft, int oldTop, int oldRight, int oldBottom) {
+				if(oldBottom != 0 && bottom != 0 &&(oldBottom - bottom > 0)){
+					mBuy.setVisibility(View.INVISIBLE);
+		          
+		        }else if(oldBottom != 0 && bottom != 0 &&(bottom - oldBottom > 0)){  
+		              
+		        	mBuy.setVisibility(View.VISIBLE);
+		        }  
+				
+			}
+		}); 
+		homeFragments = new ArrayList<HomeFragment>();
+		adapter = new HomeFragmentAdapter(getSupportFragmentManager(), homeFragments);
+		vp.setAdapter(adapter);
+		CommonUtils.controlViewPagerSpeed(this, vp, 500);//设置你想要的时间
+		product = (Product) getIntent().getSerializableExtra("product");
+		if (null == product) {
+			finish();
+			return;
+		}
+		confine = product.getConfine();
+		id = product.getId();
+		status = product.getNewstatus();
+		
 		http = new KJHttp();
 		params = new HttpParams();
 		getData();
-		mPrice.addTextChangedListener(new TextWatcher() {
+		refreshBuyBtn();
+		mBuy.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-			}
-
-			/**
-			 * 限制输入长度
-			 */
-			@Override
-			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-				Editable editable = mPrice.getText();
-				// 输入长度
-				int len = editable.length();
-				// 可用金钱长度
-				int maxLen = (available / 100 + "").length();
-				// 输入字符
-				String str = editable.toString();
-				if (Utils.isNullOrEmpty(str)) {
-					pay.setText((0L - (long) cash_price) + "元");
-					cash_discount.setText(cash_price + "元");
+			public void onClick(View v) {
+				if (!AppVariables.isSignin) {
+					Intent intent = new Intent(TenderActivity.this, SigninActivity.class);
+					startActivityForResult(intent, TenderActivity.REQUEST_SIGNIN);
 					return;
 				}
-				if (str.startsWith("0")) {
-					LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-					ld.showConfirmHint("请输入至少100元");
-					mPrice.setText("");
-					return;
+				User user = CacheBean.getInstance().getUser();
+				if (null == user) {
+					InfoManager.getInstance().getInfo(TenderActivity.this, new TaskCallBack() {
+						
+						@Override
+						public void taskSuccess() {
+							User cUser = CacheBean.getInstance().getUser();
+							if (null == cUser) {
+								Toast.makeText(TenderActivity.this, "用户信息拉取异常", Toast.LENGTH_LONG).show();
+							}
+							else {
+								checkUser(CacheBean.getInstance().getUser());
+							}
+						}
+						
+						@Override
+						public void taskFail(String err, int type) {
+						}
+						
+						@Override
+						public void afterTask() {
+						}
+					});
 				}
-				// 截取新字符串
-				long p = 0L;
-				p = Long.parseLong(str);
-				if (p > available / 100) {
-					str = str.substring(0, Math.max(len, maxLen) - 1);
-					LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-					ld.showConfirmHint("抱歉，您的账户可用余额不足，请充值后再进行投资");
-					mPrice.setText(str);
+				else {
+					checkUser(user);
 				}
-				pay.setText((Utils.isNullOrEmpty(str) ? 0L : (Long.parseLong(str) - (long) cash_price)) + "元");
-				cash_discount.setText(cash_price + "元");
-				editable = mPrice.getText();
-
-				// 新字符串的长度
-				int newLen = editable.length();
-				// 设置新光标所在的位置
-				Selection.setSelection(editable, newLen);
-			}
-
-			@Override
-			public void afterTextChanged(Editable editable) {
 			}
 		});
-	}
 
+	}
+	
+	private void checkUser(User user) {
+		//企业
+		if (user.getType() == 1) {
+			ToastUtil.showToast(TenderActivity.this, "企业用户不能投资",Toast.LENGTH_SHORT);
+			return;
+		}
+		if (status != 5) return;
+		vp.setCurrentItem(0);
+		if (adapter.getCount() >0) {
+			DetailFragmentTender fragment = (DetailFragmentTender) adapter.getItem(0);
+			fragment.getInfo();
+		}
+	}
+	
+	/**
+	 * 刷新购买按钮状态
+	 */
+	private void refreshBuyBtn() {
+		int i = status;
+		String[] arr = getResources().getStringArray(R.array.product_status);
+		// 使用预约时间开始时间替换 原预约2字
+		String content = "";
+		if (i == 3 && null != product.getFinanceStartDate()) {
+			SimpleDateFormat format = new SimpleDateFormat(
+					"yyyy/MM/dd HH:mm开始");
+			content = format.format(product.getFinanceStartDate());
+//			mBuy.setTextSize(10);
+			mBuy.setText(content);
+//			mBuy.setTextColor(getResources().getColor(R.color.white));
+		}
+		else if (i != 5) {
+			mBuy.setText(arr[i]);
+//			mBuy.setTextColor(getResources().getColor(R.color.grey));
+		}
+		mBuy.setBackgroundResource(i == 5 ? R.color.orange : R.color.grey_btn);
+	}
+	
+	/**
+	 * @return true 新手标且不为新手
+	 */
+	public boolean  checkNewHand() {
+		return (confine == 1 || confine == 6 ) && AppVariables.newHand != 0;
+	}
+	
 	private void getData() {
+		 getData(httpCallback);
+	}
+	
+	private void getData(HttpCallBack callback) {
 		params.put("sid", AppVariables.sid);
 		params.put("id", id);
-		http.post(AppConstants.DETAIL_PRODUCT + id, params, httpCallback);
+		http.post(AppConstants.DETAIL_PRODUCT + id, params, callback);
 	}
 
-	private HttpCallBack httpCallback = new HttpCallBack(TenderActivity.this) {
+	private HttpCallBack httpCallback = new HttpCallBack(this) {
 		public void success(org.json.JSONObject ret) {
 			try {
-				product = new DetailProduct(ret);
-				cash_count = ret.getInt("cashCount");
-				cash_sum = ret.getInt("cashSum");
-				JSONObject p = ret.getJSONObject("product");
-				agreement = p.getString("agreement");
-				products_type = p.getString("products_type");
-				mul = (p.getInt("baseLimitAmount")) / 100;
-				max = Integer.parseInt(p.getString("remainingInvestmentAmount")) / 100;
-				min = Integer.parseInt(p.getString("singlePurchaseLowerLimit")) / 100;
-				initView();
-				getAvailable();
+				dProduct = new DetailProduct(ret);
+				CacheBean.getInstance().setProduct(ret);
+				homeFragments.clear();
+				homeFragments.add(new DetailFragmentTender());
+				homeFragments.add(new DetailFragmentIntroduction(dProduct, sc));
+				adapter.setList(homeFragments);
+				adapter.getItem(0).refreshData();
+				showTips();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				Toast.makeText(TenderActivity.this, R.string.app_data_error, Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
-
-	private void initView() {
-		protocol.setText(agreement);
-
-		// 产品详情
-		name.setText(product.getName());
-		totalInvestment.setText(product.getTotalInvestment());
-		totalInvestmentunit.setText(product.getTotalInvestmentunit());
-		investmentPeriodDesc.setText(product.getInvestmentPeriodDesc());
-		investmentPeriodDescunit.setText(product.getInvestmentPeriodDescunit());
-		annualizedGain.setText(product.getAnnualizedGain() + "");
-		if (!"".equals(tenderAward)) {
-			if (null != add_v)
-				add_v.setVisibility(View.VISIBLE);
-			if (null != add)
-				add.setText(tenderAward);
-		}
-
-		guaranteeModeName.setText(product.getGuaranteeModeName());
-		repaymentMethodName.setText(product.getRepaymentMethodName());
-		expirationDate.setText("剩余投资时间");
-		interestBeginDate.setText(product.getExpirationDate());
-		remainingInvestmentAmount.setText(product.getRemainingInvestmentAmount());
-		singlePurchaseLowerLimit.setText(product.getSinglePurchaseLowerLimit());
-		if (product.getInvestmentProgress() == 100) {
-			percentage.setText("已满标");
-			percentagetxt.setText("");
-		} else {
-			percentage.setText("");
-			percentagetxt.setText(product.getInvestmentProgress() + "");
-		}
-		percentagepb.setProgress(product.getInvestmentProgress());
-		mCheckbox.setImageResource(R.drawable.checkbox);
-
-		mPrice.setHint("输入金额为" + mul + "的整数倍");
-
-		if (cash_count > 0) {
-			cash_state.setText("现金券使用");
-			cash_use.setText("使用");
-			cash_use.setTextColor(getResources().getColor(R.color.app_blue));
-		} else {
-			cash_state.setText("现金券使用（无可用）");
-			cash_use.setText("使用");
-			cash_use.setTextColor(getResources().getColor(R.color.app_bg));
-		}
-		mCheckbox.setImageResource(R.drawable.checkbox);
-	}
-
-	@Override
-	public void widgetClick(View v) {
-		super.widgetClick(v);
-		switch (v.getId()) {
-		case R.id.tender_cash:
-			if (idValidated == 1 && status == 2) {
-				Intent charge = new Intent(TenderActivity.this, ChargeActivity.class);
-				charge.putExtra("balance", available);
-				startActivity(charge);
-			} else {
-				isCharge = true;
-				getInfo1();
+	
+	/**
+	 * 登录状态弹出 tiplog显示
+	 */
+	public void showTips() {
+		if (AppVariables.isSignin) {
+			//NewHand
+			if (checkNewHand()) {
+				LoudingDialogIOS ld = new LoudingDialogIOS(TenderActivity.this);
+				ld.showConfirmHint("新手标只能投资一次");
+				mBuy.setBackgroundResource(R.color.grey_btn);
+				mBuy.setEnabled(false);
 			}
-			break;
-		case R.id.cash_use:
-			if (cash_count < 1) {
-				break;
-			}
-			String p = mPrice.getText().toString();
-			if (StringUtils.isEmpty(p)) {
-				LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-				ld.showConfirmHint("请输入金额。");
-				break;
-			}
-			if (Integer.parseInt(p) < 100) {
-				LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-				ld.showConfirmHint("只有大于100元的投资才能使用现金券。");
-				break;
-			}
-			if (Integer.parseInt(p) % mul > 0) {
-				LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-				ld.showConfirmHint("请输入" + mul + "的整数倍");
-				break;
-			}
-			Intent intent = new Intent(TenderActivity.this, UseRedActivity.class);
-			intent.putExtra("amount", Integer.parseInt(p));
-			intent.putExtra("productid", id);
-			startActivityForResult(intent, 1);
-			break;
-		case R.id.buy:
-			if (!AppVariables.isSignin) {
-				startActivity(new Intent(TenderActivity.this, SigninActivity.class));
-				break;
-			} else {
-				getInfo();
-			}
-			break;
-		case R.id.protocol:
-			Intent protocol = new Intent(TenderActivity.this, TenderProtocolActivity.class);
-			protocol.putExtra("pid", id);
-			protocol.putExtra("products_type", products_type);
-			String amt = mPrice.getText().toString();
-			if (StringUtils.isEmpty(amt)) {
-				final LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-				ld.showConfirmHint("请输入金额。");
-				break;
-			}
-			protocol.putExtra("amt", Integer.parseInt(amt));
-			startActivity(protocol);
-			break;
-		case R.id.checkbox:
-			if (checkbox) {
-				checkbox = false;
-				mCheckbox.setImageResource(R.drawable.checkbox_none);
-			} else {
-				checkbox = true;
-				mCheckbox.setImageResource(R.drawable.checkbox);
-			}
-			break;
-		}
-	}
-
-	private void getInfo() {
-		params.put("sid", AppVariables.sid);
-		http.post(AppConstants.GAIN, params, new HttpCallBack(TenderActivity.this) {
-			@Override
-			public void onSuccess(String t) {
-				KJLoger.debug(t);
+			else {
+				float rateSubsidy = 0;
 				try {
-					JSONObject ret = new JSONObject(t);
-					available = ret.getInt("available");
-					final LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-					String p = mPrice.getText().toString();
-					if (!checkbox) {
-						ld.showConfirmHint("请先同意相关协议。");
-						return;
-					}
-					if (StringUtils.isEmpty(p)) {
-						ld.showConfirmHint("请输入金额");
-						return;
-					}
-					int price = Integer.parseInt(p);
-					if (price > available) {
-						ld.showConfirmHint("可用余额不足,请先充值。");
-						return;
-					} else if (price > max) {
-						ld.showConfirmHint("输入的金额超过可投金额，请重新输入！");
-						return;
-					} else if (price < min) {
-						ld.showConfirmHint("请大于最小投资金额");
-						return;
-					} else if ((price % mul) > 0) {
-						ld.showConfirmHint("请输入" + mul + "的整数倍");
-						return;
-					}
-					ld.dismiss();
-					params.put("sid", AppVariables.sid);
-					params.put("id", id);
-					params.put("amount", price / mul);
-					params.put("cash", cashid);
-					http.post(AppConstants.BUY + id + "/order/pay", params, tenderCallback);
-				} catch (JSONException e) {
+					rateSubsidy = Float.parseFloat(product.getRateSubsidy());
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				if ("1".equals(product.getRateFlg()) && rateSubsidy > 0 && enableRateCoupon()) {
+					showRateCouponDialog("加息测试", "000");
+					mBuy.setBackgroundResource(R.color.grey_btn);
+					mBuy.setEnabled(false);
+				}
 			}
-		});
+		}
 	}
-
-	;
-
+	
 	/**
-	 * 购买回调
+	 * TODO dialog样式
+	 * 弹出加息的dialog
+	 * @param name
+	 * @param phone
 	 */
-	private HttpCallBack tenderCallback = new HttpCallBack(TenderActivity.this) {
-		@Override
-		public void success(JSONObject ret) {
-			try {
-				url = ret.getString("url");
-				String[] as = url.split("/");
-				for (int i = 0; i < as.length; i++) {
-					KJLoger.debug(i + "===>" + as[i]);
-				}
-				params = new HttpParams();
-				params.put("sid", AppVariables.sid);
-				params.put("id", as[2]);
-				http.post(AppConstants.HOST + url, params, transCallback);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-
-	/**
-	 * 开启环迅插件支付
-	 * 
-	 * @param ret server返回的支付信息json
-	 */
-	private void biddingAction(JSONObject ret) {
-		try {
-			Bundle bundle = new Bundle();
-			bundle.putString("operationType", ret.getString("operationType"));
-			bundle.putString("merchantID", ret.getString("merchantID"));
-			bundle.putString("sign", ret.getString("sign"));
-			bundle.putString("request", ret.getString("request"));
-			StartPluginTools.start_p2p_plugin(StartPluginTools.BIDDING, TenderActivity.this, bundle, 1);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private HttpCallBack transCallback = new HttpCallBack(TenderActivity.this) {
-		@Override
-		public void success(JSONObject ret) {
-			try {
-				if ("ips".equals(ret.getString("pay.provider"))) {
-					biddingAction(ret);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	};
-
-	private void getAvailable() {
-		params.put("sid", AppVariables.sid);
-		http.post(AppConstants.GAIN, params, new HttpCallBack(TenderActivity.this) {
+	private void showRateCouponDialog(String name, String phone) {
+		final InviteCodeDialog inviteCodeDialog = new InviteCodeDialog(this, name, phone);
+		inviteCodeDialog.setCallBack(new OnSubmitCallBack() {
+			
 			@Override
-			public void onSuccess(String t) {
-				try {
-					JSONObject ret = new JSONObject(t);
-					available = ret.getInt("available");
-					mAvaliable.setText(FormatUtils.fmtMicrometer(available / 100 + "") + "." + available % 100 / 10
-							+ available % 10 + "元");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+			public void onSubmit() {
+				inviteCodeDialog.dismiss();
+				
 			}
 		});
+		inviteCodeDialog.show();
+	}
+	
+	private boolean enableRateCoupon() {
+		return CacheBean.getInstance().getAccount().getLeftRateCouponNum() > 0;
 	}
 
-	private void getInfo1() {
-
-		InfoManager.getInstance().getInfo(this, new TaskCallBack() {
-
-			@Override
-			public void taskSuccess() {
-				User user = CacheBean.getInstance().getUser();
-
-				idValidated = user.getIdValidated();
-				if (idValidated == 1) {
-					if (isCharge) {
-						Intent charge = new Intent(TenderActivity.this, ChargeActivity.class);
-						charge.putExtra("balance", available);
-						startActivity(charge);
-					} else {
-						Account account = CacheBean.getInstance().getAccount();
-						status = account.getCardStatus();
-						if (status == 0) {
-							final LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-							ld.showConfirmHint("您还没有绑卡，请到电脑上绑定银行卡。");
-						} else if (status == 1) {
-							final LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-							ld.showConfirmHint("您的银行卡正在审核中，审核结果将通过短信通知您。");
-						} else if (status == 2) {
-							Intent cash = new Intent(TenderActivity.this, CashActivity.class);
-							cash.putExtra("balance", available);
-							startActivity(cash);
-						}
-					}
-				} else {
-					final LoudingDialog ld = new LoudingDialog(TenderActivity.this);
-					ld.showOperateMessage("请先实名认证。");
-					ld.setPositiveButton("前往", R.drawable.dialog_positive_btn, new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							startActivity(new Intent(TenderActivity.this, AccountActivity.class));
-							ld.dismiss();
-						}
-					});
-				}
-			}
-
-			@Override
-			public void taskFail(String err, int type) {
-			}
-
-			@Override
-			public void afterTask() {
-			}
-		});
-
-	}
 
 	// 当插件调用完毕后返回时执行该方法
 	protected void onNewIntent(Intent intent) {
@@ -527,7 +305,25 @@ public class TenderActivity extends KJActivity {
 		Bundle bundle = intent.getExtras();
 		if (bundle != null) {
 			// 更新数据
-			getData();
+			//TODO 页面返回刷新逻辑
+			if (confine == 1 || confine == 6 ) {
+				AppVariables.newHand = 1;
+				showTips();				
+			}
+			getData(new HttpCallBack(this) {
+				public void success(org.json.JSONObject ret) {
+					try {
+						dProduct = new DetailProduct(ret);
+						CacheBean.getInstance().setProduct(ret);
+						DetailFragmentTender dft = (DetailFragmentTender) adapter.getItem(0);
+						dft.refreshData();
+					} catch (Exception e) {
+						e.printStackTrace();
+						Toast.makeText(TenderActivity.this, R.string.app_data_error, Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+			
 
 			printExtras(bundle);
 			String resultCode = bundle.getString("resultCode");
@@ -541,7 +337,6 @@ public class TenderActivity extends KJActivity {
 			Log.e(LOGTAG, "sign" + ":" + sign);
 
 		}
-		finish();
 	}
 
 	protected void printExtras(Bundle extras) {
@@ -559,31 +354,42 @@ public class TenderActivity extends KJActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 1 && resultCode == 1) {
+		//现金券
+		if (requestCode == REQUEST_RED && resultCode == AppConstants.SUCCESS) {
+			int cashid = 0;
+			int cash_price = 0;
 			if (data != null) {
 				cashid = data.getIntExtra("cash", 0);
 				cash_price = data.getIntExtra("price", 0);
-			} else {
-				cashid = 0;
-				cash_price = 0;
 			}
-			if (cashid == 0) {
-				cash_discount.setText("0元");
-				int p = 0;
-				String sp = mPrice.getText().toString();
-				if (!Utils.isNullOrEmpty(sp)) {
-					p = Integer.parseInt(sp);
+			//TODO 
+			DetailFragmentTender dft = (DetailFragmentTender) adapter.getItem(0);
+			dft.refreshCashRed(cashid, cash_price);
+		}
+		//登录
+		else if (requestCode == REQUEST_SIGNIN && resultCode == AppConstants.SUCCESS) {
+			getData(new HttpCallBack(this) {
+				public void success(org.json.JSONObject ret) {
+					try {
+						dProduct = new DetailProduct(ret);
+						CacheBean.getInstance().setProduct(ret);
+						adapter.getItem(0).refreshData();
+						status = dProduct.getNewstatus();
+						refreshBuyBtn();
+						if (AppVariables.isSignin && checkNewHand()) {
+							LoudingDialogIOS ld = new LoudingDialogIOS(TenderActivity.this);
+							ld.showConfirmHint("新手标只能投资一次");
+							mBuy.setBackgroundResource(R.color.grey_btn);
+							mBuy.setEnabled(false);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						Toast.makeText(TenderActivity.this, R.string.app_data_error, Toast.LENGTH_SHORT).show();
+					}
 				}
-				pay.setText(p + "元");
-			} else {
-				cash_discount.setText(cash_price + "元");
-				int p = 0;
-				String sp = mPrice.getText().toString();
-				if (!Utils.isNullOrEmpty(sp)) {
-					p = Integer.parseInt(sp);
-				}
-				pay.setText((p - cash_price) + "元");
-			}
+			});
 		}
 	}
+
+	
 }

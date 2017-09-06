@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:textColor="@color/font_gray"
         android:textSize="@dimen/font_hint" />
@@ -22,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:textColor="@color/font_gray"
         android:textSize="@dimen/font_hint" />
@@ -32,7 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:textColor="@color/font_gray"
         android:textSize="@dimen/font_hint" />
@@ -42,7 +42,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        typefaceName="msyh"
+        
         android:gravity="center"
         android:textColor="@color/font_gray"
         android:textSize="@dimen/font_hint" />

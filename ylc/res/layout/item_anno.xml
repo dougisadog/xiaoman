@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        typefaceName="msyh"
+        
         android:textColor="@color/font_gray"
         android:textSize="@dimen/font_app" />
 
@@ -26,7 +26,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/data"
-        typefaceName="msyh"
+        
         android:drawableLeft="@drawable/anno_circle"
         android:drawablePadding="5dp"
         android:singleLine="true"

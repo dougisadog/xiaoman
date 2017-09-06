@@ -14,9 +14,10 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.nangua.xiaomanjflc.utils.ApplicationUtil;
 import com.nangua.xiaomanjflc.utils.Point;
-import com.nangua.xiaomanjflc.utils.ScreenUtils;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.support.ApkInfo;
 
 /**
  * 
@@ -56,7 +57,8 @@ public class Drawl extends View {
 			GestureCallBack callBack) {
 		super(context);
 		paint = new Paint(Paint.DITHER_FLAG);// 创建一个画笔
-		int[] display = ScreenUtils.getScreenDispaly(context);
+		ApkInfo apkInfo = ApplicationUtil.getApkInfo(context);
+		int[] display = new int[] {apkInfo.width, apkInfo.height};
 		bitmap = Bitmap.createBitmap(display[0], display[1],
 				Bitmap.Config.ARGB_8888); // 设置位图的宽高
 		canvas = new Canvas();

@@ -28,6 +28,39 @@ public class Account {
 	
 	private String bankAccount;
 	
+	private String groupValided; //1 的时候为集团已认证
+	
+	private String groupUserName;
+	
+	private String groupIdCard;
+	
+	private int leftRateCouponNum;
+	
+	
+	public String getGroupValided() {
+		return groupValided;
+	}
+
+	public void setGroupValided(String groupValided) {
+		this.groupValided = groupValided;
+	}
+
+	public String getGroupUserName() {
+		return groupUserName;
+	}
+
+	public void setGroupUserName(String groupUserName) {
+		this.groupUserName = groupUserName;
+	}
+
+	public String getGroupIdCard() {
+		return groupIdCard;
+	}
+
+	public void setGroupIdCard(String groupIdCard) {
+		this.groupIdCard = groupIdCard;
+	}
+
 	public String getUid() {
 		return uid;
 	}
@@ -130,6 +163,14 @@ public class Account {
 
 	public void setBankAccount(String bankAccount) {
 		this.bankAccount = bankAccount;
+	}
+
+	public int getLeftRateCouponNum() {
+		return leftRateCouponNum;
+	}
+
+	public void setLeftRateCouponNum(int leftRateCouponNum) {
+		this.leftRateCouponNum = leftRateCouponNum;
 	}
 
 

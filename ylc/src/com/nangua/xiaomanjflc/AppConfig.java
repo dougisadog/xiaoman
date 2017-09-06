@@ -19,6 +19,10 @@ import java.util.Properties;
 public class AppConfig {
 
     private final static String APP_CONFIG = "config";
+    
+    public final static String SID = "sid";//保存最近一次的登录码
+    
+    public final static String NOT_UPDATE_DIALOG_VERSION = "not_update_dialog_version";//保存最近一次的登录码
 
     private Context mContext;//上下文
 

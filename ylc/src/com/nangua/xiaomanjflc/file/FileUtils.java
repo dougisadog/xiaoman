@@ -3,11 +3,14 @@ package com.nangua.xiaomanjflc.file;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.R;
 import com.nangua.xiaomanjflc.YilicaiApplication;
 import com.nangua.xiaomanjflc.error.DebugPrinter;
@@ -25,7 +29,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -371,5 +378,67 @@ public class FileUtils {
 		}
 		return list;
 	}
+	
+	public static Uri getLatestCameraPicture(Activity activity) {
+		return getLatestCameraPicture(activity, AppConstants.LAST_IMAGE_CACHE_TIME);
+	}
+		
+	/**
+	 * 获取本地最近一张图片
+	 * @param activity
+	 * @param cacheTime
+	 * @return
+	 */
+	public static Uri getLatestCameraPicture(Activity activity, long cacheTime) {
+		String[] projection = new String[]{MediaStore.Images.ImageColumns._ID,
+				MediaStore.Images.ImageColumns.DATA,
+				MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+				MediaStore.Images.ImageColumns.DATE_TAKEN,
+				MediaStore.Images.ImageColumns.MIME_TYPE};
+		final Cursor cursor = activity.getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+				null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+		if (cursor.moveToFirst()) {
+			String path = cursor.getString(1);
+			long seconds = cursor.getLong(3);
+			if (System.currentTimeMillis() - seconds <= cacheTime)
+				return Uri.fromFile(new File(path));
+		}
+		return null;
+	}
+	
+	   /**
+     * 写入错误日志
+     * @param errMessage
+     */
+    public static void writeErr(String errMessage, String errFile) {
+        try {
+            String logDir = FileUtils.getSdCardPath() +  File.separator + "log";
+            if (TextUtils.isEmpty(logDir)) {
+                return;
+            }
+            String path = logDir + File.separator + errFile + ".stacktrace";
+            File f = new File(path);
+            if (!f.exists()) {
+            	f.createNewFile();
+            }
+            
+            String orgin = new String(); //原有txt内容  
+            String fresh = new String();//内容更新  
+            BufferedReader input = new BufferedReader(new FileReader(f));  
+            while ((orgin = input.readLine()) != null) {  
+                fresh += orgin + "\n";  
+            }  
+            input.close();  
+            fresh += errMessage;  
+  
+            BufferedWriter output = new BufferedWriter(new FileWriter(f));  
+            output.write(fresh);  
+            output.close();  
+        } 
+        catch (Exception another) {
+        	another.printStackTrace();
+        } 
+    }
 
 }

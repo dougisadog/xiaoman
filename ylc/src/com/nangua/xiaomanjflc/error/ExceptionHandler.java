@@ -7,10 +7,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import com.nangua.xiaomanjflc.YilicaiApplication;
+import com.nangua.xiaomanjflc.bean.jsonbean.User;
 import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.file.FileUtils;
+import com.qq.taf.jce.dynamic.StringField;
+import com.umeng.analytics.MobclickAgent;
+
 import android.text.TextUtils;
 
 
@@ -44,6 +50,16 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
             String path = logDir + File.separator + filename + ".stacktrace";
             BufferedWriter write = new BufferedWriter(new FileWriter(path));
             write.write(CacheBean.getInstance().getApkInfo().toString() + "\n");
+            StringBuffer pathActivity = new StringBuffer();
+            List<String> names = YilicaiApplication.getInstance().getStackActivities();
+            for (int i = 0; i < names.size(); i++) {
+            	pathActivity.append(names.get(i));
+			}
+            write.write("path:" + names.toString() + "\n");
+            User user = CacheBean.getInstance().getUser();
+            if (null != user) {
+            	 write.write("user:" + user.getName() + " and tel:" + user.getPhone());
+            }
             write.write(result.toString());
             write.flush();
             write.close();
@@ -53,6 +69,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         } 
         finally {
         }
+        MobclickAgent.reportError(YilicaiApplication.getInstance().getApplicationContext(), result.toString());
         previousHandler.uncaughtException(thread, exception);
     }
     

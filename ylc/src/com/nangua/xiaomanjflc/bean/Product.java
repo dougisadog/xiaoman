@@ -1,8 +1,17 @@
 package com.nangua.xiaomanjflc.bean;
 
-public class Product {
+import java.io.Serializable;
 
-    private int id; //产品ID
+public class Product implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -573884124894369635L;
+
+	private int id; //产品ID
+    
+    private Long financeStartDate; //产品发布时间
 
     private int type; //产品类型 productType  -1原始  0壹财贷 1壹财宝
 
@@ -19,6 +28,8 @@ public class Product {
     private int activityType; //为3 下面有值
 
     private double extraRate;
+    
+    private String activityRate; //加息
 
     private String singlePurchaseLowerLimit; //最小起投数
 
@@ -41,6 +52,14 @@ public class Product {
     private int status; //产品状态
 
     private int newstatus;
+    
+    private String recommendTitle; //推荐标提示标语
+    
+    private String recommendBody; //推荐标提示标语
+    
+    private String rateSubsidy; //贴息
+    
+    private String rateFlg; //特殊利率标识（0：正常标；1：加息贴息标；）
 
     public int getType() {
         return type;
@@ -219,4 +238,54 @@ public class Product {
                 ", newstatus=" + newstatus +
                 '}';
     }
+
+	public Long getFinanceStartDate() {
+		return financeStartDate;
+	}
+
+	public void setFinanceStartDate(Long financeStartDate) {
+		this.financeStartDate = financeStartDate;
+	}
+
+	public String getRecommendTitle() {
+		return recommendTitle;
+	}
+
+	public void setRecommendTitle(String recommendTitle) {
+		this.recommendTitle = recommendTitle;
+	}
+
+	public String getActivityRate() {
+		return activityRate;
+	}
+
+	public void setActivityRate(String activityRate) {
+		this.activityRate = activityRate;
+	}
+
+	public String getRecommendBody() {
+		return recommendBody;
+	}
+
+	public void setRecommendBody(String recommendBody) {
+		this.recommendBody = recommendBody;
+	}
+
+	public String getRateSubsidy() {
+		return rateSubsidy;
+	}
+
+	public void setRateSubsidy(String rateSubsidy) {
+		this.rateSubsidy = rateSubsidy;
+	}
+
+	public String getRateFlg() {
+		return rateFlg;
+	}
+
+	public void setRateFlg(String rateFlg) {
+		this.rateFlg = rateFlg;
+	}
+
+
 }

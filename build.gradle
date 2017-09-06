@@ -1,14 +1,23 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
+        jcenter()
         maven {
-            url 'https://repository-achartengine.forge.cloudbees.com/snapshot/'
+//            url 'https://repository-achartengine.forge.cloudbees.com/snapshot/'
+            url 'http://mvnrepository.com/'
+
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
     }
 }
 

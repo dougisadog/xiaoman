@@ -1,18 +1,11 @@
 package com.nangua.xiaomanjflc.ui;
 
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.louding.frame.KJActivity;
 import com.louding.frame.KJHttp;
@@ -21,33 +14,47 @@ import com.louding.frame.http.HttpParams;
 import com.louding.frame.ui.BindView;
 import com.louding.frame.utils.StringUtils;
 import com.nangua.xiaomanjflc.AppConstants;
-import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.nangua.xiaomanjflc.utils.HttpHelper;
-import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
+import com.nangua.xiaomanjflc.AppVariables;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.support.UIHelper;
+import com.nangua.xiaomanjflc.utils.ApplicationUtil;
+import com.nangua.xiaomanjflc.utils.ImageUtils;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class FindPwdOneActivity extends KJActivity {
 
 	@BindView(id = R.id.tel)
 	private EditText mTel;
-	@BindView(id = R.id.verification)
-	private EditText mVrify;
 	@BindView(id = R.id.hint)
-	private FontTextView mHint;
+	private TextView mHint;
 	@BindView(id = R.id.pwd)
 	private EditText mPwd;
 	@BindView(id = R.id.pwdconfirm)
 	private EditText mPwdConfirm;
 	@BindView(id = R.id.tel_verify)
 	private EditText mTelcode;
-	@BindView(id = R.id.verifyimage, click = true)
-	private ImageView mVrifyImage;
 	@BindView(id = R.id.code, click = true)
-	private FontTextView mCode;
+	private TextView mCode;
 	@BindView(id = R.id.next, click = true)
-	private FontTextView mNext;
+	private TextView mNext;
+	
+	@BindView(id = R.id.imgCaptcha, click = true)
+	private ImageView imgCaptcha;
+	@BindView(id = R.id.txtCaptcha)
+	private EditText txtCaptcha;
 
 	private String tel;
 	private String sid;
@@ -56,21 +63,24 @@ public class FindPwdOneActivity extends KJActivity {
 	private String pwdc;
 	private String captcha;
 	private KJHttp http;
+	private boolean hascode;
 
 	@Override
 	public void setRootView() {
-		setContentView(R.layout.activity_find_pwd);
+		setContentView(R.layout.activity_find_pwd_v2);
 	}
 
 	@Override
 	public void initWidget() {
 		super.initWidget();
+		getCaptcha();
 		UIHelper.setTitleView(this, "返回", "找回密码");
 	}
 
 	@Override
 	public void initData() {
 		super.initData();
+		hascode = false;
 		post();
 	}
 
@@ -80,29 +90,33 @@ public class FindPwdOneActivity extends KJActivity {
 		switch (v.getId()) {
 		case R.id.next:// 确定
 			tel = mTel.getText().toString();
-			captcha = mVrify.getText().toString();
 			telcode = mTelcode.getText().toString();
 			pwd = mPwd.getText().toString();
 			pwdc = mPwdConfirm.getText().toString();
-//			if (StringUtils.isEmpty(captcha)) {
-//				mHint.setVisibility(View.VISIBLE);
-//				mHint.setText("请先输入图片验证码。");
-//			} else 
 			if (StringUtils.isEmpty(tel) || (tel.length() < 11)) {
 				mHint.setVisibility(View.VISIBLE);
 				mHint.setText(R.string.signup_code);
-			} else if (pwd.trim().equals("")) {
+			} 
+			else if (!hascode) {
+				mHint.setVisibility(View.VISIBLE);
+				mHint.setText(R.string.signup_hascode);
+			}
+			else if (StringUtils.isEmpty(telcode)) {
+				mHint.setVisibility(View.VISIBLE);
+				mHint.setText("短信验证码不能为空");
+			}
+			else if (StringUtils.isEmpty(pwd)) {
 				mHint.setVisibility(View.VISIBLE);
 				mHint.setText("密码不能为空");
 			}
-			else if (!pwd.equals(pwdc)) {
-				mHint.setVisibility(View.VISIBLE);
-				mHint.setText("两次输入密码不一致。");
-			}
 			else if (!StringUtils.isPasswordStrength(pwd)) {
 				mHint.setVisibility(View.VISIBLE);
-				mHint.setText("密码格式不正确");
-			} 
+				mHint.setText(getResources().getString(R.string.sign_up_pwd_hint));
+			}
+			else if (!pwd.equals(pwdc)) {
+				mHint.setVisibility(View.VISIBLE);
+				mHint.setText(getResources().getString(R.string.different_pwd));
+			}
 			else {
 				mHint.setVisibility(View.GONE);
 				next();
@@ -113,18 +127,21 @@ public class FindPwdOneActivity extends KJActivity {
 //			break;
 		case R.id.code:// 获取短信验证码
 			tel = mTel.getText().toString();
-			captcha = mVrify.getText().toString();
-//			if (StringUtils.isEmpty(captcha)) {
-//				mHint.setVisibility(View.VISIBLE);
-//				mHint.setText("请先输入图片验证码。");
-//			} else 
-			if (StringUtils.isEmpty(tel) || (tel.length() < 11)) {
+			captcha = txtCaptcha.getText().toString();
+			if (StringUtils.isEmpty(captcha)) {
+				mHint.setVisibility(View.VISIBLE);
+				mHint.setText("请先输入图片验证码。");
+			} 
+			else if (StringUtils.isEmpty(tel) || (tel.length() < 11)) {
 				mHint.setVisibility(View.VISIBLE);
 				mHint.setText(R.string.signup_code);
 			} else {
 				mHint.setVisibility(View.GONE);
 				getCode();
 			}
+			break;
+		case R.id.imgCaptcha:
+			getCaptcha();
 			break;
 		}
 	}
@@ -138,7 +155,7 @@ public class FindPwdOneActivity extends KJActivity {
 		params.put("sid", sid);
 		params.put("account", tel);
 		params.put("phoneCode", telcode);
-		params.put("captcha", captcha);
+		params.put("captcha", "");
 		http.post(AppConstants.VERIFY_CODE, params, new HttpCallBack(
 				FindPwdOneActivity.this) {
 
@@ -154,10 +171,11 @@ public class FindPwdOneActivity extends KJActivity {
 							} else {
 								if ("".equals(msg))
 									msg = "密码找回失败";
-								LoudingDialog ldc = new LoudingDialog(FindPwdOneActivity.this);
+								LoudingDialogIOS ldc = new LoudingDialogIOS(FindPwdOneActivity.this);
 								ldc.showConfirmHint(msg);
-								mHint.setVisibility(View.VISIBLE);
-								mHint.setText(msg);
+								mHint.setVisibility(View.GONE);
+//								mHint.setVisibility(View.VISIBLE);
+//								mHint.setText(msg);
 							}
 					} catch (JSONException e) {
 						Toast.makeText(FindPwdOneActivity.this, R.string.app_data_error,
@@ -167,13 +185,6 @@ public class FindPwdOneActivity extends KJActivity {
 					Toast.makeText(FindPwdOneActivity.this, R.string.app_exception, Toast.LENGTH_SHORT)
 							.show();
 				}
-//				super.failure(ret);
-//				String msg = null;
-//				try {
-//					msg = ret.getString("msg");
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//				}
 			}
 
 			@Override
@@ -191,7 +202,7 @@ public class FindPwdOneActivity extends KJActivity {
 		params.put("account", tel);
 		params.put("password", pwd);
 		mNext.setEnabled(false);
-		mNext.setBackgroundResource(R.drawable.btn_tender_gray);
+		mNext.setBackgroundResource(R.drawable.btn_grey);
 		http.post(AppConstants.GET_LOSE, params, new HttpCallBack(
 				FindPwdOneActivity.this) {
 			
@@ -204,15 +215,16 @@ public class FindPwdOneActivity extends KJActivity {
 
 			@Override
 			public void failure(JSONObject ret) {
-				super.failure(ret);
+//				super.failure(ret);
 				String msg = null;
 				try {
 					msg = ret.getString("code");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				mHint.setVisibility(View.VISIBLE);
-				mHint.setText(msg);
+				LoudingDialogIOS ldc = new LoudingDialogIOS(FindPwdOneActivity.this);
+				ldc.showConfirmHint(msg);
+				mHint.setVisibility(View.GONE);
 			}
 
 			@Override
@@ -222,13 +234,12 @@ public class FindPwdOneActivity extends KJActivity {
 				String msg;
 				try {
 					status = ret.getString("status");
-//					msg = ret.getString("msg");
 					msg = ret.getString("code");
 				} catch (JSONException e) {
 					e.printStackTrace();
 					return;
 				}
-				final LoudingDialog ld = new LoudingDialog(FindPwdOneActivity.this);
+				final LoudingDialogIOS ld = new LoudingDialogIOS(FindPwdOneActivity.this);
 				if (null != status && Integer.parseInt(status) == 0) {
 					
 					ld.showOperateMessage("密码修改成功。");
@@ -253,20 +264,28 @@ public class FindPwdOneActivity extends KJActivity {
 	 * */
 	private void getCode() {
 		http = new KJHttp();
+		captcha = txtCaptcha.getText().toString();
 		HttpParams params = new HttpParams();
-		params.put("sid", sid);
 		params.put("phone", tel);
 		params.put("captcha", captcha);
-		http.post(AppConstants.SENDCODE, params, new HttpCallBack(
+		String captchaKey = CacheBean.getInstance().getCaptchaKey();
+		params.put("captchaKey", captchaKey);
+		
+		http.post(AppConstants.SENDCODE_V2, params, new HttpCallBack(
 				FindPwdOneActivity.this) {
 
 			@Override
 			public void failure(JSONObject ret) {
 				super.failure(ret);
 				String msg = null;
-				try {
-					msg = ret.getString("msg");
-				} catch (JSONException e) {
+				try 
+				{
+					if (ret.getBoolean("needCaptcha")) {
+						getCaptcha();
+					}
+				} 
+				catch (JSONException e) 
+				{
 					e.printStackTrace();
 				}
 				mHint.setVisibility(View.VISIBLE);
@@ -278,6 +297,7 @@ public class FindPwdOneActivity extends KJActivity {
 				super.success(ret);
 				mHint.setVisibility(View.VISIBLE);
 				mHint.setText("发送成功。");
+				hascode = true;
 				buttonHandle.post(buttonControl);
 			}
 		});
@@ -298,6 +318,9 @@ public class FindPwdOneActivity extends KJActivity {
 				super.success(ret);
 				try {
 					sid = ret.getString("sid");
+					if (null == sid) {
+						sid = AppVariables.sid;
+					}
 //					getCapture();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -306,22 +329,6 @@ public class FindPwdOneActivity extends KJActivity {
 		});
 	}
 
-	/**
-	 * 获取图片验证码
-	 * */
-	private void getCapture() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final Bitmap b = new HttpHelper().getCapture(sid);
-				runOnUiThread(new Runnable() {
-					public void run() {
-						mVrifyImage.setImageBitmap(b);
-					}
-				});
-			}
-		}).start();
-	}
 
 	Runnable buttonControl = new Runnable() {
 		int sec = 60;
@@ -342,15 +349,50 @@ public class FindPwdOneActivity extends KJActivity {
 	Handler buttonHandle = new Handler() {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			mCode.setText(msg.arg1 + "秒后重新获取");
+			mCode.setText(msg.arg1 + "秒后重发");
+//			mCode.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+//	                getResources().getDimensionPixelSize(R.dimen.font_hint_small));
 			if (msg.arg1 == 0) {
 				buttonHandle.removeCallbacks(buttonControl);
+				mCode.setBackgroundResource(R.drawable.btn_blue);
 				mCode.setText("点击获取");
+//				mCode.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+//		                getResources().getDimensionPixelSize(R.dimen.font_hint));
 				mCode.setClickable(true);
 			} else {
 				mCode.setClickable(false);
+				mCode.setBackgroundResource(R.drawable.btn_grey);
 				buttonHandle.postDelayed(buttonControl, 1000);
 			}
 		};
 	};
+	
+	private void getCaptcha() {
+		http.post(AppConstants.CAPTCHA, new HttpParams(), new HttpCallBack(FindPwdOneActivity.this,false,true) {
+
+//			@Override
+//			public void onSuccess(InputStream input ,Map<String, List<String>> headers) {
+//				CacheBean.getInstance().setCaptcha(BitmapFactory.decodeStream(input));
+//				if (null != headers.get("captchaKey") && headers.get("captchaKey").size() > 0)
+//					CacheBean.getInstance().setCaptchaKey(headers.get("captchaKey").get(0));
+//				super.onSuccess(input);
+//			}
+			
+			@Override
+			public void onSuccess(Map<String, String> headers, byte[] input) {
+//				Bitmap bitmap = ImageUtils.byteToBitmap(input);
+				Bitmap bitmap = BitmapFactory.decodeByteArray(input, 0, input.length);
+				CacheBean.getInstance().setCaptcha(bitmap);
+				if (null != headers.get("captchaKey"))
+					CacheBean.getInstance().setCaptchaKey(headers.get("captchaKey"));
+				super.onSuccess(input);
+			}
+
+			@Override
+			public void onSuccess(String t) {
+				imgCaptcha.setImageBitmap(CacheBean.getInstance().getCaptcha());
+			}
+		
+		});
+	}
 }

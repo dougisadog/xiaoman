@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            typefaceName="msyh"
+            
             android:text="王海"
             android:textColor="@color/font_black"
             android:textSize="@dimen/font_app" />
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            typefaceName="msyh"
+            
             android:text="返还时间"
             android:textColor="@color/font_black"
             android:textSize="@dimen/font_app" />
@@ -55,7 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            typefaceName="msyh"
+            
             android:text="邀请注册"
             android:textColor="@color/red"
             android:textSize="@dimen/font_app" />
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            typefaceName="msyh"
+            
             android:gravity="center"
             android:text="10元现金券"
             android:textColor="@color/red"
@@ -76,7 +76,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            typefaceName="msyh"
+            
             android:gravity="center"
             android:text="2015-08-15"
             android:textColor="@color/red"

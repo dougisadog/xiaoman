@@ -1,5 +1,7 @@
 package com.nangua.xiaomanjflc.ui;
 
+import java.util.HashMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ips.p2p.StartPluginTools;
 import com.louding.frame.KJActivity;
@@ -23,21 +26,24 @@ import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
 import com.nangua.xiaomanjflc.utils.FormatUtils;
 import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+import com.umeng.analytics.MobclickAgent;
 import com.nangua.xiaomanjflc.R;
 import com.nangua.xiaomanjflc.support.UIHelper;
 
 public class CashActivity extends KJActivity {
 
 	@BindView(id = R.id.cash, click = true)
-	private FontTextView mCash;
+	private TextView mCash;
 	@BindView(id = R.id.price)
 	private EditText mPrice;
 	@BindView(id = R.id.balance)
-	private FontTextView mBalance;
+	private TextView mBalance;
+	@BindView(id = R.id.supportTel)
+	private TextView supportTel;
 
 	private KJHttp kjh;
-	private LoudingDialog ld;
+	private LoudingDialogIOS ld;
 
 	private int balance;
 	private String price;
@@ -62,6 +68,7 @@ public class CashActivity extends KJActivity {
 	@Override
 	public void initWidget() {
 		super.initWidget();
+		supportTel.setText("7.在提现过程如遇任何问题，请联系平台客服" + getResources().getString(R.string.support_tel_text2) + "。");
 		mBalance.setText(FormatUtils.fmtMicrometer(FormatUtils.priceFormat(balance)) + "元");
 		mPrice.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -80,7 +87,7 @@ public class CashActivity extends KJActivity {
 						mPrice.setSelection(s.length());
 					}
 				}
-				if (s.toString().trim().equals(".")) {
+				if (s.toString().trim().substring(0).equals(".")) {
 					s = "0" + s;
 					mPrice.setText(s);
 					mPrice.setSelection(2);
@@ -109,14 +116,14 @@ public class CashActivity extends KJActivity {
 		case R.id.cash:
 			price = mPrice.getText().toString();
 			if (StringUtils.isEmpty(price)) {
-				ld = new LoudingDialog(CashActivity.this);
+				ld = new LoudingDialogIOS(CashActivity.this);
 				ld.showConfirmHint("请输入金额。");
 			} else if ((Double.parseDouble(price)) > balance) {
-				ld = new LoudingDialog(CashActivity.this);
+				ld = new LoudingDialogIOS(CashActivity.this);
 				ld.showConfirmHint("余额不足。");
-			} else if (Double.parseDouble(price) < 1) {
-				ld = new LoudingDialog(CashActivity.this);
-				ld.showConfirmHint("提现金额需大于等于1元。");
+			} else if (Double.parseDouble(price) < 100) {
+				ld = new LoudingDialogIOS(CashActivity.this);
+				ld.showConfirmHint("提现金额需大于等于100元。");
 			} else {
 				getFee();
 			}
@@ -136,7 +143,7 @@ public class CashActivity extends KJActivity {
 					JSONObject body = ret.getJSONObject("body");
 					String actualAmount = body.getString("actualAmount");
 					String fee = body.getString("fee");
-					final LoudingDialog ld = new LoudingDialog(
+					final LoudingDialogIOS ld = new LoudingDialogIOS(
 							CashActivity.this);
 					ld.showOperateMessage("实际提现金额：" + actualAmount + "元\n手续费："
 							+ fee + "元\n预计到账：一到两个工作日");
@@ -159,7 +166,7 @@ public class CashActivity extends KJActivity {
 	
 	/**
 	 * 开启环迅插件支付
-	 * @param ret server返回的支付信息json
+	 * @param server返回的支付信息json
 	 */
 	private void cashAction(JSONObject ret) {
 		try {
@@ -168,7 +175,12 @@ public class CashActivity extends KJActivity {
 			bundle.putString("merchantID", ret.getString("merchantID"));
 			bundle.putString("sign", ret.getString("sign"));
 			bundle.putString("request", ret.getString("request"));
-			StartPluginTools.start_p2p_plugin(StartPluginTools.WITHDRAWAL, CashActivity.this, bundle, 1);
+			StartPluginTools.start_p2p_plugin(StartPluginTools.WITHDRAWAL, CashActivity.this, bundle, AppConstants.IPS_VERSION);
+			
+			//Umeng事件统计
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("amount",price); //提现金额
+			MobclickAgent.onEvent(this, StartPluginTools.WITHDRAWAL, map);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -1,11 +1,4 @@
 /*
- * @(#)ApplicationUtil.java		       Project:com.sinaapp.msdxblog.androidkit
- * Date:2012-9-13
- *
- * Copyright (c) 2011 CFuture09, Institute of Software, 
- * Guangdong Ocean University, Zhanjiang, GuangDong, China.
- * All rights reserved.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,16 +21,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.louding.frame.KJDB;
 import com.nangua.xiaomanjflc.AppConstants;
 import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.bean.jsonbean.UserConfig;
+import com.nangua.xiaomanjflc.bean.database.UserConfig;
 import com.nangua.xiaomanjflc.cache.CacheBean;
 import com.nangua.xiaomanjflc.support.ApkInfo;
 
 import java.util.Date;
 import java.util.List;
-
-import org.kymjs.kjframe.KJDB;
 
 /**
  * 应用工具类。
@@ -73,31 +66,39 @@ public class ApplicationUtil {
 	 * @return 有关本程序的信息。
 	 */
 	public static ApkInfo getApkInfo(Context ctx) {
-		ApkInfo apkInfo = new ApkInfo();
-		ApplicationInfo applicationInfo = ctx.getApplicationInfo();
-		apkInfo.packageName = applicationInfo.packageName;
-		apkInfo.iconId = applicationInfo.icon;
-		apkInfo.iconDrawable = ctx.getResources().getDrawable(apkInfo.iconId);
-		apkInfo.programName = ctx.getResources()
-				.getText(applicationInfo.labelRes).toString();
-		PackageInfo packageInfo = null;
-		try {
-			packageInfo = ctx.getPackageManager().getPackageInfo(
-					apkInfo.packageName, 0);
-			apkInfo.versionCode = packageInfo.versionCode;
-			apkInfo.versionName = packageInfo.versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
+		ApkInfo apkInfo = CacheBean.getInstance().getApkInfo();
+		if (null == apkInfo) {
+			apkInfo = new ApkInfo();
+			ApplicationInfo applicationInfo = ctx.getApplicationInfo();
+			apkInfo.packageName = applicationInfo.packageName;
+			apkInfo.iconId = applicationInfo.icon;
+			apkInfo.iconDrawable = ctx.getResources().getDrawable(apkInfo.iconId);
+			apkInfo.programName = ctx.getResources()
+					.getText(applicationInfo.labelRes).toString();
+			PackageInfo packageInfo = null;
+			try {
+				packageInfo = ctx.getPackageManager().getPackageInfo(
+						apkInfo.packageName, 0);
+				apkInfo.versionCode = packageInfo.versionCode;
+				apkInfo.versionName = packageInfo.versionName;
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
+			apkInfo.width = displayMetrics.widthPixels;
+			apkInfo.height = displayMetrics.heightPixels;
+			apkInfo.dpi = displayMetrics.densityDpi;
+			float density = displayMetrics.density;//屏幕密度（0.75 / 1.0 / 1.5）  
+	         //屏幕宽度算法:屏幕宽度（像素）/屏幕密度  
+			 apkInfo.screenWidth = (int) (apkInfo.width/density);//屏幕宽度(dp)  
+			 apkInfo.screenHeight = (int)(apkInfo.height/density);//屏幕高度(dp)  
+			
+			Log.i("MainActivity", "height:" + displayMetrics.heightPixels); 
+			Log.i("MainActivity", "width:" + displayMetrics.widthPixels); 
+			
+			CacheBean.getInstance().setApkInfo(apkInfo);
 		}
-		
-		DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-		apkInfo.width = displayMetrics.widthPixels;
-		apkInfo.height = displayMetrics.heightPixels;
-		Log.i("MainActivity", "height:" + displayMetrics.heightPixels); 
-		Log.i("MainActivity", "width:" + displayMetrics.widthPixels); 
-		
-		CacheBean.getInstance().setApkInfo(apkInfo);
-		
 		return apkInfo;
 	}
 
@@ -147,22 +148,5 @@ public class ApplicationUtil {
 		context.startActivity(intent);
 	}
 	
-	/**
-	 * 返回当前程序版本名
-	 */
-	public static String getAppVersionName(Context context) {
-		String versionName = "";
-		try {
-			PackageManager pm = context.getPackageManager();
-			PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-			versionName = pi.versionName;
-			if (versionName == null || versionName.length() <= 0) {
-				return "";
-			}
-		} catch (Exception e) {
-			Log.e("LAG", "Exception", e);
-		}
-		return versionName;
-	}
 
 }

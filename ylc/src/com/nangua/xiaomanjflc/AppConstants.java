@@ -8,25 +8,21 @@ package com.nangua.xiaomanjflc;
  */
 public class AppConstants {
 	
-	public final static String CONF_APP_UNIQUEID = "APP_UNIQUEID";// App唯一标识
+	public final static int IPS_VERSION = 4; // 当前IPS插件版本 对应1.1.4
+	
+	public final static String IPS_PACKAGE_NAME = "com.ips.p2p3"; // IPS插件包名
+	
+	public final static String USER_DB_NAME = "xiaomanjf_user.db"; // 数据库名字
 
-	public static String PATH_LOG_PATH = "/yilicai/Log/";// 日志默认保存目录
-
-	public static String PATH_UPDATE_APK = "/yilicai/Update/";// 软件更新默认保存目录
+	public final static String PATH_UPDATE_APK = "/yilicai/Update/";// 软件更新默认保存目录
 
 	public static final int TIME = 120* 1000;// 手势密码出现持续时间  60秒
 
-	public static final int PRODUCT_STATUS_REPAY = 1;// 还款中
-
-	public static final int PRODUCT_STATUS_SOLD_OUT = 2;// 已售罄
-
-	public static final int PRODUCT_STATUS_APPOINTMENT = 3;// 预约
-
-	public static final int PRODUCT_STATUS_END = 4;// 已结束
-
-	public static final int PRODUCT_STATUS_ON_SALE = 5;// 正在售卖
-	
 	public static final float BANNER_SCALE = 2.0f; // 长宽比
+	
+	public static final float BANNER_SCALE_BOTTOM = 2.0f; // 底部轮播长宽比
+	
+	public static final long LAST_IMAGE_CACHE_TIME = 5 * 60 * 1000; // 最近一张图片的判定有效时间
 
 	/**
 	 * 返回成功
@@ -38,39 +34,48 @@ public class AppConstants {
 	 */
 	public static final int FAILED = 2;
 	
-	public final static String INVITE_URL = "http://nangua.webok.net:9077"; //邀请地址测试
-//	public final static String INVITE_URL = "http://passport.xiaomanjf.com"; //邀请地址线上
-	
-	// 内侧地址
-//	public final static String HOST = "http://59.46.5.242:8089/mapp"; //mapp项目端口
-//	public final static String HOST_IMAGE = "http://59.46.5.242:8089/docroot/upload/images";
-//	public final static String SPECIALHOST = "http://59.46.5.242:8089"; //app项目 端口
-	
-	
 	// 线上地址
 //	public final static String HOST = "http://www.xiaomanjf.com/mapp"; //mapp项目端口
 //	public final static String HOST_IMAGE = "http://www.xiaomanjf.com/docroot/upload/images";
 //	public final static String SPECIALHOST = "http://www.xiaomanjf.com"; //app项目 端口
-//	
+	
 	// 真实测试地址
 //	public final static String HOST = "http://nangua.webok.net:9070/mapp"; //mapp项目端口
 //	public final static String HOST_IMAGE = "http://nangua.webok.net:9070/docroot/upload/images";
 //	public final static String SPECIALHOST = "http://nangua.webok.net:9070"; //app项目 端口
 
 	// 内侧地址
-	public final static String HOST = "http://nangua.webok.net:9080/mapp"; //mapp项目端口
-	public final static String HOST_IMAGE = "http://nangua.webok.net:9080/docroot/upload/images";
-	public final static String SPECIALHOST = "http://nangua.webok.net:9080"; //app项目 端口
-
+//	public final static String HOST = "http://nangua.webok.net:9080/mapp"; //mapp项目端口
+//	public final static String HOST_IMAGE = "http://nangua.webok.net:9080/docroot/upload/images";
+//	public final static String SPECIALHOST = "http://nangua.webok.net:9080"; //app项目 端口
+	
 	//本地外网
 //	public final static String HOST = "http://nangua.webok.net:9973/p2p-mapp";
 //	public final static String HOST_IMAGE = "http://nangua.webok.net:9973/p2p-mapp/docroot/upload/images";
 //	public final static String SPECIALHOST = "http://nangua.webok.net:9973";
+	
+	//本地外网IP
+	public final static String HOST = "http://192.168.199.73:9973/p2p-mapp";
+	public final static String HOST_IMAGE = "http://192.168.199.73:9973/p2p-mapp/docroot/upload/images";
+	public final static String SPECIALHOST = "http://192.168.199.73:9973";
+	
+//	public final static String HOST = "http://192.168.199.10:9080/mapp";
+//	public final static String HOST_IMAGE = "http://192.168.199.10:9080/p2p-mapp/docroot/upload/images";
+//	public final static String SPECIALHOST = "http://192.168.199.10:9080";
 
 	//刘庆安
-//	public final static String HOST = "http://192.168.199.43:8080/mapp";
-//	public final static String HOST_IMAGE = "http://192.168.199.43:8080/mapp/docroot/upload/images";
-//	public final static String SPECIALHOST = "http://192.168.199.43:8080";
+//	public final static String HOST = "http://192.168.199.43:9065/mapp";
+//	public final static String HOST_IMAGE = "http://192.168.199.43:9065/mapp/docroot/upload/images";
+//	public final static String SPECIALHOST = "http://192.168.199.43:9065";
+	
+	//集成测试
+//	public final static String HOST = "http://nangua.webok.net:80/mapp";
+//	public final static String HOST_IMAGE = "http://nangua.webok.net:80/p2p-mapp/docroot/upload/images";
+//	public final static String SPECIALHOST = "http://nangua.webok.net:80";
+	
+//	public final static String HOST = "http://192.168.199.34:80/mapp";
+//	public final static String HOST_IMAGE = "http://192.168.199.34:80/p2p-mapp/docroot/upload/images";
+//	public final static String SPECIALHOST = "http://192.168.199.34:80";
 
 	public final static String HTTP = "http://";
 
@@ -84,11 +89,24 @@ public class AppConstants {
 	 */
 	public static final String SIGNUP = HOST + "/register/noOauth";
 	
+	/**
+	 * 邀请码获取邀请人信息
+	 */
+	public static final String INVITED_USER = HOST + "/register/invitedUser";
+	
+	
+	
 
 	/**
 	 * 发送手机验证码
 	 */
 	public static final String GETCODE = HOST + "/reg/sendcode";
+	
+	/**
+	 * 补充图片验证码
+	 * 发送手机验证码
+	 */
+	public static final String GETCODE_V2 = HOST + "/reg/sendcode/v2";
 
 	/**
 	 * 获取验证码
@@ -104,6 +122,13 @@ public class AppConstants {
 	 * 找回登陆密码时发送验证码
 	 */
 	public static final String SENDCODE = HOST + "/findback/sendcode";
+	
+	
+	/**
+	 * 补充图片验证码
+	 * 找回登陆密码时发送验证码V2
+	 */
+	public static final String SENDCODE_V2 = HOST + "/findback/sendcode/v2";
 
 	/**
 	 * 找回登陆密码时验证手机验证码
@@ -119,6 +144,11 @@ public class AppConstants {
 	 * 产品列表
 	 */
 	public static final String PRODUCTS = HOST + "/product/all";
+	
+	/**
+	 * 产品推荐列表
+	 */
+	public static final String PRODUCTS_RECOMMENDED = HOST + "/product/recommended";
 
 	/**
 	 * 产品详情
@@ -129,7 +159,7 @@ public class AppConstants {
 	/**
 	 * 直投宝列表
 	 */
-	public static final String DIRECT = HOST + "/product/direct";
+//	public static final String DIRECT = HOST + "/product/direct";
 
 	/**
 	 * 购买产品
@@ -156,15 +186,6 @@ public class AppConstants {
 	 */
 	public static final String BASICINFO = HOST + "/my/basic";
 
-	/**
-	 * 添加用户名
-	 */
-	public static final String ADDNAME = HOST + "/my/name";
-
-	/**
-	 * 绑定邮箱
-	 */
-	public static final String BINDEMAIL = HOST + "/my/email/bind";
 
 	/**
 	 * 修改密码
@@ -195,16 +216,27 @@ public class AppConstants {
 	 * 交易记录
 	 */
 	public static final String TRANSACTION = HOST + "/my/bill";
+	
+	/**
+	 * 现金券
+	 */
+	public static final String RATE_COUPON = HOST + "/my/rateCoupon";
 
 	/**
 	 * 现金券
 	 */
 	public static final String RED = HOST + "/my/cash";
+	
 
 	/**
 	 * 新现金券
 	 */
 	public static final String NEWCASH = HOST + "/product/enablecash";
+	
+	/**
+	 * 用户是否有借款
+	 */
+	public static final String ACCOUNT_ISLOAN = HOST + "/account/isloan";
 	
 	/**
 	 * ips web登录
@@ -243,8 +275,13 @@ public class AppConstants {
 	/**
 	 * 服务协议 直接
 	 */
+//	public static final String SERVICE_PROTOCOL = SPECIALHOST
+//			+ "/contract/show/new";
+	
 	public static final String SERVICE_PROTOCOL = SPECIALHOST
-			+ "/contract/show/new";
+			+ "/tender/tendercontract.html";
+	
+	
 	/**
 	 * 服务协议 债权
 	 */
@@ -260,6 +297,12 @@ public class AppConstants {
 	 * 获取首页轮播图数据
 	 */
 	public static final String GET_SLIDE_IMAGE = HOST + "/appadv";
+	
+	/**
+	 * 获取首页轮播图数据
+	 */
+	public static final String GET_BOTTOM_IMAGE = HOST + "/appadv/bottom";
+	
 
 	/**
 	 * 关于我们
@@ -272,32 +315,6 @@ public class AppConstants {
 	 */
 	public static final String FAQ = SPECIALHOST + "/page/app/faq/";
 
-	/**
-	 * 债权转让 可转让
-	 */
-	public static final String TRANSFER_CAN = HOST + "/claims/transfercan";
-
-	/**
-	 * 债权转让 转让中
-	 */
-	public static final String TRANSFER_ING = HOST + "/claims/transfering";
-
-	/**
-	 * 债权转让 已转让
-	 */
-	public static final String TRANSFER_ALREADY = HOST
-			+ "/claims/transferalready";
-
-	/**
-	 * 债权转让 发布转让
-	 */
-	public static final String TRANSFER_PUBLISH = HOST
-			+ "/claims/transferPublish";
-
-	/**
-	 * 账户中心 修改绑定手机号
-	 */
-	public static final String update_phone = HOST + "/my/phone";
 
 	/**
 	 * 消息中心
@@ -317,32 +334,136 @@ public class AppConstants {
 			+ "/my/center/readall";
 
 	/**
-	 * 用户是否有借款
-	 */
-	public static final String ACCOUNT_ISLOAN = HOST + "/account/isloan";
-
-	/**
-	 * 我的积分
-	 */
-	public static final String MY_INTEGRAL = HOST + "/my/integral";
-	/**
-	 * 我的积分详情
-	 */
-	public static final String MY_INTEGRAL_DETAIL = HOST
-			+ "/my/integral/detail";
-	/**
-	 * 积分商城
-	 */
-	public static final String MY_INTEGRAL_MALL = HOST + "/my/integral/mall";
-	/**
-	 * 积分商城 兑换
-	 */
-	public static final String MY_INTEGRAL_MALL_EXCHANGE = HOST
-			+ "/my/integral/mall/exchange";
-
-	/**
 	 * 取得银行列表
 	 */
 	public static final String GET_BANKCODE = HOST + "/account/bankCode";
+	
+	
+    /**
+     * 支付货币类型  钱 0 金币1
+     */
+    public enum NotifyMsgType {
 
+    	//支付宝  微信 金币 现金（线下）
+    	TXT(0,"普通文本"), UPDATE(1, "更新"), PRODUCT(2, "商品跳转"), URL(3, "链接跳转");
+
+        private String type;
+        
+        private int code;
+
+        NotifyMsgType(int code, String type) {
+            this.type = type;
+            this.code = code;
+        }
+
+        public String getType() {
+            return type;
+        }
+        
+        public int getCode() {
+        	return code;
+        }
+
+    }
+    
+    /**
+     * 过场广告类型
+     */
+    public enum MainADType {
+
+    	//支付宝  微信 金币 现金（线下）
+    	GOODS(2,"商品"), LINK(1, "链接");
+
+        private String type;
+        
+        private int code;
+
+        MainADType(int code, String type) {
+            this.type = type;
+            this.code = code;
+        }
+
+        public String getType() {
+            return type;
+        }
+        
+        public int getCode() {
+        	return code;
+        }
+
+    }
+    
+    /**
+     * 过场广告类型
+     */
+    public enum SortType {
+
+    	//支付宝  微信 金币 现金（线下）
+    	DEFAULT(0,"默认"), PROFIT(2,"商品"), COST(3, "金额"), LIMIT_DATE(4, "期限");
+
+        private String type;
+        
+        private int code;
+
+        SortType(int code, String type) {
+            this.type = type;
+            this.code = code;
+        }
+
+        public String getType() {
+            return type;
+        }
+        
+        public int getCode() {
+        	return code;
+        }
+        
+        public static SortType getSortTypeByCode(int code) {
+        	for (SortType sortType : SortType.values()) {
+				if (sortType.getCode() == code) {
+					return sortType;
+				}
+			}
+        	return null;
+        }
+
+    }
+    
+    /**
+     * 加息劵发方类型/来源
+     */
+    public enum SendType {
+
+    	//支付宝  微信 金币 现金（线下）
+    	SYSTEM("01","手动发放"), REGIST("02","注册赠送"), FIST_INVEST("03", "首次投资")
+    	, LIMIT_DATE("04", "期限"), THIRD_PARTH("05", "第三方开户");
+
+        private String type;
+        
+        private String code;
+
+        SendType(String code, String type) {
+            this.type = type;
+            this.code = code;
+        }
+
+        public String getType() {
+            return type;
+        }
+        
+        public String getCode() {
+        	return code;
+        }
+        
+        public static SendType getSendTypeByCode(String code) {
+        	for (SendType sendType : SendType.values()) {
+				if (sendType.getCode().equals(code)) {
+					return sendType;
+				}
+			}
+        	return null;
+        }
+
+    }
+    
 }

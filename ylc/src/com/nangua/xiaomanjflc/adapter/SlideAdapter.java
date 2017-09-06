@@ -9,15 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-
 import com.nangua.xiaomanjflc.adapter.ViewHolder.MyClickHandler;
-import com.nangua.xiaomanjflc.utils.ApplicationUtil;
-import com.nangua.xiaomanjflc.widget.SlideShowView;
-import com.nangua.xiaomanjflc.AppConstants;
-import com.nangua.xiaomanjflc.R;
 
 public abstract class SlideAdapter<T> extends BaseAdapter {
 
@@ -56,22 +49,11 @@ public abstract class SlideAdapter<T> extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
+	
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		Log.d("itemposition", position + "");
-		if (position == 0) {
-			if (slide == null) {
-				slide = inflater.inflate(R.layout.item_slide, parent, false);
-				SlideShowView v = (SlideShowView) slide.findViewById(R.id.banner);
-				int width = ApplicationUtil.getApkInfo(context).width;
-				RelativeLayout.LayoutParams params = new   RelativeLayout.LayoutParams(
-						RelativeLayout.LayoutParams.MATCH_PARENT,
-						(int) (width /AppConstants.BANNER_SCALE));
-				v.setLayoutParams(params);
-			}
-			return slide;
-		} else {
+//		Log.d("itemposition", position + "");
 			final ViewHolder viewHolder = getViewHolder(position, convertView,
 					parent);
 			viewHolder.setHandler(new MyClickHandler() {
@@ -82,7 +64,6 @@ public abstract class SlideAdapter<T> extends BaseAdapter {
 			});
 			canvas(viewHolder, getItem(position));
 			return viewHolder.getConvertView();
-		}
 	}
 
 	public abstract void canvas(ViewHolder holder, T item);

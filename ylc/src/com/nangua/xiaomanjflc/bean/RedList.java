@@ -3,6 +3,9 @@ package com.nangua.xiaomanjflc.bean;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import com.louding.frame.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,18 @@ public class RedList {
 		for (int i = 0; i < len; i++) {
 			Red a = new Red();
 			JSONObject o = (JSONObject) array.get(i);
+//			if (0 != o.getInt("lock_flg")) continue;
+//			if (o.has("lock_flg"))
+//				try {
+//					a.setLock_flg(o.getInt("lock_flg"));
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			if (o.has("lock_flg")) {
+				a.setLock_flg(o.getInt("lock_flg"));
+			}
+			
 			a.setActive_time(o.getLong("active_time"));
 			a.setCach_Desc(o.getString("cash_desc"));
 			a.setCash_price(o.getInt("cash_price"));
@@ -46,6 +61,16 @@ public class RedList {
 		for (int i = 0; i < len; i++) {
 			Red a = new Red();
 			JSONObject o = (JSONObject) array.get(i);
+			if (o.has("lock_flg")) {
+				a.setLock_flg(o.getInt("lock_flg"));
+			}
+//			if (o.has("lock_flg"))
+//				try {
+//					a.setLock_flg(o.getInt("lock_flg"));
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			a.setActive_time(o.getLong("active_time"));
 			a.setCach_Desc(o.getString("cash_desc"));
 			a.setCash_price(o.getInt("cash_price"));

@@ -9,8 +9,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 
+import com.louding.frame.utils.StringUtils;
+import com.nangua.xiaomanjflc.AppConfig;
 import com.nangua.xiaomanjflc.AppConstants;
+import com.nangua.xiaomanjflc.AppVariables;
 import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.StartApplication;
 import com.nangua.xiaomanjflc.bean.Update;
 import com.nangua.xiaomanjflc.utils.ApplicationUtil;
 import com.nangua.xiaomanjflc.widget.FontTextView;
@@ -24,14 +28,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -65,7 +72,7 @@ public class UpdateManager {
 	// 进度条
 	private ProgressBar mProgress;
 	// 显示下载数值
-	private FontTextView mProgressText;
+	private TextView mProgressText;
 	// 查询动画
 	private ProgressDialog mProDialog;
 	// 进度值
@@ -90,6 +97,10 @@ public class UpdateManager {
 	private String tmpFileSize;
 
 	private Update mUpdate;
+	
+	public String getApkPath() {
+		return apkFilePath;
+	}
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
@@ -102,7 +113,12 @@ public class UpdateManager {
 				break;
 			case DOWN_OVER:
 				downloadDialog.dismiss();
-				installApk();
+				if (onPatchUpdateListener != null) {
+					onPatchUpdateListener.onPatchUpdate();
+				}
+				else {
+					installApk();
+				}
 				break;
 			case DOWN_NOSDCARD:
 				downloadDialog.dismiss();
@@ -153,14 +169,8 @@ public class UpdateManager {
 			public void handleMessage(Message msg) {
 				// 进度条对话框不显示 - 检测结果也不显示
 				if (mProDialog != null && !mProDialog.isShowing()) {
-					return;
+					doCheckDone();
 				}
-				// 关闭并释放释放进度条对话框
-				if (isShowMsg && mProDialog != null) {
-					mProDialog.dismiss();
-					mProDialog = null;
-				}
-
 				if (msg.what == AppConstants.FAILED) {
 					doCheckDone();
 				}
@@ -172,13 +182,22 @@ public class UpdateManager {
 						// 获取当前版本号
 						ApkInfo apkInfo = ApplicationUtil.getApkInfo(mContext);
 						curVersionCode = apkInfo.versionCode;
-						if (curVersionCode < mUpdate.getVersionCode()) {
+						String nonDialogVersion = AppConfig.getAppConfig(context).get(AppConfig.NOT_UPDATE_DIALOG_VERSION);
+						if (StringUtils.isEmpty(nonDialogVersion)) {
+							nonDialogVersion = curVersionCode + "";
+							AppConfig.getAppConfig(context).set(AppConfig.NOT_UPDATE_DIALOG_VERSION, nonDialogVersion);
+						}
+						if (curVersionCode < mUpdate.getVersionCode()
+								&& (isShowMsg || omitVersionUpdateCheck(context, curVersionCode,
+										mUpdate.getVersionCode()))) {
 							apkUrl = mUpdate.getDownloadURL();
 							updateMsg = mUpdate.getVersionDesc();
-							showNoticeDialog();
-						} else if (isShowMsg) {
+							showNoticeDialog(isShowMsg);
+						}
+						else if (isShowMsg) {
 							showLatestOrFailDialog(DIALOG_TYPE_LATEST);
-						} else {
+						}
+						else {
 							doCheckDone();
 						}
 					}
@@ -205,6 +224,28 @@ public class UpdateManager {
 				handler.sendMessage(msg);
 			}
 		}.start();
+		// 关闭并释放释放进度条对话框
+		if (isShowMsg && mProDialog != null) {
+			mProDialog.dismiss();
+			mProDialog = null;
+		}
+
+	}
+	
+	/**
+	 * 判断忽略版本更新的验证
+	 * @param context 上下文
+	 * @param curVersionCode 本地版本
+	 * @return true 提示更新 false不提示更新
+	 */
+	private boolean omitVersionUpdateCheck(Context context, int curVersionCode, int serverVersion) {
+		String nonDialogVersion = AppConfig.getAppConfig(context).get(AppConfig.NOT_UPDATE_DIALOG_VERSION);
+		if (StringUtils.isEmpty(nonDialogVersion)) {
+			nonDialogVersion = curVersionCode + "";
+			AppConfig.getAppConfig(context).set(AppConfig.NOT_UPDATE_DIALOG_VERSION, nonDialogVersion);
+		}
+		return Integer.parseInt(nonDialogVersion) < serverVersion;
+		
 	}
 
 	private OnCheckDoneListener onCheckDoneListener;
@@ -215,6 +256,16 @@ public class UpdateManager {
 
 	public interface OnCheckDoneListener {
 		public void onCheckDone();
+	}
+	
+	private OnPatchUpdateListener onPatchUpdateListener;
+	
+	public void setOnPatchUpdateListener(OnPatchUpdateListener onPatchUpdateListener) {
+		this.onPatchUpdateListener = onPatchUpdateListener;
+	}
+	
+	public interface OnPatchUpdateListener {
+		public void onPatchUpdate();
 	}
 
 	private void doCheckDone() {
@@ -252,9 +303,10 @@ public class UpdateManager {
 	/**
 	 * 显示版本更新通知对话框
 	 */
-	private void showNoticeDialog() {
+	private void showNoticeDialog(boolean isShowMsg) {
 		AlertDialog.Builder builder = new Builder(mContext);
-		builder.setTitle("软件版本更新");
+		builder.setTitle("软件版本更新 :" + 
+		ApplicationUtil.getApkInfo(mContext).versionName + "->" + mUpdate.getVersionName());
 		StringBuffer sb = new StringBuffer();
 		if (updateMsg != null) {
 			String[] updateList = updateMsg.replaceAll("\\\\n", "====").split(
@@ -267,6 +319,17 @@ public class UpdateManager {
 			}
 		}
 		builder.setMessage(sb.toString());
+		if (!isShowMsg && AppVariables.dismissVersionUpdate) {
+			builder.setNeutralButton("不再提示", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					AppConfig.getAppConfig(mContext).set(AppConfig.NOT_UPDATE_DIALOG_VERSION, mUpdate.getVersionCode() + "");
+					dialog.dismiss();
+					doCheckDone();
+				}
+			});
+		}
 		builder.setPositiveButton("立即更新", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -288,7 +351,28 @@ public class UpdateManager {
 		});
 
 		noticeDialog = builder.create();
-		noticeDialog.show();
+		noticeDialog.setCancelable(false);
+		noticeDialog.setOnKeyListener(new OnKeyListener() {
+	        @Override
+	        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+	            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+	            	dialog.dismiss();
+					//强制更新 不更新则退出
+					if (mUpdate.isForceUpdate())
+						System.exit(-1);
+					else {
+						doCheckDone();
+					}
+	            }
+	            return false;
+	        }
+		});
+		try {
+			noticeDialog.show();
+		} catch (Exception e) {
+			//此处可能出现activity生命周期完结 而报错
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -331,9 +415,9 @@ public class UpdateManager {
 		@Override
 		public void run() {
 			try {
-				String apkName = "YilicaiApp_" + mUpdate.getVersionName()
+				String apkName = "xiaomanjf_p2p_" + mUpdate.getVersionName()
 						+ ".apk";
-				String tmpApk = "YilicaiApp_" + mUpdate.getVersionName()
+				String tmpApk = "xiaomanjf_p2p_" + mUpdate.getVersionName()
 						+ ".tmp";
 				// 判断是否挂载了SD卡
 				String storageState = Environment.getExternalStorageState();
@@ -437,7 +521,9 @@ public class UpdateManager {
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 				"application/vnd.android.package-archive");
 		mContext.startActivity(i);
+		StartApplication.parse = true;
 	}
+
 
 	public static interface CheckVersionInterface {
 		/**

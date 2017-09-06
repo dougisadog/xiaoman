@@ -3,27 +3,26 @@ package com.nangua.xiaomanjflc.ui;
 import java.util.Date;
 import java.util.List;
 
-import org.kymjs.kjframe.KJDB;
+import com.louding.frame.KJActivity;
+import com.louding.frame.KJDB;
+import com.louding.frame.KJHttp;
+import com.louding.frame.ui.BindView;
+import com.louding.frame.utils.StringUtils;
+import com.nangua.xiaomanjflc.AppVariables;
+import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.bean.database.UserConfig;
+import com.nangua.xiaomanjflc.support.InfoManager;
+import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
+import com.nangua.xiaomanjflc.support.UIHelper;
+import com.nangua.xiaomanjflc.widget.FontTextView;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
 
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.louding.frame.KJActivity;
-import com.louding.frame.KJHttp;
-import com.louding.frame.ui.BindView;
-import com.louding.frame.utils.StringUtils;
-import com.nangua.xiaomanjflc.AppVariables;
-import com.nangua.xiaomanjflc.utils.HttpHelper;
-import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
-import com.nangua.xiaomanjflc.R;
-import com.nangua.xiaomanjflc.bean.jsonbean.UserConfig;
-import com.nangua.xiaomanjflc.support.InfoManager;
-import com.nangua.xiaomanjflc.support.InfoManager.TaskCallBack;
+import android.widget.TextView;
 
 public class VerifyPwd extends KJActivity {
 
@@ -36,11 +35,11 @@ public class VerifyPwd extends KJActivity {
 	@BindView(id = R.id.verifyimage, click = true)
 	private ImageView mVrifyImage;
 	@BindView(id = R.id.signin, click = true)
-	private FontTextView mSignin;
+	private TextView mSignin;
 	@BindView(id = R.id.verify1)
 	private LinearLayout mVrify1;
 	@BindView(id = R.id.hint)
-	private FontTextView mHint;
+	private TextView mHint;
 
 	private String tel;
 	private String pwd;
@@ -65,32 +64,21 @@ public class VerifyPwd extends KJActivity {
 	public void initWidget() {
 		super.initWidget();
 		mTel.setText(AppVariables.tel);
-		FontTextView btnLeft = null;
-		FontTextView titleTv = null;
-		ImageView titleImage = null;
-		btnLeft = (FontTextView) findViewById(R.id.title_left);
-		titleTv = (FontTextView) findViewById(R.id.title_center);
-		titleImage = (ImageView) findViewById(R.id.title_image);
-		btnLeft.setText(" ");
-		titleImage.setVisibility(View.GONE);
-		btnLeft.setVisibility(View.VISIBLE);
-		titleTv.setVisibility(View.VISIBLE);
-		titleTv.setText("验证登录");
-		btnLeft.setOnClickListener(new View.OnClickListener() {
+		UIHelper.setTitleView(this, "", "", "验证登录", 0, new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 //				loginout();
 				setResult(FAIL);
 				finish();
 			}
-		});
+		}, null);
 	}
 	
 	/**
 	 * 暂时弃用登出逻辑 0817
 	 */
 	private void loginout() {
-		final LoudingDialog ld = new LoudingDialog(VerifyPwd.this);
+		final LoudingDialogIOS ld = new LoudingDialogIOS(VerifyPwd.this);
 		ld.showOperateMessage("是否退出登录？");
 		ld.setPositiveButton("确定", R.drawable.dialog_positive_btn,
 				new View.OnClickListener() {
@@ -171,29 +159,10 @@ public class VerifyPwd extends KJActivity {
 				
 			}
 			break;
-//		case R.id.verifyimage:
-//			getCapture();
-//			break;
 		case R.id.losepwd:
 			showActivity(VerifyPwd.this, FindPwdOneActivity.class);
 			break;
 		}
-	}
-
-
-	private void getCapture() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final Bitmap b = new HttpHelper().getCapture(sid);
-				runOnUiThread(new Runnable() {
-					public void run() {
-						System.out.println("bitmap========>" + b);
-						mVrifyImage.setImageBitmap(b);
-					}
-				});
-			}
-		}).start();
 	}
 
 	@Override

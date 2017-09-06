@@ -17,6 +17,7 @@ package com.louding.frame.database;
 
 import com.louding.frame.KJDB.DbUpdateListener;
 import com.louding.frame.utils.KJLoger;
+import com.nangua.xiaomanjflc.AppConstants;
 
 import android.content.Context;
 
@@ -30,7 +31,7 @@ import android.content.Context;
  */
 final public class DaoConfig {
     private Context mContext = null; // android上下文
-    private String mDbName = "yilicai.db"; // 数据库名字
+    private String mDbName = AppConstants.USER_DB_NAME; // 数据库名字
     private int dbVersion = 1; // 数据库版本
     private boolean debug = KJLoger.DEBUG_LOG; // 是否是调试模式（调试模式 增删改查的时候显示SQL语句）
     private DbUpdateListener dbUpdateListener;

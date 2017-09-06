@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.nangua.xiaomanjflc.bean.Transaction;
-import com.nangua.xiaomanjflc.widget.FontTextView;
 import com.nangua.xiaomanjflc.R;
 
 public class TransactionRecordAdapter extends BaseAdapter {
@@ -21,11 +21,14 @@ public class TransactionRecordAdapter extends BaseAdapter {
 	private LayoutInflater layoutInflater;
 
 	private List<Transaction> transactions;
+	
+	private Context context;
 
 	public TransactionRecordAdapter(Context context,
 			List<Transaction> transactions) {
 		this.layoutInflater = LayoutInflater.from(context);
 		this.transactions = transactions;
+		this.context = context;
 	}
 
 	@Override
@@ -46,36 +49,44 @@ public class TransactionRecordAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
-		holder = new ViewHolder();
 		if (transactions.get(position).getDateflag() != null) {
 			convertView = layoutInflater.inflate(
 					R.layout.item_transaction_record_date, null);
-
-			holder.tv_date = (FontTextView) convertView
+			holder = new ViewHolder();
+			holder.tv_date = (TextView) convertView
 					.findViewById(R.id.tv_date);
 
 			holder.tv_date.setText(transactions.get(position).getDateflag());
 		} else {
 			convertView = layoutInflater.inflate(
 					R.layout.item_transaction_record, null);
-			holder.transactionId = (FontTextView) convertView
-					.findViewById(R.id.transactionId);
-			holder.amount = (FontTextView) convertView
-					.findViewById(R.id.amount);
-			holder.createTime = (FontTextView) convertView
-					.findViewById(R.id.createTime);
-			holder.transactionType = (FontTextView) convertView
-					.findViewById(R.id.transactionType);
+			holder = (ViewHolder) convertView.getTag();
+			if (null == holder) {
+				holder = new ViewHolder();
+				holder.transactionId = (TextView) convertView
+						.findViewById(R.id.transactionId);
+				holder.amount = (TextView) convertView
+						.findViewById(R.id.amount);
+				holder.createTime = (TextView) convertView
+						.findViewById(R.id.createTime);
+				holder.transactionType = (TextView) convertView
+						.findViewById(R.id.transactionType);
+				convertView.setTag(holder);
+			}
+			
 
 			holder.transactionId.setText("交易号："
 					+ transactions.get(position).getTransactionId());
 			if (transactions.get(position).getOperationAmount().startsWith("+")) {
-				holder.amount.setTextColor(Color.rgb(61, 145, 64));
+//				holder.amount.setTextColor(Color.rgb(61, 145, 64));
+				holder.amount.setTextColor(context.getResources().getColor(R.color.orange));
 			} else if (transactions.get(position).getOperationAmount()
 					.startsWith("-")) {
-				holder.amount.setTextColor(Color.rgb(253, 153, 18));
+//				holder.amount.setTextColor(Color.rgb(253, 153, 18));
+				holder.amount.setTextColor(context.getResources().getColor(R.color.green));
 			} else {
-				holder.amount.setTextColor(Color.rgb(61, 145, 64));
+//				holder.amount.setTextColor(Color.rgb(61, 145, 64));
+				holder.amount.setTextColor(context.getResources().getColor(R.color.orange));
 			}
 			holder.amount.setText(transactions.get(position)
 					.getOperationAmount());
@@ -84,7 +95,7 @@ public class TransactionRecordAdapter extends BaseAdapter {
 						"yyyy-MM-dd HH:mm:ss");
 				Date date = sdfold.parse(transactions.get(position)
 						.getCreateTime());
-				SimpleDateFormat sdfnew = new SimpleDateFormat("MM-dd HH:mm");
+				SimpleDateFormat sdfnew = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				holder.createTime.setText(sdfnew.format(date));
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -102,11 +113,11 @@ public class TransactionRecordAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder {
-		public FontTextView transactionId;
-		public FontTextView amount;
-		public FontTextView createTime;
-		public FontTextView transactionType;
-		public FontTextView tv_date;
+		public TextView transactionId;
+		public TextView amount;
+		public TextView createTime;
+		public TextView transactionType;
+		public TextView tv_date;
 	}
 
 }

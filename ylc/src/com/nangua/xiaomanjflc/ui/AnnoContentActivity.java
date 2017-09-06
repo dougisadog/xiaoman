@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
+import android.widget.TextView;
 
 import com.louding.frame.KJActivity;
 import com.louding.frame.ui.BindView;
@@ -14,9 +15,9 @@ import com.nangua.xiaomanjflc.widget.FontTextView;
 public class AnnoContentActivity extends KJActivity {
 
 	@BindView(id = R.id.title)
-	private FontTextView mTitle;
+	private TextView mTitle;
 	@BindView(id = R.id.data)
-	private FontTextView mData;
+	private TextView mData;
 	@BindView(id = R.id.content)
 	private WebView mContent;
 
@@ -44,7 +45,7 @@ public class AnnoContentActivity extends KJActivity {
 		super.initWidget();
 		mTitle.setText(title);
 		mData.setText(data);
-		String html = "<html><head>"
+		String html = "<html><style> p a { display:block;overflow:hidden;text-overflow:ellipsis; white-space:nowrap;}</style><head>"
 				+ "<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>"
 				+
 				// "<meta name='viewport' content='width=640, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=yes'>"
@@ -54,7 +55,7 @@ public class AnnoContentActivity extends KJActivity {
 				+ content
 				+ "<script type='text/javascript'>var list=document.getElementsByTagName('img');for (var i = 0; i < list.length; i++) {list[i].width=300;}</script>"
 				+ "</body></html>";
-		System.out.println(html);
+//		System.out.println(html);
 		WebSettings ws = mContent.getSettings();
 		ws.setJavaScriptEnabled(true);
 		ws.setSupportZoom(false);

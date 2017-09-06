@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:background="@drawable/invest_one">
 
-    <TextView
+    <com.nangua.xiaomanjflc.widget.FontTextView
+        
         android:gravity="center"
         android:id="@+id/groupItem"
         android:layout_width="match_parent"

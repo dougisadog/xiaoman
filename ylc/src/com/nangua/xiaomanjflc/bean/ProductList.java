@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.nangua.xiaomanjflc.utils.FormatUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +16,20 @@ public class ProductList {
 	public ProductList(JSONArray array) throws JSONException {
 		super();
 		products = new ArrayList<Product>();
-		Product pnull = new Product();
-		products.add(pnull);// 为了后来特殊需求加的
 		int len = array.length();
 		for (int i = 0; i < len; i++) {
 			Product p = new Product();
 			JSONObject o = (JSONObject) array.get(i);
+			if (0 == o.getInt("id")) continue;
+			p.setId(o.getInt("id"));
 			p.setType(o.getInt("productType"));
 			p.setUrl(o.getString("productUrl"));
+			if (o.has("financeStartDate")) {
+				Long l = o.getLong("financeStartDate");
+				p.setFinanceStartDate(o.getLong("financeStartDate"));
+			}
 			p.setConfine(o.getInt("confine"));
+//			p.setConfine(9);
 			if (o.has("guaranteeModeName")) {
 				p.setGuaranteeModeName(o.getString("guaranteeModeName"));
 			}
@@ -31,7 +38,15 @@ public class ProductList {
 			p.setRemainingInvestmentAmount(o
 					.getString("remainingInvestmentAmount"));
 			p.setTotalInvestment(o.getString("totalInvestment"));
-			p.setGain(o.getString("annualizedGain"));
+			
+			//.00结尾屏蔽
+			String gain = o.getString("annualizedGain");
+			p.setGain(FormatUtils.getSimpleNum(gain));
+			
+			p.setRateFlg(o.getString("rateFlg"));
+			String rateSubsidy = o.getString("rateSubsidy");
+			p.setRateSubsidy(FormatUtils.getSimpleNum(rateSubsidy));
+			
 			p.setActivity(o.getInt("activity"));
 			if (o.has("activityType"))
 				p.setActivityType(o.getString("activityType") == "null" ? 0 : o
@@ -39,8 +54,14 @@ public class ProductList {
 			if (o.has("extraRate"))
 				p.setExtraRate(o.getString("extraRate") == "null" ? 0 : o
 						.getDouble("extraRate"));
+			if (o.has("activityRate") && Double.parseDouble(o.getString("activityRate")) != 0) {
+				//.00结尾屏蔽
+				String activityRate = o.getString("activityRate");
+				p.setActivityRate(FormatUtils.getSimpleNum(activityRate));
+			}
+			
 			JSONArray a = o.getJSONArray("investmentPeriodDesc");
-			p.setId(o.getInt("id"));
+			
 			p.setDeadline(a.get(0) + "");
 			p.setDeadlinedesc(a.getString(1));
 			p.setName(o.getString("name"));
@@ -48,6 +69,14 @@ public class ProductList {
 			p.setRepayMethod(o.getString("repaymentMethodName"));
 			p.setStatus(o.getInt("status"));
 			p.setNewstatus(o.getInt("newstatus"));
+			
+			if (o.has("recommendTitle")) {
+				p.setRecommendTitle(o.getString("recommendTitle"));
+			}
+			if (o.has("recommendBody")) {
+				p.setRecommendBody(o.getString("recommendBody"));
+			}
+			
 			products.add(p);
 		}
 	}
@@ -59,25 +88,39 @@ public class ProductList {
 		for (int i = 0; i < len; i++) {
 			Product p = new Product();
 			JSONObject o = (JSONObject) array.get(i);
+			if (0 == o.getInt("id")) continue;
+			p.setId(o.getInt("id"));
 			p.setType(o.getInt("productType"));
+			if (o.has("financeStartDate")) {
+				Long l = o.getLong("financeStartDate");
+				p.setFinanceStartDate(o.getLong("financeStartDate"));
+			}
 			p.setUrl(o.getString("productUrl"));
 			p.setConfine(o.getInt("confine"));
+//			p.setConfine(9);
 			p.setGuaranteeModeName(o.getString("guaranteeModeName"));
 			p.setSinglePurchaseLowerLimit(o.getInt("singlePurchaseLowerLimit"));
 			p.setNameInfo(o.getString("activityTab"));
 			p.setRemainingInvestmentAmount(o
 					.getString("remainingInvestmentAmount"));
 			p.setTotalInvestment(o.getString("totalInvestment"));
-			p.setGain(o.getString("annualizedGain"));
+			String gain = o.getString("annualizedGain");
+			p.setGain(FormatUtils.getSimpleNum(gain));
+			
+			p.setRateFlg(o.getString("rateFlg"));
+			String rateSubsidy = o.getString("rateSubsidy");
+			p.setRateSubsidy(FormatUtils.getSimpleNum(rateSubsidy));
+			
 			p.setActivity(o.getInt("activity"));
-			if (o.has("activityType"))
-				p.setActivityType(o.getString("activityType") == "null" ? 0 : o
-						.getInt("activityType"));
+			if (o.has("activityRate") && Double.parseDouble(o.getString("activityRate")) != 0){
+				//.00结尾屏蔽
+				String activityRate = o.getString("activityRate");
+				p.setActivityRate(FormatUtils.getSimpleNum(activityRate));
+			}
 			if (o.has("extraRate"))
 				p.setExtraRate(o.getString("extraRate") == "null" ? 0 : o
 						.getInt("extraRate"));
 			JSONArray a = o.getJSONArray("investmentPeriodDesc");
-			p.setId(o.getInt("id"));
 			p.setDeadline(a.get(0) + "");
 			p.setDeadlinedesc(a.getString(1));
 			p.setName(o.getString("name"));
@@ -85,6 +128,13 @@ public class ProductList {
 			p.setRepayMethod(o.getString("repaymentMethodName"));
 			p.setStatus(o.getInt("status"));
 			p.setNewstatus(o.getInt("newstatus"));
+			
+			if (o.has("recommendTitle")) {
+				p.setRecommendTitle(o.getString("recommendTitle"));
+			}
+			if (o.has("recommendBody")) {
+				p.setRecommendBody(o.getString("recommendBody"));
+			}
 			products.add(p);
 		}
 	}

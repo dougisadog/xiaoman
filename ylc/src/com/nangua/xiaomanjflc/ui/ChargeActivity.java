@@ -1,8 +1,7 @@
 package com.nangua.xiaomanjflc.ui;
 
-import static java.lang.System.out;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ips.p2p.StartPluginTools;
@@ -34,17 +34,22 @@ import com.nangua.xiaomanjflc.support.UIHelper;
 import com.nangua.xiaomanjflc.utils.FormatUtils;
 import com.nangua.xiaomanjflc.utils.ToastUtil;
 import com.nangua.xiaomanjflc.widget.FontTextView;
-import com.nangua.xiaomanjflc.widget.LoudingDialog;
+import com.nangua.xiaomanjflc.widget.LoudingDialogIOS;
+import com.umeng.analytics.MobclickAgent;
 import com.nangua.xiaomanjflc.R;
 
 public class ChargeActivity extends KJActivity {
 
 	@BindView(id = R.id.charge, click = true)
-	private FontTextView mCharge;
+	private TextView mCharge;
 	@BindView(id = R.id.price)
 	private EditText mPrice;
 	@BindView(id = R.id.balance)
-	private FontTextView mBalance;
+	private TextView mBalance;
+	
+	@BindView(id = R.id.supportTel)
+	private TextView supportTel;
+	
 	@BindView(id = R.id.bankCode)
 	private Spinner mbankCode;
 	
@@ -52,7 +57,7 @@ public class ChargeActivity extends KJActivity {
 	private LinearLayout thr;
 
 	private KJHttp kjh;
-	private LoudingDialog ld;
+	private LoudingDialogIOS ld;
 
 	private int balance;
 	private String price;
@@ -79,11 +84,13 @@ public class ChargeActivity extends KJActivity {
 		balance = intent.getIntExtra("balance", 0);
 		type = intent.getStringExtra("type");
 		ipsAccount = intent.getStringExtra("ipsAccount");
+		
 	}
 
 	@Override
 	public void initWidget() {
 		super.initWidget();
+		supportTel.setText("4.在充值过程如遇任何问题，请联系小满金服客服" + getResources().getString(R.string.support_tel_text2)+ "。");
 		mBalance.setText(FormatUtils.fmtMicrometer(FormatUtils.priceFormat(balance)) + "元");
 		thr.setVisibility(View.GONE);
 		mPrice.addTextChangedListener(new TextWatcher() {
@@ -124,9 +131,10 @@ public class ChargeActivity extends KJActivity {
 			}
 		});
 		
-		getBankCode();
+//		getBankCode();
 	}
 	
+	//暂定取消银行号参数获取 简化充值
 	private void getBankCode() {
 		kjh = new KJHttp();
 		HttpParams params = new HttpParams();
@@ -173,22 +181,27 @@ public class ChargeActivity extends KJActivity {
 
 			String input = mPrice.getText().toString(); // 输入的金额
 
-			out.println("My: input => " + input);
-
 			if (null != input && !"".equals(input)) // 输入金额不为空
 			{
 				price = input;
-				bankCode = ((CItem) mbankCode.getSelectedItem()).getValue();
+//				CItem item = (CItem) mbankCode.getSelectedItem();
+//				if (null != item) {
+//					bankCode = item.getValue();
+//				}
 				priced = Double.parseDouble(price);
+			}
+			if (priced < 100) {
+				ld = new LoudingDialogIOS(ChargeActivity.this);
+				ld.showConfirmHint(getResources().getString(R.string.lesat_charge_amount));
+				return;
 			}
 
 			if (priced < 10000000) {
 				if (StringUtils.isEmpty(price)) {
-					ld = new LoudingDialog(ChargeActivity.this);
+					ld = new LoudingDialogIOS(ChargeActivity.this);
 					ld.showConfirmHint("请输入金额。");
 				} else {
 					post();
-
 				}
 			} else {
 				ToastUtil.showToast(ChargeActivity.this, "充值金额不得超过10,000,000元", Toast.LENGTH_SHORT);
@@ -211,7 +224,12 @@ public class ChargeActivity extends KJActivity {
 			bundle.putString("sign", ret.getString("sign"));
 			bundle.putString("request", ret.getString("request"));
 			bundle.putString("depositType", ret.getString("depositType"));//充值类型
-			StartPluginTools.start_p2p_plugin(StartPluginTools.RECHARGE, ChargeActivity.this, bundle, 1);
+			StartPluginTools.start_p2p_plugin(StartPluginTools.RECHARGE, ChargeActivity.this, bundle, AppConstants.IPS_VERSION);
+			
+			//Umeng事件统计
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("amount",price); //充值金额
+			MobclickAgent.onEvent(this, StartPluginTools.RECHARGE, map);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -221,7 +239,8 @@ public class ChargeActivity extends KJActivity {
 		HttpParams params = new HttpParams();
 		params.put("sid", AppVariables.sid);
 		params.put("amount", price);
-		params.put("bankCode", bankCode);
+//		if (!StringUtils.isEmpty(bankCode))
+//		params.put("bankCode", bankCode);
 		kjh.post(AppConstants.CHARGE, params, new HttpCallBack(
 				ChargeActivity.this) {
 			@Override
@@ -276,13 +295,4 @@ public class ChargeActivity extends KJActivity {
         }
     }
     
-    public static boolean isNullOrEmpty(String param)    // 判断字符串是否为空
-	{
-        if (param == null || param.trim().length() == 0) 
-        {
-            return true;
-        }
-        
-        return false;
-    }
 }

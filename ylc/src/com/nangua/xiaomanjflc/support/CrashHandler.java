@@ -16,6 +16,9 @@ import java.util.Map;
 import com.louding.frame.KJHttp;
 import com.louding.frame.http.HttpCallBack;
 import com.louding.frame.http.HttpParams;
+import com.nangua.xiaomanjflc.UmengManager;
+import com.nangua.xiaomanjflc.YilicaiApplication;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -78,6 +81,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				Log.e(TAG, "error : ", e);
+			}
+			if (UmengManager.analyticsStatus == UmengManager.AnalyticsOn) {
+				MobclickAgent.onKillProcess(YilicaiApplication.getInstance().getApplicationContext());
 			}
 			// 退出程序
 			android.os.Process.killProcess(android.os.Process.myPid());
@@ -191,9 +197,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			HttpParams params = new HttpParams();
 			params.put("log", sb.toString());
 			// params.put("file", sb.toString().getBytes());
-			http.post("http://122.226.100.86:3004/log", params,
-					new HttpCallBack(ctx) {
-					});
+//			http.post("http://122.226.100.86:3004/log", params,
+//					new HttpCallBack(ctx, false) {
+//					});
 			return fileName;
 		} catch (Exception e) {
 			Log.e(TAG, "an error occured while writing file...", e);

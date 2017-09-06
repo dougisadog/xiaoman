@@ -24,12 +24,28 @@ public class ApkInfo {
 	public String versionName;
 	public int width;
 	public int height;
+	public int dpi;
+	public int screenWidth;
+	public int screenHeight;
+	
+
+	public static String ANDROID_VERSION = null;
+	public static String PHONE_BRAND = null;
+	public static String PHONE_MODEL = null;
+	public static String PHONE_MANUFACTURER = null;
+
+	public ApkInfo() {
+		ApkInfo.ANDROID_VERSION = android.os.Build.VERSION.RELEASE;
+		ApkInfo.PHONE_BRAND = android.os.Build.BRAND;
+		ApkInfo.PHONE_MODEL = android.os.Build.MODEL;
+		ApkInfo.PHONE_MANUFACTURER = android.os.Build.MANUFACTURER;
+	}
 
 	@Override
 	public String toString() {
-		return "ApkInfo [packageName=" + packageName + ", iconId=" + iconId
-				+ ", iconDrawable=" + iconDrawable + ", programName="
-				+ programName + ", versionCode=" + versionCode
-				+ ", versionName=" + versionName + "]";
+		return "ApkInfo [android version= " + ANDROID_VERSION + "phone manufacturer=" + PHONE_MANUFACTURER
+				+ "phone model=" + PHONE_MODEL + " phone brand=" + PHONE_BRAND + "packageName=" + packageName
+				+ ", programName=" + programName
+				+ ", versionCode=" + versionCode + ", versionName=" + versionName + "]";
 	}
 }

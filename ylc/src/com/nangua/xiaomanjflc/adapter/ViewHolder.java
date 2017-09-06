@@ -1,13 +1,12 @@
 package com.nangua.xiaomanjflc.adapter;
 
-import com.nangua.xiaomanjflc.widget.FontTextView;
-
 import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class ViewHolder {
 
@@ -86,7 +85,7 @@ public class ViewHolder {
 	 * @return
 	 */
 	public ViewHolder setText(int viewId, String text, boolean click) {
-		FontTextView view = getView(viewId);
+		TextView view = getView(viewId);
 		view.setText(text);
 		if (click) {
 			view.setOnClickListener(new OnClickListener() {

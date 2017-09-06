@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nangua.xiaomanjflc"
-    android:versionCode="10000"
-    android:versionName="1.0.0" >
+    android:versionCode="20104"
+    android:versionName="2.1.4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.xiaomi.market.sdk.UPDATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application
         android:name=".YilicaiApplication"
@@ -36,7 +37,7 @@
             android:label="@string/app_name"
             android:launchMode="standard"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,14 +47,20 @@
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="standard"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.AtyMainAD"
+            android:launchMode="standard"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.SettingActivity"
+            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SignupActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.AdActivity"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.SigninActivity"
@@ -61,11 +68,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.AccountActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.UsernameActivity"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.IdcardActivity"
@@ -74,10 +77,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.PasswordActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.EmailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -93,12 +92,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.TransactionActivity"
+            android:name=".ui.InvestListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name=".ui.RedActivity"
-            android:launchMode="singleTask"
+            android:name=".ui.RedPlusActivity"
+            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ChargeActivity"
@@ -112,7 +112,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.BindActivity"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.GestureActivity"
@@ -131,19 +131,21 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.GuardActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NewHandActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AboutListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.HelpCenterActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.FeedbackActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.DetailActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.TenderActivity"
             android:exported="true"
@@ -176,45 +178,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ui.ClaimsTransferActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ui.TransferRuleActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ui.TransferActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ui.TransferSuccessActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ui.IntegralDetailActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.IntegralRuleActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.IntegralActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.MessageCenterActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.IntegralMallActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoTitleBar" />
         <activity
             android:name=".ui.MessageCenterDetailActivity"
             android:launchMode="singleTask"
@@ -227,7 +194,29 @@
             android:name=".ui.GuideActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <!--
+        <activity
+            android:name=".ui.ReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SENDTO" />
+
+                <data android:scheme="mailto" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter android:label="@string/app_name" >
+                <action android:name="android.intent.action.SEND" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -235,7 +224,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
-                <data android:scheme="tencent100371282" />
+                <data android:scheme="tencent1105605201" />
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -243,15 +232,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
+            <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        -->
         <!-- 微信分享回调 -->
-        <!--
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -267,8 +255,13 @@
             android:name=".ui.VerifyPwd"
             android:label="@string/title_activity_verify_pwd" >
         </activity>
-        -->
+
         <!-- UMENG -->
+        <service android:name="com.nangua.xiaomanjflc.service.MyPushIntentService" />
+
+        <meta-data android:name="Mob-AppKey"  android:value="166bec058b2e0"/>
+     	<meta-data android:name="Mob-AppSecret" android:value="d04f7c82d9a95d44ec385bc35678efce"/>
+     
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="57dde83ee0f55a08d20013b0" >
@@ -277,30 +270,39 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="a679b666c2bd22ae2869246cadf10c3d" >
         </meta-data>
-
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="LOCAL" >
+            android:value="BAIDU" >
         </meta-data>
+        <meta-data
+            android:name="BDAPPID"
+            android:value="8619241" />
+        <meta-data
+            android:name="BDAPPKEY"
+            android:value="Q2p8UdphmKFPaZGdoWiwwbIxjMOcUAsx" />
+
+        <receiver
+            android:name="com.baidu.autoupdatesdk.receiver.BDBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.baidu.autoupdatesdk.ACTION_NEW_UPDATE" />
+                <action android:name="com.baidu.autoupdatesdk.ACTION_DOWNLOAD_COMPLETE" />
+                <action android:name="com.baidu.autoupdatesdk.ACTION_NEW_AS" />
+                <action android:name="com.baidu.autoupdatesdk.ACTION_AS_DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
         <!-- 自动更新 -->
-        <!--
-    YYB 
-    <service   android:name="com.tencent.tmdownloader.TMAssistantDownloadService"
+        <!-- YYB -->
+        <service
+            android:name="com.tencent.tmdownloader.TMAssistantDownloadService"
             android:exported="false"
             android:process=":TMAssistantDownloadSDKService" />
-
-        -->
-
-
-        <!--
-    xiaomi 
-    <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver" >
-		<intent-filter>
-		<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-		</intent-filter>
-	</receiver>
-
-        -->
+        <!-- xiaomi -->
+        <receiver android:name="com.xiaomi.market.sdk.DownloadCompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -15,11 +15,19 @@
  */
 package com.louding.frame.ui;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.lang.reflect.Field;
+import com.nangua.xiaomanjflc.R;
+import com.nangua.xiaomanjflc.file.FileUtils;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -51,18 +59,54 @@ public class AnnotateUtil {
                     try {
                         field.setAccessible(true);
                         if (clickLis) {
+                        	View v = sourceView.findViewById(viewId);
                             sourceView.findViewById(viewId).setOnClickListener(
                                     (OnClickListener) currentClass);
                         }
                         // 将currentClass的field赋值为sourceView.findViewById(viewId)
                         field.set(currentClass, sourceView.findViewById(viewId));
                     } catch (Exception e) {
+                    	getWrongViewName(currentClass, viewId);
+                    	//16位码的粗略查找
+//                    	DebugPrinter.e("Class :" + currentClass + ",R中ID ： 0x" + Long.toHexString(viewId).toUpperCase());
                         e.printStackTrace();
                     }
                 }
             }
         }
     }
+    
+    /**
+     * 精密查找bindview报错位置
+     * @param currentClass
+     * @param viewId
+     */
+    private static void getWrongViewName(Object currentClass, int viewId) {
+		try {
+			Class<?> clazz = Class.forName(R.id.class.getName());
+			Field[] f = clazz.getDeclaredFields();
+			for (int i = 0; i < f.length; i++) {
+					int g = f[i].getInt(clazz);
+					if (g == viewId) {
+						String errMessage = currentClass + ",View name ：R.id." + f[i].getName();
+						FileUtils.writeErr(errMessage, "bindViewErr");
+					}
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 
     /**
      * 必须在setContentView之后调用

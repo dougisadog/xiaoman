@@ -10,7 +10,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="2dp"
-        typefaceName="msyh"
+        
         android:background="@drawable/btn_back_nor"
         android:gravity="center_horizontal"
         android:textColor="#333333"
@@ -23,7 +23,7 @@
         android:layout_below="@id/textEditText"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@id/atTextView"
-        typefaceName="msyh"
+        
         android:gravity="center_vertical"
         android:text="@string/list_friends"
         android:textColor="#333333"

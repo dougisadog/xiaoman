@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.nangua.xiaomanjflc.utils.FormatUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +28,10 @@ public class InvestList {
 						.getString("principalAndInterest"));
 			a.setName(order.getString("name"));
 			a.setPrice(order.getString("price"));
-			if (order.has("rate"))
-				a.setRate(order.getString("rate"));
+			if (order.has("rate")) {
+				String rate = order.getString("rate");
+				a.setRate(FormatUtils.getSimpleNum(rate));
+			}
 			if (order.has("repayTime"))
 				a.setRepayTime(order.getLong("repayTime"));
 			a.setCreateDate(order.getString("createDate"));
@@ -44,6 +48,11 @@ public class InvestList {
 				a.setCouponPrice(coupon.getString("price"));
 			} else {
 				a.setHasCoupon(false);
+			}
+			if (order.has("activityRate") && Double.parseDouble(order.getString("activityRate")) != 0) {
+				//.00结尾屏蔽
+				String activityRate = order.getString("activityRate");
+				a.setActivityRate(FormatUtils.getSimpleNum(activityRate));
 			}
 			invests.add(a);
 		}
@@ -64,8 +73,10 @@ public class InvestList {
 						.getString("principalAndInterest"));
 			a.setName(order.getString("name"));
 			a.setPrice(order.getString("price"));
-			if (order.has("rate"))
-				a.setRate(order.getString("rate"));
+			if (order.has("rate")) {
+				String rate = order.getString("rate");
+				a.setRate(FormatUtils.getSimpleNum(rate));
+			}
 			if (order.has("repayTime"))
 				a.setRepayTime(order.getLong("repayTime"));
 			a.setCreateDate(order.getString("createDate"));
@@ -82,6 +93,11 @@ public class InvestList {
 				a.setCouponPrice(coupon.getString("price"));
 			} else {
 				a.setHasCoupon(false);
+			}
+			if (order.has("activityRate") && Double.parseDouble(order.getString("activityRate")) != 0) {
+				//.00结尾屏蔽
+				String activityRate = order.getString("activityRate");
+				a.setActivityRate(FormatUtils.getSimpleNum(activityRate));
 			}
 			invests.add(a);
 		}

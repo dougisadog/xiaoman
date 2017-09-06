@@ -12,7 +12,6 @@ public class AppReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-            //System.out.println("屏幕已锁。");
             AppVariables.needGesture = true;
         }
     }

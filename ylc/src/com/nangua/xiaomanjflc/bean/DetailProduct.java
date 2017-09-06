@@ -1,5 +1,7 @@
 package com.nangua.xiaomanjflc.bean;
 
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +31,9 @@ public class DetailProduct {
 	private String guaranteeModeName; // 保障方式
 	private String repaymentMethodName; // 还款方式
 	private int investmentProgress; // 百分比
-	private String expirationDate; // 投标截止
+	private String expirationDate; // 投标截止剩余时间
+	
+	private String endDay; //截止日期 yyyy-mm-dd
 	private String interestBeginDate; // 计息开始
 	private String remainingInvestmentAmount; // 可投 单位分
 	private String singlePurchaseLowerLimit; // 起投 单位分
@@ -120,12 +124,27 @@ public class DetailProduct {
 		JSONArray a = product.getJSONArray("investmentPeriodDesc");
 		investmentPeriodDesc = a.get(0) + "";
 		investmentPeriodDescunit = a.get(1) + "";
-		annualizedGain = product.getString("annualizedGain");
-		tenderAward = product.getString("tenderAward");
+		
+		String gain = product.getString("annualizedGain");
+		annualizedGain = FormatUtils.getSimpleNum(gain);
+		
+		//.00结尾屏蔽
+		String myRate = product.getString("tenderAward");
+		tenderAward = FormatUtils.getSimpleNum(myRate);
 		guaranteeModeName = product.getString("guaranteeModeName");
 		repaymentMethodName = product.getString("repaymentMethodName");
 		investmentProgress = product.getInt("investmentProgress");
 		expirationDate = product.getString("expirationDate");
+		
+		try {
+			if (product.has("endDay")) {
+				java.text.DateFormat format1 = new java.text.SimpleDateFormat("yyyy-MM-dd");
+				setEndDay(format1.format(new Date(product.getLong("endDay"))));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		expirationDate = expirationDate.split(" ")[0];
 		interestBeginDate = product.getString("interestBeginDate");
 		interestBeginDate = interestBeginDate.split(" ")[0];
@@ -499,5 +518,14 @@ public class DetailProduct {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
+
+	public String getEndDay() {
+		return endDay;
+	}
+
+	public void setEndDay(String endDay) {
+		this.endDay = endDay;
+	}
+
 
 }
